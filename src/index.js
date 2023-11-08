@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import TrangChu from './component/TrangChu';
 import Login from './component/Login';
 import Register from './component/Register.js';
+import ChiTietGiangVien from './component/ChiTietGiangVien'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,6 +16,7 @@ root.render(
         <Route path="/" element={<TrangChu />} />        
         <Route path="/login" element={<Login />} />   
         <Route path="/register" element={<Register />} />   
+        <Route path="/chitietgiangvien" element={<ChiTietGiangVien />} /> 
       </Routes>
     </Router>
   </React.StrictMode>
