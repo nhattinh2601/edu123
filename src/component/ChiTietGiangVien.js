@@ -3,17 +3,10 @@ import "../css/style.css";
 import "../css/headers.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLanguage,
-  faLineChart,
-  faDesktop,
-  faSearchDollar,
-  faLightbulb,
-  faCode,
-} from "@fortawesome/free-solid-svg-icons";
+
 
 import background from "../image/background_header_chitietgv.jpg";
-
+import { faStar,faUsers } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../image/August252017100pm_do-trung-thanh_thumb.jpg";
 
 import Header from "./header/header-trang-chu";
@@ -61,12 +54,12 @@ function App() {
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <div class="d-inline-block text-black">
 
-                        <span>5 </span> <i class="fas fa-star"></i> Đánh giá trung bình
+                        <span>5 </span> <FontAwesomeIcon icon={faStar}></FontAwesomeIcon> Đánh giá trung bình
                     </div>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <div class="d-inline-block text-black">
                         <span>
-                            <i class="fa fa-users" aria-hidden="true"></i> 14111 Học viên </span>
+                        <FontAwesomeIcon icon={faUsers}></FontAwesomeIcon> 14111 Học viên </span>
                     </div>
 
                 </div>
