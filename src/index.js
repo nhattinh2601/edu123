@@ -9,6 +9,9 @@ import ChiTietGiangVien from './component/ChiTietGiangVien'
 import ChiTietKhoaHoc from './component/ChiTietKhoaHoc'
 import ChinhSuaInfo from './component/user/ChinhSuaInfo'
 import DoiMatKhau from './component/user/DoiMatKhau'
+import DangKyGV from './component/giangvien/dangkygiangvien'
+import UpdateInfoGV from './component/giangvien/updateinfo'
+import InfoThanhToan from './component/giangvien/infothanhtoan'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -23,6 +26,9 @@ root.render(
         <Route path="/chitietkhoahoc" element={<ChiTietKhoaHoc />} /> 
         <Route path="/user/chinhsuainfo" element={<ChinhSuaInfo />} /> 
         <Route path="/user/doimatkhau" element={<DoiMatKhau />} /> 
+        <Route path="/giangvien/dangky" element={<DangKyGV />} /> 
+        <Route path="/giangvien/updateinfo" element={<UpdateInfoGV />} /> 
+        <Route path="/giangvien/infothanhtoan" element={<InfoThanhToan />} /> 
       </Routes>
     </Router>
   </React.StrictMode>
