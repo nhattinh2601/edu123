@@ -1,16 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import React from 'react';
 import logo from '../../image/logo.png';
 import '../../css/headers.css';
-import '../../css/style.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 
-import {faLanguage, faLineChart, faDesktop,faSearchDollar,faLightbulb,faCode} from '@fortawesome/free-solid-svg-icons'
-
-import slideshow1 from '../../image/slideshow_1.jpg';
-import slideshow2 from '../../image/slideshow_2.jpg';
-import slideshow3 from '../../image/slideshow_3.jpg';
 
 export default function Header() {
     const navigate = useNavigate();
@@ -18,9 +12,7 @@ export default function Header() {
       navigate(path);
     };
     return (
-        <div className='container '>
-
-        <header className="d-flex justify-content-center py-3 bg-light bg-gradient" id="topbar">
+        <header className="d-flex justify-content-center py-3 bg-white" id="topbar">
             <div className="d-inline-block">
                 <a className="navbar-brand mr-1" href="/">
                     <img className="img-fluid logo" alt="logo" src={logo} />
@@ -41,15 +33,8 @@ export default function Header() {
                 </a>
             </div>
 
-            <a className="btn btn-primary margin-button-header" onClick={() => handleNavigate('/login')} >Đăng nhập</a>
-            <a className="btn btn-primary margin-button-header" onClick={() => handleNavigate('/register')}>Đăng ký</a>
+            <button className="btn btn-primary margin-button-header" onClick={() => handleNavigate('/login')} >Đăng nhập</button>
+            <button className="btn btn-primary margin-button-header" onClick={() => handleNavigate('/register')}>Đăng ký</button>
         </header>
-
-        
-    
-
-    
-
-        </div>   
     )
 }

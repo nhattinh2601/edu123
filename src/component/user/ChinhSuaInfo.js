@@ -1,8 +1,7 @@
 import '../../css/style.css';
 import '../../css/headers.css';
-
+import { Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import { faFacebookF,faGoogle,faGit, faTwitter } from '@fortawesome/free-brands-svg-icons' 
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../../image/August252017100pm_do-trung-thanh_thumb.jpg";
 
@@ -17,7 +16,7 @@ function App() {
               <form action="/login" method="POST">
                 
                 <div >
-                    <img src={avatar} className='rounded-circle' width='100px' />                    
+                    <img src={avatar} className='rounded-circle' width='100px' alt=""/>                    
                     <br/>
                     <button type="submit" className="btn btn-light btn-block mb-4 w-20 "><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>Đổi hình đại diện</button>
                 </div>
@@ -33,7 +32,7 @@ function App() {
                 
                    
                 <button type="submit" className="btn btn-primary btn-block mb-4 w-50 ">Cập nhật</button>
-                <a type="button" href='/user/doimatkhau' className="btn btn-light btn-block mb-4 w-50 ">Đổi mật khẩu</a>
+                <Link to type="button" href='/user/doimatkhau' className="btn btn-light btn-block mb-4 w-50 ">Đổi mật khẩu</Link>
                 
               </form>
             </div>
