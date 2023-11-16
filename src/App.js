@@ -16,6 +16,8 @@ import InfoThanhToan from './component/giangvien/infothanhtoan';
 import Admin from './component/admin/Admin';
 import User from './component/user/User';
 
+import NotFound from './component/NotFound';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -56,6 +58,8 @@ const App = () => {
 
         {/* Trang admin */}
         <Route path="/admin" element={<ProtectedRoute element={<Admin />} requiredRoleId="2" />}/>
+
+        <Route path="*" element={<NotFound />} />
 
       </Routes>
     </Router>

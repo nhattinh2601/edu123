@@ -14,7 +14,7 @@ function App() {
                                 
                 <div className="form-outline mb-4">
                 <label className="form-label fw-bold" for="form2Example1">Mật khẩu cũ</label>
-                  <input type="password" name="email" id="email" autocomplete="on" className="form-control" />                  
+                  <input type="password" name="password" id="password" autocomplete="on" className="form-control" />                  
                 </div>
                                 
                 <div className="form-outline mb-4">

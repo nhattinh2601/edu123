@@ -32,7 +32,7 @@ function App() {
                 
                    
                 <button type="submit" className="btn btn-primary btn-block mb-4 w-50 ">Cập nhật</button>
-                <Link to type="button" href='/user/doimatkhau' className="btn btn-light btn-block mb-4 w-50 ">Đổi mật khẩu</Link>
+                <Link to ='/user/doimatkhau' className="btn btn-light btn-block mb-4 w-50 ">Đổi mật khẩu</Link>
                 
               </form>
             </div>
