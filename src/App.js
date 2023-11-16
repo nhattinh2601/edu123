@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-do
 import TrangChu from './component/TrangChu';
 import Login from './component/Login';
 import Register from './component/Register';
+import ForgetPassword from './component/ForgetPassword';
 import ChiTietGiangVien from './component/ChiTietGiangVien';
 import ChiTietKhoaHoc from './component/ChiTietKhoaHoc';
 import ChinhSuaInfo from './component/user/ChinhSuaInfo';
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/" element={<TrangChu />} />        
         <Route path="/login" element={<Login />} />   
         <Route path="/register" element={<Register />} />   
+        <Route path="/forget-password" element={<ForgetPassword />} />   
 
         {/* Trang học viên */}
         <Route path="/user" element={<ProtectedRoute element={<TrangChu />} requiredRoleId="1" />}/>

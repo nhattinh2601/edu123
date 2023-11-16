@@ -1,4 +1,3 @@
-// commentsSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchComments, createComment, updateComment, deleteComment, fetchCommentFeatures } from '../thunks/commentThunk';
 
