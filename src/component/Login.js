@@ -3,6 +3,7 @@ import '../css/headers.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { toast } from 'react-toastify';
 import { faFacebookF, faGoogle, faGit, faTwitter } from '@fortawesome/free-brands-svg-icons'
 
@@ -15,6 +16,10 @@ function App() {
     password: '',
     email: ''
   });
+  const [loginError, setLoginError] = useState(null);
+  const [rememberMe, setRememberMe] = useState(false);
+  
+
 
   useEffect(() => {
     const message = localStorage.getItem('message');
@@ -37,11 +42,38 @@ function App() {
     checkPassword();
   }, [formValues]);
 
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    const rememberedPassword = localStorage.getItem('rememberedPassword');
+  
+    if (rememberedEmail && rememberedPassword) {
+      setFormValues({
+        email: rememberedEmail,
+        password: rememberedPassword,
+      });
+      setRememberMe(true);
+    }
+  }, []);
+
   const handleChange = (event) => {
+    const { name, value } = event.target;
+
     setFormValues({
       ...formValues,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
+
+    // Kiểm tra định dạng email
+     if (name === 'email') {
+      const emailRegex = /@/;
+      setError((prevState) => ({
+        ...prevState,
+        invalidEmailFormat: !emailRegex.test(value),
+      }));
+    }
+  };
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
   };
 
   const checkPassword = () => {
@@ -74,6 +106,14 @@ function App() {
 
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', formValues.email);
+        localStorage.setItem('rememberedPassword', formValues.password);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+        localStorage.removeItem('rememberedPassword');
+      }
       
 
       if (accessToken !== null) {
@@ -87,9 +127,11 @@ function App() {
         }, 1000);
       } else {
         setError((prevState) => ({ ...prevState, emailPasswordNotFound: true }));
+        setLoginError('Sai email hoặc mật khẩu! Vui lòng Nhập lại'); 
         };
       } catch (error) {
-      console.error(error);
+        console.error(error);
+        setLoginError('Đăng nhập thất bại. Vui lòng thử lại.');
       }
   };
   
@@ -106,6 +148,11 @@ function App() {
                 <div className="form-outline mb-4">
                   <input type="email" name="email" id="email" autoComplete="on" className="form-control" value={formValues.email} onChange={handleChange} />
                   <label className="form-label" htmlFor="form2Example1">Email address</label>
+                  {error.invalidEmailFormat && formValues.email.length > 0 && (
+                    <span style={{ backgroundColor: 'yellow', display: 'block', marginTop: '5px' }}>
+                       Định dạng email không hợp lệ.
+                    </span>
+                )}
                 </div>
                 <div className="form-outline mb-4">
                 <input type="password" name="password" id="password" autoComplete="on" className="form-control" value={formValues.password} onChange={handleChange}/>
@@ -115,18 +162,27 @@ function App() {
                   </span>
                 )}
                 <label className="form-label" htmlFor="form2Example2">Password</label>
-                {error.emailPasswordNotFound && (
-                  <span style={{ backgroundColor: 'yellow', display: 'block', marginTop: '5px' }}>
-                    Sai email hoặc mật khẩu! Vui lòng Nhập lại
+                {loginError && (
+                <span style={{ backgroundColor: 'red', display: 'block', marginTop: '5px' }}>
+                  {loginError}
                   </span>
                 )}
               </div>
                 <div className="row mb-4">
                   <div className="col d-flex justify-content-center">
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                      <label className="form-check-label" htmlFor="form2Example31"> Remember me </label>
-                    </div>
+  <input
+    className="form-check-input"
+    type="checkbox"
+    value=""
+    id="form2Example31"
+    checked={rememberMe}
+    onChange={handleRememberMeChange}
+  />
+  <label className="form-check-label" htmlFor="form2Example31">
+    Remember me
+  </label>
+</div>
                   </div>
                   <div className="col">
                     <Link to="#">Forgot password?</Link>

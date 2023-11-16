@@ -14,7 +14,7 @@ import UpdateInfoGV from './component/giangvien/updateinfo';
 import InfoThanhToan from './component/giangvien/infothanhtoan';
 
 import Admin from './component/admin/Admin';
-import User from './component/user/User';
+
 
 import NotFound from './component/NotFound';
 
@@ -45,7 +45,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />   
 
         {/* Trang học viên */}
-        <Route path="/user" element={<ProtectedRoute element={<User />} requiredRoleId="1" />}/>
+        <Route path="/user" element={<ProtectedRoute element={<TrangChu />} requiredRoleId="1" />}/>
         <Route path="/chitietgiangvien" element={<ProtectedRoute element={<ChiTietGiangVien />} requiredRoleId="1" />}/>
         <Route path="/chitietkhoahoc" element={<ProtectedRoute element={<ChiTietKhoaHoc />} requiredRoleId="1" />}/>
         <Route path="/user/chinhsuainfo" element={<ProtectedRoute element={<ChinhSuaInfo />} requiredRoleId="1" />}/>
