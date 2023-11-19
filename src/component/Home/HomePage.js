@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from "../api/axiosClient";
+import axiosClient from "../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
-import Header from "./header/header-trang-chu";
-import Footer from "./footer/footer";
-import NoiDung from "./TrangChuNoiDung";
-import slideshow1 from "../image/slideshow_1.jpg";
-import slideshow2 from "../image/slideshow_2.jpg";
-import slideshow3 from "../image/slideshow_3.jpg";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import NoiDung from "./HomePageContent";
+import slideshow1 from "../../image/slideshow_1.jpg";
+import slideshow2 from "../../image/slideshow_2.jpg";
+import slideshow3 from "../../image/slideshow_3.jpg";
 
 function Home() {
   const [categories, setCategories] = useState([]);
