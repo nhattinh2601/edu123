@@ -1,21 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import "../css/style.css";
-import "../css/headers.css";
+
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import background from "../image/background_header_chitietgv.jpg";
+import background from "../../../assets/images/background_header_chitietgv.jpg";
 import {
   faStar,
   faUsers,
   faPlay,
   faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import avatar from "../image/August252017100pm_do-trung-thanh_thumb.jpg";
+import avatar from "../../../assets/images/August252017100pm_do-trung-thanh_thumb.jpg";
 
-import Header from "./header/header-trang-chu";
-import Footer from "./footer/footer";
-import NoiDung from "./ChiTietGvNoiDung";
+
 function App() {
   const navigate = useNavigate();
   const handleNavigate = (path) => {
@@ -535,6 +534,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

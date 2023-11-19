@@ -2,16 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import TrangChu from './component/TrangChu';
-import Login from './component/Login';
-import Register from './component/Register.js';
-import ChiTietGiangVien from './component/ChiTietGiangVien'
-import ChiTietKhoaHoc from './component/ChiTietKhoaHoc'
-import ChinhSuaInfo from './component/user/ChinhSuaInfo'
-import DoiMatKhau from './component/user/DoiMatKhau'
-import DangKyGV from './component/giangvien/dangkygiangvien'
-import UpdateInfoGV from './component/giangvien/updateinfo'
-import InfoThanhToan from './component/giangvien/infothanhtoan'
+import TrangChu from './component/User/Home/Home.js';
+import Login from './component/User/Login/Login.js';
+import Register from './component/User/Register/Register.js';
+import TeacherDetail from './component/User/Teacher/TeacherDetail.js'
+import Course from './component/User/Course/Course.js'
+import EditInfo from './component/User/MyProfile/EditProfile.js'
+import ChangePassword from './component/User/MyProfile/ChangePassword.js'
+import RegisterTeacher from './component/User/Teacher/RegisterTeacher.js'
+import EditInfoTeacher from './component/User/Teacher/EditInformation.js'
+import PaymentInformation from './component/User/Teacher/PaymentInformation'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,13 +22,13 @@ root.render(
         <Route path="/" element={<TrangChu />} />        
         <Route path="/login" element={<Login />} />   
         <Route path="/register" element={<Register />} />   
-        <Route path="/chitietgiangvien" element={<ChiTietGiangVien />} /> 
-        <Route path="/chitietkhoahoc" element={<ChiTietKhoaHoc />} /> 
-        <Route path="/user/chinhsuainfo" element={<ChinhSuaInfo />} /> 
-        <Route path="/user/doimatkhau" element={<DoiMatKhau />} /> 
-        <Route path="/giangvien/dangky" element={<DangKyGV />} /> 
-        <Route path="/giangvien/updateinfo" element={<UpdateInfoGV />} /> 
-        <Route path="/giangvien/infothanhtoan" element={<InfoThanhToan />} /> 
+        <Route path="/user/edit-info" element={<EditInfo />} />   
+        <Route path="/user/change-password" element={<ChangePassword />} />   
+        <Route path="/user/course" element={<Course />} />   
+        <Route path="/teacher/register" element={<RegisterTeacher />} />   
+        <Route path="/teacher/edit-info" element={<EditInfoTeacher />} />   
+        <Route path="/teacher/payment-info" element={<PaymentInformation />} />           
+        <Route path="/teacher/detail" element={<TeacherDetail />} />           
       </Routes>
     </Router>
   </React.StrictMode>

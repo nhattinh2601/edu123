@@ -1,19 +1,8 @@
-import "../../css/style.css";
-import "../../css/headers.css";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faGoogle,
-  faGit,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import avatar from "../../image/August252017100pm_do-trung-thanh_thumb.jpg";
-import Header from "./../header/header-trang-chu";
-import Footer from "./../footer/footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
-function App() {
+export default function RegisterTeacher() {
   return (
     <div>
         <Header/>
@@ -102,4 +91,3 @@ function App() {
   );
 }
 
-export default App;

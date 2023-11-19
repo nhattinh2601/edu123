@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import "../css/style.css";
-import "../css/headers.css";
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-import background from "../image/background_header_chitietgv.jpg";
-import { faStar,faUsers } from "@fortawesome/free-solid-svg-icons";
-import avatar from "../image/August252017100pm_do-trung-thanh_thumb.jpg";
 
-import Header from "./header/header-trang-chu";
-import Footer from "./footer/footer";
+import { faStar,faUsers } from "@fortawesome/free-solid-svg-icons";
+
+import avatar from "../../../assets/images/August252017100pm_do-trung-thanh_thumb.jpg";
+import background from "../../../assets/images/background_header_chitietgv.jpg";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+
 import NoiDung from "./ChiTietGvNoiDung";
 function App() {
   const navigate = useNavigate();

@@ -1,16 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import logo from '../../image/logo.png';
-import '../../css/headers.css';
-import '../../css/style.css';
+import logo from '../../../assets/images/logo.png';
+
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 
-import {faLanguage, faLineChart, faDesktop,faSearchDollar,faLightbulb,faCode} from '@fortawesome/free-solid-svg-icons'
+import "./Header.css"
 
-import slideshow1 from '../../image/slideshow_1.jpg';
-import slideshow2 from '../../image/slideshow_2.jpg';
-import slideshow3 from '../../image/slideshow_3.jpg';
 
 export default function Header() {
     const navigate = useNavigate();
@@ -18,12 +14,12 @@ export default function Header() {
       navigate(path);
     };
     return (
-        <div className='container '>
+        <div className='container'>
 
         <header className="d-flex justify-content-center py-3 bg-light bg-gradient" id="topbar">
             <div className="d-inline-block">
                 <a className="navbar-brand mr-1" href="/">
-                    <img className="img-fluid logo" alt="logo" src={logo} />
+                    <img className="img-fluid " width={100} height={120} alt="logo" src={logo} />
                 </a>
             </div>
             <div className="d-inline-block">
@@ -32,7 +28,7 @@ export default function Header() {
                 </form>
             </div>
 
-            <div className="d-inline-block" style={{ alignItems: 'center' }}>
+            <div className="d-inline-block me-2 ms-2" style={{ alignItems: 'center' }}>
                 <a href="https://www.google.com/">
                     <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#999', fontSize: '30px' }} ></FontAwesomeIcon>
                     <i className="fa fa-shopping-cart" aria-hidden="true" ></i>
@@ -41,15 +37,11 @@ export default function Header() {
                 </a>
             </div>
 
-            <a className="btn btn-primary margin-button-header" onClick={() => handleNavigate('/login')} >Đăng nhập</a>
-            <a className="btn btn-primary margin-button-header" onClick={() => handleNavigate('/register')}>Đăng ký</a>
+            <a className="btn btn-primary margin-button-header me-2 ms-2" onClick={() => handleNavigate('/login')} >Đăng nhập</a>
+            <a className="btn btn-primary margin-button-header me-2 ms-2" onClick={() => handleNavigate('/register')}>Đăng ký</a>
         </header>
 
         
-    
-
-    
-
         </div>   
     )
 }

@@ -1,28 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import logo from "../image/logo.png";
-import "../css/headers.css";
-import "../css/style.css";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  faLanguage,
-  faLineChart,
-  faDesktop,
-  faSearchDollar,
-  faLightbulb,
-  faCode,
-} from "@fortawesome/free-solid-svg-icons";
-import facebookcourse from "../image/facebookcourse.jpg";
+import facebookcourse from "../../../assets/images/facebookcourse.jpg"; 
 
-export default function Header() {
+
+export default function HomeContent() {
   const navigate = useNavigate();
   const handleNavigate = (path) => {
     navigate(path);
   };
   return (
-  <div>
+    <div>
   <div className="container-fluid col-md-10 ">
       <div className="row">
         <div className="center_body">
@@ -32,7 +23,7 @@ export default function Header() {
           <div className=" row ">
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -57,7 +48,7 @@ export default function Header() {
             </div>
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -82,7 +73,7 @@ export default function Header() {
             </div>
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -107,7 +98,7 @@ export default function Header() {
             </div>
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -138,7 +129,7 @@ export default function Header() {
           <div className=" row ">
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -163,7 +154,7 @@ export default function Header() {
             </div>
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -188,7 +179,7 @@ export default function Header() {
             </div>
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -213,7 +204,7 @@ export default function Header() {
             </div>
             <div
               class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
+              style={{ width: "17rem" }}
             >
               <img class="card-img-top" alt="..." src={facebookcourse} />
               <div class="card-body">
@@ -244,3 +235,5 @@ export default function Header() {
     </div>
   );
 }
+
+

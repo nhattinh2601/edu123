@@ -1,13 +1,10 @@
-import '../../css/style.css';
-import '../../css/headers.css';
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import { faFacebookF,faGoogle,faGit, faTwitter } from '@fortawesome/free-brands-svg-icons' 
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import avatar from "../../image/August252017100pm_do-trung-thanh_thumb.jpg";
-
-function App() {
+export default function ChangePassword() {
     return (
+      <div>
+      <Header/>  
       <div className="container">
       <div className="row">
         <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -41,8 +38,10 @@ function App() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </div> 
     );
   }
   
-  export default App;
+  
   

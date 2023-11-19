@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import "../css/style.css";
-import "../css/headers.css";
+import "./Home.css";
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,15 +12,15 @@ import {
   faCode,
 } from "@fortawesome/free-solid-svg-icons";
 
-import slideshow1 from "../image/slideshow_1.jpg";
-import slideshow2 from "../image/slideshow_2.jpg";
-import slideshow3 from "../image/slideshow_3.jpg";
+import slideshow1 from "../../../assets/images/slideshow_1.jpg"; 
 
 
-import Header from "./header/header-trang-chu";
-import Footer from "./footer/footer";
-import NoiDung from "./TrangChuNoiDung";
-function App() {
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import HomeContent from "./HomeContent";
+
+
+export default function Home() {
   const navigate = useNavigate();
   const handleNavigate = (path) => {
     navigate(path);
@@ -163,26 +163,7 @@ function App() {
         id="demo"
         className="carousel slide col-sm-6 slideshow_homepage"
         data-bs-ride="carousel"
-      >
-        <div className="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#demo"
-            data-bs-slide-to="0"
-            class="active"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#demo"
-            data-bs-slide-to="1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#demo"
-            data-bs-slide-to="2"
-          ></button>
-        </div>
-
+      >        
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img
@@ -190,42 +171,11 @@ function App() {
               alt="Los Angeles"
               className="d-block w-100 image-slideshow"
             />
-          </div>
-          <div className="carousel-item">
-            <img
-              src={slideshow2}
-              alt="Chicago"
-              className="d-block w-100 image-slideshow"
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src={slideshow3}
-              alt="New York"
-              className="d-block w-100 image-slideshow"
-            />
-          </div>
-        </div>
-
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#demo"
-          data-bs-slide="prev"
-        >
-          <span className="carousel-control-prev-icon"></span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#demo"
-          data-bs-slide="next"
-        >
-          <span className="carousel-control-next-icon"></span>
-        </button>
+          </div>                  
+        </div>         
       </div>
 
-      <NoiDung />
+      <HomeContent />
       
 
       <Footer />
@@ -233,4 +183,3 @@ function App() {
   );
 }
 
-export default App;

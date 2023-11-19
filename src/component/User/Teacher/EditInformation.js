@@ -1,19 +1,7 @@
-import "../../css/style.css";
-import "../../css/headers.css";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faGoogle,
-  faGit,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import avatar from "../../image/August252017100pm_do-trung-thanh_thumb.jpg";
-import Header from "./../header/header-trang-chu";
-import Footer from "./../footer/footer";
-
-function App() {
+export default function EditInformation() {
   return (
     <div>
         <Header/>
@@ -23,7 +11,7 @@ function App() {
           <div className="card border-0 shadow rounded-3 my-5">
             <div className="card-body p-4 p-sm-5">
               <h2 className="card-title text-center mb-5  fw-bold ">
-                Thông tin thanh toán{" "}
+                Chỉnh sửa thông tin giảng viên{" "}
               </h2>
               <form action="/login" method="POST">
                 
@@ -32,27 +20,27 @@ function App() {
                   <input
                     type="phone"
                     className="form-control"
-                    placeholder="Ngân hàng"
+                    placeholder="Chức danh"
                     name="password"
                     id="password"
                   />
                 </div>
 
                 <div className="form-outline mb-4">
-                  <input
+                  <textarea
                     type="phone"
                     className="form-control"
-                    placeholder="Số tài khoản"
+                    placeholder="Chủ đề muốn giảng dạy trên edu123"
                     name="password"
                     id="password"
                   />
                 </div>
 
                 <div className="form-outline mb-4">
-                  <input
+                  <textarea
                     type="phone"
                     className="form-control"
-                    placeholder="Họ và tên"
+                    placeholder="Kinh nghiệp giảng dạy"
                     name="password"
                     id="password"
                   />
@@ -74,4 +62,3 @@ function App() {
   );
 }
 
-export default App;
