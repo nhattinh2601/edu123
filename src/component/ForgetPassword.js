@@ -6,7 +6,6 @@ import { forgetPassword } from "../thunks/authThunk";
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isFormValid, setIsFormValid] = useState(false);
   const resetPasswordStatus = useSelector(
     (state) => state.auth.resetPasswordStatus
   );
@@ -141,7 +140,7 @@ function App() {
                     : "Lấy lại mật khẩu"}
                 </button>
 
-                {/* Login Link */}
+  
                 <Link
                   to="/login"
                   className="btn btn-primary btn-block mb-4 w-50"

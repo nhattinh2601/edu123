@@ -56,7 +56,6 @@ function App() {
       [name]: value,
     });
 
-    // Kiểm tra định dạng email
     if (name === "email") {
       const emailRegex = /@/;
       setError((prevState) => ({
@@ -65,7 +64,6 @@ function App() {
       }));
     }
 
-    // Kiểm tra định dạng số điện thoại
     if (name === "phone") {
       const phoneRegex = /^[0-9]{10,11}$/;
       setError((prevState) => ({
@@ -74,8 +72,6 @@ function App() {
       }));
     }
   };
-
-  
 
   const handleRememberMeChange = () => {
     setRememberMe(!rememberMe);

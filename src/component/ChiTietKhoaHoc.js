@@ -209,329 +209,478 @@ function App() {
               </p>
             </div>
 
-            <br/>
+            <br />
 
-                
-                <div className="bg-white" id="noidung">
-                    <h3>Nội dung khóa học</h3>
-                    <h5>Phần 1:Giới thiệu tổng quan và các thiết lập ban đầu</h5>
-                    <ul className="no-dots-list">
-                        <li>                            
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href="" > &nbsp; Bài 1: Giới thiệu và các thiết lập cơ bản </a>
-                            <div className="d-inline-block float-right">08:05&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                        <li>
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href=""> &nbsp;Bài 2: Tạo mới, mở và lưu trữ file văn bản </a>
-                            <div className="d-inline-block float-right">06:58&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                        <li>
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href=""> &nbsp; Bài 3: Hướng dẫn tập gõ nhanh văn bản bằng 10 ngón </a>
-                            <div className="d-inline-block float-right">06:58&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                        <li>
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href=""> &nbsp; Bài 4: Sao chép, cắt, dán văn bản </a>
-                            <div className="d-inline-block float-right">06:58&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                    </ul>
+            <div className="bg-white" id="noidung">
+              <h3>Nội dung khóa học</h3>
+              <h5>Phần 1:Giới thiệu tổng quan và các thiết lập ban đầu</h5>
+              <ul className="no-dots-list">
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href="">
+                    {" "}
+                    &nbsp; Bài 1: Giới thiệu và các thiết lập cơ bản{" "}
+                  </a>
+                  <div className="d-inline-block float-right">
+                    08:05&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href="">
+                    {" "}
+                    &nbsp;Bài 2: Tạo mới, mở và lưu trữ file văn bản{" "}
+                  </a>
+                  <div className="d-inline-block float-right">
+                    06:58&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href="">
+                    {" "}
+                    &nbsp; Bài 3: Hướng dẫn tập gõ nhanh văn bản bằng 10 ngón{" "}
+                  </a>
+                  <div className="d-inline-block float-right">
+                    06:58&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href=""> &nbsp; Bài 4: Sao chép, cắt, dán văn bản </a>
+                  <div className="d-inline-block float-right">
+                    06:58&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+              </ul>
 
-                    <h5>Phần 2:Định dạng văn bản</h5>
-                    <ul className="no-dots-list">
-                        <li>
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href=""> &nbsp; Bài 5: Giới thiệu và các thiết lập cơ bản </a>
-                            <div className="d-inline-block float-right">08:05&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                        <li>
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href=""> &nbsp;Bài 6: Tạo mới, mở và lưu trữ file văn bản </a>
-                            <div className="d-inline-block float-right">06:58&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                        <li>
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href=""> &nbsp; Bài 7: Hướng dẫn tập gõ nhanh văn bản bằng 10 ngón </a>
-                            <div className="d-inline-block float-right">06:58&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                        <li>
-                            <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
-                            <a href=""> &nbsp; Bài 8: Sao chép, cắt, dán văn bản </a>
-                            <div className="d-inline-block float-right">06:58&nbsp;&nbsp;</div>
-                            <hr/>
-                        </li>
-                    </ul>
+              <h5>Phần 2:Định dạng văn bản</h5>
+              <ul className="no-dots-list">
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href="">
+                    {" "}
+                    &nbsp; Bài 5: Giới thiệu và các thiết lập cơ bản{" "}
+                  </a>
+                  <div className="d-inline-block float-right">
+                    08:05&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href="">
+                    {" "}
+                    &nbsp;Bài 6: Tạo mới, mở và lưu trữ file văn bản{" "}
+                  </a>
+                  <div className="d-inline-block float-right">
+                    06:58&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href="">
+                    {" "}
+                    &nbsp; Bài 7: Hướng dẫn tập gõ nhanh văn bản bằng 10 ngón{" "}
+                  </a>
+                  <div className="d-inline-block float-right">
+                    06:58&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>
+                  <a href=""> &nbsp; Bài 8: Sao chép, cắt, dán văn bản </a>
+                  <div className="d-inline-block float-right">
+                    06:58&nbsp;&nbsp;
+                  </div>
+                  <hr />
+                </li>
+              </ul>
+            </div>
 
-                </div>
+            <div className="bg-white" id="infogiangvien">
+              <h3>Thông tin giảng viên</h3>
 
-                <div className="bg-white" id="infogiangvien">
-                    <h3>Thông tin giảng viên</h3>
-
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-sm-3">
-                                <div><img className="lazy"
-                                        src="/uploads/thaoptt09@gmail.com/August252017100pm_do-trung-thanh_thumb.jpg"
-                                        align="" loading="lazy"/></div>
-                                <div className="uct-rate-gv">
-                                    <ul>
-                                        <li>
-                                            <i className="fa fa-users" aria-hidden="true"></i>
-                                            <span>8896</span> Học viên
-                                        </li>
-                                        <li><i className="fa fa-play-circle" aria-hidden="true"></i> <span>6</span> Khóa học
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="col-sm-8">
-                                <p className="fw-bold">Đỗ Trung Thành </p>
-                                <div className="pre">
-                                    Giảng viên Trường Cao đẳng Sư phạm Yên Bái, Thạc sỹ Khoa học Máy tính
-                                    Đỗ Trung Thành - Giảng viên Trường Cao đẳng Sư phạm Yên Bái
-                                    Trình độ: Thạc sỹ Khoa học Máy tính
-                                    Đạt giải nhì Hội thi sáng tạo kỹ thuật tỉnh Yên Bái (năm 2016)
-                                    Đạt giải nhì Cuộc thi Thiết kế bài giảng e-Learning Quốc gia lần thứ 4 (2017).
-                                    Nhiều năm đạt giáo viên dạy giỏi cấp tỉnh, có học sinh giỏi cấp quốc gia
-                                    Đỗ Trung Thành với kinh nghiệm 20 năm tham gia công tác giảng dạy.
-                                    Tham gia nhiều dự án xây dựng website, phần mềm.
-                                    Có kinh nghiệm giảng dạy Tin học Văn phòng; thiết kế đồ họa; biên tập âm thanh; biên
-                                    tập videos; lập trình thiết kế, xây dựng website, xây dựng phần mềm với các ngôn ngữ
-                                    C# và PHP
-                                </div>
-                                <div>
-                                    <a className="see-more-info-btn" href="javascript:void(0)">Xem thêm</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <br/>
-                
-                
-                <div className="bg-white" id="danhgia">
-                    <h3>Đánh giá của học viên</h3>
-                    <div className="u-rate-hv" id="u-rate-hv">
-                        <div className="urh-left">
-                            <div className="number-big-rate">5</div>
-                            <div className="star-big-rate">
-                                <span className="star-rate">
-                                    <i className="fa fa-star co-or" aria-hidden="true"></i><i className="fa fa-star co-or"
-                                        aria-hidden="true"></i><i className="fa fa-star co-or" aria-hidden="true"></i><i
-                                        className="fa fa-star co-or" aria-hidden="true"></i><i className="fa fa-star co-or"
-                                        aria-hidden="true"></i> </span>
-                            </div>
-                            <div className="count-rate">49 Đánh giá</div>
-                        </div>
-                        <div className="urh-right">
-                            <div className="u-rate-f1">
-                                <div className="u-rate-f1-progress">
-                                    <div className="progress">
-                                        <div className="progress-bar progress-bar-success" role="progressbar"
-                                            aria-valuenow="86" aria-valuemin="0" aria-valuemax="100"
-                                            style={{width: '86%'}}>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="u-rate-f1-star">
-                                    <span className="star-rate">
-                                        <i className="fa fa-star co-or"></i><i className="fa fa-star co-or"></i><i
-                                            className="fa fa-star co-or"></i><i className="fa fa-star co-or"></i><i
-                                            className="fa fa-star co-or"></i> </span>
-                                </div>
-                                <div className="u-rate-f1-num">
-                                    <p>86%</p>
-                                </div>
-                            </div>
-                            <div className="u-rate-f1">
-                                <div className="u-rate-f1-progress">
-                                    <div className="progress">
-                                        <div className="progress-bar progress-bar-success" role="progressbar"
-                                            aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style={{width: '5%'}}>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="u-rate-f1-star">
-                                    <span className="star-rate">
-                                        <i className="fa fa-star co-or"></i><i className="fa fa-star co-or"></i><i
-                                            className="fa fa-star co-or"></i><i className="fa fa-star co-or"></i> <i
-                                            className="fa fa-star-o co-or"></i> </span>
-                                </div>
-                                <div className="u-rate-f1-num">
-                                    <p>5%</p>
-                                </div>
-                            </div>
-                            <div className="u-rate-f1">
-                                <div className="u-rate-f1-progress">
-                                    <div className="progress">
-                                        <div className="progress-bar progress-bar-success" role="progressbar"
-                                            aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style={{width: '2%'}}>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="u-rate-f1-star">
-                                    <span className="star-rate">
-                                        <i className="fa fa-star co-or"></i><i className="fa fa-star co-or"></i><i
-                                            className="fa fa-star co-or"></i> <i className="fa fa-star-o co-or"></i><i
-                                            className="fa fa-star-o co-or"></i> </span>
-                                </div>
-                                <div className="u-rate-f1-num">
-                                    <p>2%</p>
-                                </div>
-                            </div>
-                            <div className="u-rate-f1">
-                                <div className="u-rate-f1-progress">
-                                    <div className="progress">
-                                        <div className="progress-bar progress-bar-success" role="progressbar"
-                                            aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style={{width: '5%'}}>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="u-rate-f1-star">
-                                    <span className="star-rate">
-                                        <i className="fa fa-star co-or"></i><i className="fa fa-star co-or"></i> <i
-                                            className="fa fa-star-o co-or"></i><i className="fa fa-star-o co-or"></i><i
-                                            className="fa fa-star-o co-or"></i> </span>
-                                </div>
-                                <div className="u-rate-f1-num">
-                                    <p>5%</p>
-                                </div>
-                            </div>
-                            <div className="u-rate-f1">
-                                <div className="u-rate-f1-progress">
-                                    <div className="progress">
-                                        <div className="progress-bar progress-bar-success" role="progressbar"
-                                            aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style={{width: '2%'}}>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="u-rate-f1-star">
-                                    <span className="star-rate">
-                                        <i className="fa fa-star co-or"></i> <i className="fa fa-star-o co-or"></i><i
-                                            className="fa fa-star-o co-or"></i><i className="fa fa-star-o co-or"></i><i
-                                            className="fa fa-star-o co-or"></i> </span>
-                                </div>
-                                <div className="u-rate-f1-num">
-                                    <p>2%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <br/>                
-                <div className="bg-white">
-                    <h3>Nhận xét của học viên</h3>
+              <div className="container">
+                <div className="row">
+                  <div className="col-sm-3">
                     <div>
-                        <ul className="load_comment">
-                            <li className="u-block-cmhv">
-                                <div className="ava-hv">
-                                    
-                                    C
-                                </div>
-                                <div className="block-hv">
-                                    <div className="block-inner user-rate-detail">
-                                        <span className="star-rate-detail" >
-                                            <i className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i> </span>
-                                        <div className="name-hv">Đỗ Thị Cúc</div>
-                                    </div>
-                                    <div className="cm-hv">
-                                        <div className="rate-hv">
-                                            <p>Khóa học rất tốt, giảng viên giảng bài dễ hiểu và nhiệt tình
-                                                hỗ trợ học viên.</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </li>
-                            <li className="u-block-cmhv">
-                                <div className="ava-hv">
-                                    
-                                    C
-                                </div>
-                                <div className="block-hv">
-                                    <div className="block-inner user-rate-detail">
-                                        <span className="star-rate-detail" style={{paddingTop: '3px'}}>
-                                            <i className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i> </span>
-                                        <div className="name-hv">Vi văn cường</div>
-                                    </div>
-                                    <div className="cm-hv">
-                                        <div className="rate-hv">
-                                            <p>Rất hay và hữu ích ạ mong chương trình mỗi ngày một phát triển hơn</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </li>
-                            <li className="u-block-cmhv">
-                                <div className="ava-hv">                                    
-                                    K
-                                </div>
-                                <div className="block-hv">
-                                    <div className="block-inner user-rate-detail">
-                                        <span style={{paddingTop: '3px'}}>
-                                            <i className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i> </span>
-                                        <div className="name-hv">Nguyễn Hoàng Kim</div>
-                                    </div>
-                                    <div className="cm-hv">
-                                        <div className="rate-hv">
-                                            <p>Khóa hoc chất lượng cao, bổ ích và đầy đủ thông tin cần cho người học</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="u-block-cmhv">
-                                <div className="ava-hv">
-                                    H
-                                </div>
-                                <div className="block-hv">
-                                    <div className="block-inner user-rate-detail">
-                                        <span style={{paddingTop: '3px'}}>
-                                            <i className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i><i
-                                                className="fa fa-star co-or" aria-hidden="true"></i> </span>
-                                        <div className="name-hv">Nguyễn Thị Thu Hà</div>
-                                    </div>
-                                    <div className="cm-hv">
-                                        <div className="rate-hv">
-                                            <p>thầy dậy rễ hiểu, chi tiết ạ</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-
+                      <img
+                        className="lazy"
+                        src="/uploads/thaoptt09@gmail.com/August252017100pm_do-trung-thanh_thumb.jpg"
+                        align=""
+                        loading="lazy"
+                      />
                     </div>
-                </div>
+                    <div className="uct-rate-gv">
+                      <ul>
+                        <li>
+                          <i className="fa fa-users" aria-hidden="true"></i>
+                          <span>8896</span> Học viên
+                        </li>
+                        <li>
+                          <i
+                            className="fa fa-play-circle"
+                            aria-hidden="true"
+                          ></i>{" "}
+                          <span>6</span> Khóa học
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
 
+                  <div className="col-sm-8">
+                    <p className="fw-bold">Đỗ Trung Thành </p>
+                    <div className="pre">
+                      Giảng viên Trường Cao đẳng Sư phạm Yên Bái, Thạc sỹ Khoa
+                      học Máy tính Đỗ Trung Thành - Giảng viên Trường Cao đẳng
+                      Sư phạm Yên Bái Trình độ: Thạc sỹ Khoa học Máy tính Đạt
+                      giải nhì Hội thi sáng tạo kỹ thuật tỉnh Yên Bái (năm 2016)
+                      Đạt giải nhì Cuộc thi Thiết kế bài giảng e-Learning Quốc
+                      gia lần thứ 4 (2017). Nhiều năm đạt giáo viên dạy giỏi cấp
+                      tỉnh, có học sinh giỏi cấp quốc gia Đỗ Trung Thành với
+                      kinh nghiệm 20 năm tham gia công tác giảng dạy. Tham gia
+                      nhiều dự án xây dựng website, phần mềm. Có kinh nghiệm
+                      giảng dạy Tin học Văn phòng; thiết kế đồ họa; biên tập âm
+                      thanh; biên tập videos; lập trình thiết kế, xây dựng
+                      website, xây dựng phần mềm với các ngôn ngữ C# và PHP
+                    </div>
+                    <div>
+                      <a
+                        className="see-more-info-btn"
+                        href="javascript:void(0)"
+                      >
+                        Xem thêm
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br />
+
+            <div className="bg-white" id="danhgia">
+              <h3>Đánh giá của học viên</h3>
+              <div className="u-rate-hv" id="u-rate-hv">
+                <div className="urh-left">
+                  <div className="number-big-rate">5</div>
+                  <div className="star-big-rate">
+                    <span className="star-rate">
+                      <i className="fa fa-star co-or" aria-hidden="true"></i>
+                      <i className="fa fa-star co-or" aria-hidden="true"></i>
+                      <i className="fa fa-star co-or" aria-hidden="true"></i>
+                      <i className="fa fa-star co-or" aria-hidden="true"></i>
+                      <i
+                        className="fa fa-star co-or"
+                        aria-hidden="true"
+                      ></i>{" "}
+                    </span>
+                  </div>
+                  <div className="count-rate">49 Đánh giá</div>
+                </div>
+                <div className="urh-right">
+                  <div className="u-rate-f1">
+                    <div className="u-rate-f1-progress">
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-success"
+                          role="progressbar"
+                          aria-valuenow="86"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          style={{ width: "86%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="u-rate-f1-star">
+                      <span className="star-rate">
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>{" "}
+                      </span>
+                    </div>
+                    <div className="u-rate-f1-num">
+                      <p>86%</p>
+                    </div>
+                  </div>
+                  <div className="u-rate-f1">
+                    <div className="u-rate-f1-progress">
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-success"
+                          role="progressbar"
+                          aria-valuenow="5"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          style={{ width: "5%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="u-rate-f1-star">
+                      <span className="star-rate">
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>{" "}
+                        <i className="fa fa-star-o co-or"></i>{" "}
+                      </span>
+                    </div>
+                    <div className="u-rate-f1-num">
+                      <p>5%</p>
+                    </div>
+                  </div>
+                  <div className="u-rate-f1">
+                    <div className="u-rate-f1-progress">
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-success"
+                          role="progressbar"
+                          aria-valuenow="2"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          style={{ width: "2%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="u-rate-f1-star">
+                      <span className="star-rate">
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>{" "}
+                        <i className="fa fa-star-o co-or"></i>
+                        <i className="fa fa-star-o co-or"></i>{" "}
+                      </span>
+                    </div>
+                    <div className="u-rate-f1-num">
+                      <p>2%</p>
+                    </div>
+                  </div>
+                  <div className="u-rate-f1">
+                    <div className="u-rate-f1-progress">
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-success"
+                          role="progressbar"
+                          aria-valuenow="5"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          style={{ width: "5%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="u-rate-f1-star">
+                      <span className="star-rate">
+                        <i className="fa fa-star co-or"></i>
+                        <i className="fa fa-star co-or"></i>{" "}
+                        <i className="fa fa-star-o co-or"></i>
+                        <i className="fa fa-star-o co-or"></i>
+                        <i className="fa fa-star-o co-or"></i>{" "}
+                      </span>
+                    </div>
+                    <div className="u-rate-f1-num">
+                      <p>5%</p>
+                    </div>
+                  </div>
+                  <div className="u-rate-f1">
+                    <div className="u-rate-f1-progress">
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-success"
+                          role="progressbar"
+                          aria-valuenow="2"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          style={{ width: "2%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="u-rate-f1-star">
+                      <span className="star-rate">
+                        <i className="fa fa-star co-or"></i>{" "}
+                        <i className="fa fa-star-o co-or"></i>
+                        <i className="fa fa-star-o co-or"></i>
+                        <i className="fa fa-star-o co-or"></i>
+                        <i className="fa fa-star-o co-or"></i>{" "}
+                      </span>
+                    </div>
+                    <div className="u-rate-f1-num">
+                      <p>2%</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br />
+            <div className="bg-white">
+              <h3>Nhận xét của học viên</h3>
+              <div>
+                <ul className="load_comment">
+                  <li className="u-block-cmhv">
+                    <div className="ava-hv">C</div>
+                    <div className="block-hv">
+                      <div className="block-inner user-rate-detail">
+                        <span className="star-rate-detail">
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>{" "}
+                        </span>
+                        <div className="name-hv">Đỗ Thị Cúc</div>
+                      </div>
+                      <div className="cm-hv">
+                        <div className="rate-hv">
+                          <p>
+                            Khóa học rất tốt, giảng viên giảng bài dễ hiểu và
+                            nhiệt tình hỗ trợ học viên.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li className="u-block-cmhv">
+                    <div className="ava-hv">C</div>
+                    <div className="block-hv">
+                      <div className="block-inner user-rate-detail">
+                        <span
+                          className="star-rate-detail"
+                          style={{ paddingTop: "3px" }}
+                        >
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>{" "}
+                        </span>
+                        <div className="name-hv">Vi văn cường</div>
+                      </div>
+                      <div className="cm-hv">
+                        <div className="rate-hv">
+                          <p>
+                            Rất hay và hữu ích ạ mong chương trình mỗi ngày một
+                            phát triển hơn
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li className="u-block-cmhv">
+                    <div className="ava-hv">K</div>
+                    <div className="block-hv">
+                      <div className="block-inner user-rate-detail">
+                        <span style={{ paddingTop: "3px" }}>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>{" "}
+                        </span>
+                        <div className="name-hv">Nguyễn Hoàng Kim</div>
+                      </div>
+                      <div className="cm-hv">
+                        <div className="rate-hv">
+                          <p>
+                            Khóa hoc chất lượng cao, bổ ích và đầy đủ thông tin
+                            cần cho người học
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li className="u-block-cmhv">
+                    <div className="ava-hv">H</div>
+                    <div className="block-hv">
+                      <div className="block-inner user-rate-detail">
+                        <span style={{ paddingTop: "3px" }}>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className="fa fa-star co-or"
+                            aria-hidden="true"
+                          ></i>{" "}
+                        </span>
+                        <div className="name-hv">Nguyễn Thị Thu Hà</div>
+                      </div>
+                      <div className="cm-hv">
+                        <div className="rate-hv">
+                          <p>thầy dậy rễ hiểu, chi tiết ạ</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

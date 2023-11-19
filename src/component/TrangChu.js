@@ -1,210 +1,136 @@
-import { useNavigate } from "react-router-dom";
-import "../css/style.css";
-import "../css/headers.css";
-
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axiosClient from "../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLanguage,
-  faLineChart,
-  faDesktop,
-  faSearchDollar,
-  faLightbulb,
-  faCode,
-} from "@fortawesome/free-solid-svg-icons";
-
+import { faLanguage } from "@fortawesome/free-solid-svg-icons";
+import Header from "./header/header-trang-chu";
+import Footer from "./footer/footer";
+import NoiDung from "./TrangChuNoiDung";
 import slideshow1 from "../image/slideshow_1.jpg";
 import slideshow2 from "../image/slideshow_2.jpg";
 import slideshow3 from "../image/slideshow_3.jpg";
 
+function Home() {
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [parentCategoryId, setParentCategoryId] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-import Header from "./header/header-trang-chu";
-import Footer from "./footer/footer";
-import NoiDung from "./TrangChuNoiDung";
-function App() {
-  const navigate = useNavigate();
-  const handleNavigate = (path) => {
-    navigate(path);
+  const fetchSubcategories = async (categoryId) => {
+    console.log("categoryId before API call:", categoryId);
+    try {
+      const response = await axiosClient.get(
+        `/categories/${categoryId}/features`
+      );
+      setSubcategories(response.data);
+      setSelectedCategoryId(categoryId);
+      setParentCategoryId(categoryId);
+    } catch (error) {
+      console.error(`Error fetching subcategories for ${categoryId}:`, error);
+      console.log("Response data:", error.response.data);
+    }
   };
+
+  useEffect(() => {
+    const fetchTopLevelCategories = async () => {
+      try {
+        const response = await axiosClient.get("/categories", {
+          params: {
+            parentCategoryId: 0,
+          },
+        });
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching top-level categories:", error);
+      }
+    };
+
+    fetchTopLevelCategories();
+    // Replace with the desired category ID or parentCategoryId
+    fetchSubcategories(/* Replace with the desired category ID or parentCategoryId */);
+  }, []); // Make sure to provide the necessary dependencies if needed
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const nextIndex = (activeIndex + 1) % 3;
+      setActiveIndex(nextIndex);
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [activeIndex]);
+
   return (
     <div>
       <Header />
-      <div className=" col-sm-3">
+      <div className="categories-col">
         <nav>
           <ul>
-            <li className="dropdown">
-              <a href="#">
-                <FontAwesomeIcon icon={faLanguage}></FontAwesomeIcon>&nbsp;Ngoại
-                ngữ
-              </a>
-              <ul>
-                <li>
-                  <a href="#">Tất cả ngoại ngữ</a>
+            {categories
+              .filter((category) => category.parentCategoryId === 0)
+              .map((category) => (
+                <li key={category.id} className="category-item">
+                  <Link to="#" onClick={() => fetchSubcategories(category.id)}>
+                    <FontAwesomeIcon icon={faLanguage} />
+                    &nbsp;{category.name}
+                  </Link>
+                  {selectedCategoryId === category.id && (
+                    <ul className="subcategory-list">
+                      {subcategories
+                        .filter(
+                          (subcategory) =>
+                            subcategory.parentCategoryId === category.id
+                        )
+                        .map((subcategory) => (
+                          <li key={subcategory.id}>
+                            <Link
+                              to="#"
+                              onClick={() => fetchSubcategories(subcategory.id)}
+                            >
+                              <FontAwesomeIcon icon={faLanguage} />
+                              &nbsp;{subcategory.name}
+                            </Link>
+                          </li>
+                        ))}
+                    </ul>
+                  )}
                 </li>
-                <li>
-                  <a href="#">Tiếng Anh</a>
-                </li>
-                <li>
-                  <a href="#">Tiếng Đức</a>
-                </li>
-                <li>
-                  <a href="#">Tiếng Hàn</a>
-                </li>
-                <li>
-                  <a href="#">Tiếng Nhật</a>
-                </li>
-                <li>
-                  <a href="#">Tiếng Trung</a>
-                </li>
-              </ul>
-            </li>
-            <li className="dropdown">
-              <a href="#">
-                <FontAwesomeIcon icon={faLineChart}></FontAwesomeIcon>
-                &nbsp;Marketing
-              </a>
-              <ul>
-                <li>
-                  <a href="#">Tất cả Marketing</a>
-                </li>
-                <li>
-                  <a href="#">Facebook Marketing</a>
-                </li>
-                <li>
-                  <a href="#">Zalo Marketing</a>
-                </li>
-                <li>
-                  <a href="#">Google Ads</a>
-                </li>
-              </ul>
-            </li>
-            <li className="dropdown">
-              <a href="#">
-                <FontAwesomeIcon icon={faDesktop}></FontAwesomeIcon>&nbsp;Tin
-                học văn phòng
-              </a>
-              <ul>
-                <li>
-                  <a href="#">Tất cả Tin học văn phòng</a>
-                </li>
-                <li>
-                  <a href="#">Word</a>
-                </li>
-                <li>
-                  <a href="#">Excel</a>
-                </li>
-                <li>
-                  <a href="#">Power Point</a>
-                </li>
-              </ul>
-            </li>
-            <li className="dropdown">
-              <a href="#">
-                <FontAwesomeIcon icon={faSearchDollar}></FontAwesomeIcon>
-                &nbsp;Tài chính kế toán
-              </a>
-              <ul>
-                <li>
-                  <a href="#">Tất cả Tài chính kế toán</a>
-                </li>
-                <li>
-                  <a href="#">Kế toán</a>
-                </li>
-                <li>
-                  <a href="#">Tài chính</a>
-                </li>
-                <li>
-                  <a href="#">Chứng khoán</a>
-                </li>
-              </ul>
-            </li>
-            <li className="dropdown">
-              <a href="#">
-                <FontAwesomeIcon icon={faLightbulb}></FontAwesomeIcon>&nbsp;Kỹ
-                năng
-              </a>
-              <ul>
-                <li>
-                  <a href="#">Tất cả Kỹ năng</a>
-                </li>
-                <li>
-                  <a href="#">Kỹ năng lãnh đạo</a>
-                </li>
-                <li>
-                  <a href="#">Kỹ năng mềm</a>
-                </li>
-                <li>
-                  <a href="#">Kỹ năng phát triển bản thân</a>
-                </li>
-              </ul>
-            </li>
-            <li className="dropdown">
-              <a href="#">
-                <FontAwesomeIcon icon={faCode}></FontAwesomeIcon>&nbsp;Công nghệ
-              </a>
-              <ul>
-                <li>
-                  <a href="#">Tất cả Công nghệ thông tin</a>
-                </li>
-                <li>
-                  <a href="#">Dữ liệu</a>
-                </li>
-                <li>
-                  <a href="#">Công nghệ thông tin</a>
-                </li>
-                <li>
-                  <a href="#">Sữa chữa, chế tạo</a>
-                </li>
-              </ul>
-            </li>
+              ))}
           </ul>
         </nav>
       </div>
       <div
         id="demo"
-        className="carousel slide col-sm-6 slideshow_homepage"
+        className="carousel slide col-sm-6 slideshow_homepage carousel-fade"
         data-bs-ride="carousel"
       >
         <div className="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#demo"
-            data-bs-slide-to="0"
-            class="active"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#demo"
-            data-bs-slide-to="1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#demo"
-            data-bs-slide-to="2"
-          ></button>
+          {[0, 1, 2].map((index) => (
+            <button
+              key={index}
+              type="button"
+              data-bs-target="#demo"
+              data-bs-slide-to={index}
+              className={activeIndex === index ? "active" : ""}
+            ></button>
+          ))}
         </div>
 
         <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img
-              src={slideshow1}
-              alt="Los Angeles"
-              className="d-block w-100 image-slideshow"
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src={slideshow2}
-              alt="Chicago"
-              className="d-block w-100 image-slideshow"
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src={slideshow3}
-              alt="New York"
-              className="d-block w-100 image-slideshow"
-            />
-          </div>
+          {[slideshow1, slideshow2, slideshow3].map((image, index) => (
+            <div
+              key={index}
+              className={`carousel-item ${
+                activeIndex === index ? "active" : ""
+              }`}
+            >
+              <img
+                src={image}
+                alt={`Slideshow ${index + 1}`}
+                className="d-block w-100 image-slideshow"
+              />
+            </div>
+          ))}
         </div>
 
         <button
@@ -213,7 +139,10 @@ function App() {
           data-bs-target="#demo"
           data-bs-slide="prev"
         >
-          <span className="carousel-control-prev-icon"></span>
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
         </button>
         <button
           className="carousel-control-next"
@@ -221,16 +150,17 @@ function App() {
           data-bs-target="#demo"
           data-bs-slide="next"
         >
-          <span className="carousel-control-next-icon"></span>
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
         </button>
       </div>
 
       <NoiDung />
-      
-
       <Footer />
     </div>
   );
 }
 
-export default App;
+export default Home;

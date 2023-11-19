@@ -1,246 +1,62 @@
-import { useNavigate } from "react-router-dom";
-import React from "react";
-import logo from "../image/logo.png";
-import "../css/headers.css";
-import "../css/style.css";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import axiosClient from "../api/axiosClient";
+import CourseCard from "./CourseCard";
 
-import {
-  faLanguage,
-  faLineChart,
-  faDesktop,
-  faSearchDollar,
-  faLightbulb,
-  faCode,
-} from "@fortawesome/free-solid-svg-icons";
-import facebookcourse from "../image/facebookcourse.jpg";
+const Header = () => {
+  const [topNewCourses, setTopNewCourses] = useState([]);
+  const [topMostCourses, setTopMostCourses] = useState([]);
 
-export default function Header() {
-  const navigate = useNavigate();
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
+  useEffect(() => {
+    const fetchTopNewCourses = async () => {
+      try {
+        const response = await axiosClient.get("/courses/topNew");
+        setTopNewCourses(response.data);
+      } catch (error) {
+        console.error("Error fetching top new courses:", error);
+      }
+    };
+
+    const fetchTopMostCourses = async () => {
+      try {
+        const response = await axiosClient.get("/courses/topMost"); 
+        setTopMostCourses(response.data);
+      } catch (error) {
+        console.error("Error fetching top most courses:", error);
+      }
+    };
+
+    fetchTopNewCourses();
+    fetchTopMostCourses();
+  }, []); 
+
   return (
-  <div>
-  <div className="container-fluid col-md-10 ">
+    <div className="container-fluid col-md-10">
       <div className="row">
         <div className="center_body">
           <br />
           <h3 className="fw-bold">Top khóa học bán chạy</h3>
           <br />
-          <div className=" row ">
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
+          <div className="row">
+            {topMostCourses.map((course) => (
+              <CourseCard key={course.Id} course={course} />
+            ))}
           </div>
 
           <br />
           <h3 className="fw-bold">Khóa học mới ra mắt</h3>
           <br />
-          <div className=" row ">
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
-            <div
-              class="card d-inline-block p-2 pt-3 mx-3"
-              style={{ width: "18rem" }}
-            >
-              <img class="card-img-top" alt="..." src={facebookcourse} />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <p className="text-decoration-line-through">1.000.000 đ</p>
-                  <p className="card-text fw-bold">799.000 đ</p>
-                </p>
-                <div className="d-inline-block">
-                  <span className="pt-2">
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                    <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
-                  </span>
-                </div>
-                <a href="#" className="btn btn-primary w-100">
-                  Thêm vào giỏ hàng
-                </a>
-              </div>
-            </div>
-          </div>  
-
+          <div className="row">
+            {topNewCourses.map((course) => (
+              <CourseCard key={course.Id} course={course} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
-    </div>
   );
-}
+};
+
+export default Header;

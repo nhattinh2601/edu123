@@ -14,7 +14,7 @@ import {
 
 import UserAPI from "../api/UserAPI";
 
-function App() {
+function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState({
     passwordWeak: false,
@@ -303,4 +303,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;

@@ -38,7 +38,14 @@ export const categoriesSlice = createSlice({
         state.data = state.data.filter((category) => category.id !== action.payload);
       })
       .addCase(fetchCategoryFeatures.fulfilled, (state, action) => {
-        // Handle the fetched category features data as needed
+        const { parentCategoryId, features } = action.payload;
+        const index = state.data.findIndex((category) => category.id === parentCategoryId);
+
+        if (index !== -1) {
+          state.data[index].features = features;
+        } else {
+          console.error(`Parent category with ID ${parentCategoryId} not found.`);
+        }
       });
   },
 });

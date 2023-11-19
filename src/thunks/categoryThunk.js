@@ -23,5 +23,6 @@ export const deleteCategory = createAsyncThunk('categories/deleteCategory', asyn
 
 export const fetchCategoryFeatures = createAsyncThunk('categories/fetchCategoryFeatures', async (parentCategoryId) => {
   const response = await axiosClient.get(`/categories/${parentCategoryId}/features`);
-  return response.data;
+  return { parentCategoryId, features: response.data };
 });
+
