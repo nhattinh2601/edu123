@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { forgetPassword } from "../../thunks/authThunk";
 
-function App() {
+function ForgetPassWord() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const resetPasswordStatus = useSelector(
@@ -156,4 +156,4 @@ function App() {
   );
 }
 
-export default App;
+export default ForgetPassWord;

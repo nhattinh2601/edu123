@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import NoiDung from "./HomePageContent";
+import HomePageContent from "./HomePageContent";
 import slideshow1 from "../../image/slideshow_1.jpg";
 import slideshow2 from "../../image/slideshow_2.jpg";
 import slideshow3 from "../../image/slideshow_3.jpg";
+import SearchCourse from "./SearchCourse";
 
-function Home() {
+function HomePage() {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [parentCategoryId, setParentCategoryId] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { title } = useParams();
 
   const fetchSubcategories = async (categoryId) => {
     console.log("categoryId before API call:", categoryId);
@@ -47,9 +50,9 @@ function Home() {
     };
 
     fetchTopLevelCategories();
-    // Replace with the desired category ID or parentCategoryId
-    fetchSubcategories(/* Replace with the desired category ID or parentCategoryId */);
-  }, []); // Make sure to provide the necessary dependencies if needed
+
+    fetchSubcategories();
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -157,10 +160,10 @@ function Home() {
         </button>
       </div>
 
-      <NoiDung />
+      {title ? <SearchCourse /> : <HomePageContent />}
       <Footer />
     </div>
   );
 }
 
-export default Home;
+export default HomePage;

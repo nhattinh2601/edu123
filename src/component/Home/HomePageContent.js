@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+
 import axiosClient from "../../api/axiosClient";
 import CourseCard from "./CourseCard";
 
-const Header = () => {
+const HomePageCotent = () => {
+  
   const [topNewCourses, setTopNewCourses] = useState([]);
   const [topMostCourses, setTopMostCourses] = useState([]);
 
@@ -59,4 +58,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HomePageCotent;

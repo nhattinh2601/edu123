@@ -13,9 +13,11 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 import UserAPI from "../../api/UserAPI";
+import { useUser } from "../../provider/UserProvider";
 
 function Login() {
   const navigate = useNavigate();
+  const { setUserIdValue } = useUser();
   const [error, setError] = useState({
     passwordWeak: false,
     emailPasswordNotFound: false,
@@ -129,6 +131,10 @@ function Login() {
         const encodedRoleId = btoa(roleId); // Mã hóa roleId
         localStorage.setItem("roleId", encodedRoleId);
         const destination = roleId === 2 ? "/admin" : "/user";
+        setUserIdValue(response.data.UserProfileDto.Id);
+        const Id = response.data.UserProfileDto.Id;
+        const encodedId = btoa(Id);
+        localStorage.setItem("userId", encodedId);
 
         setTimeout(() => {
           navigate(destination);

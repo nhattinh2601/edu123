@@ -1,11 +1,10 @@
 import "../../css/style.css";
 import "../../css/headers.css";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import avatar from "../../image/August252017100pm_do-trung-thanh_thumb.jpg";
 
-function App() {
+import UploadImage from "./UploadImage";
+
+function EditProfile() {
   return (
     <div className="container">
       <div className="row">
@@ -17,20 +16,7 @@ function App() {
               </h5>
               <form action="/login" method="POST">
                 <div>
-                  <img
-                    src={avatar}
-                    className="rounded-circle"
-                    width="100px"
-                    alt=""
-                  />
-                  <br />
-                  <button
-                    type="submit"
-                    className="btn btn-light btn-block mb-4 w-20 "
-                  >
-                    <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>Đổi hình
-                    đại diện
-                  </button>
+                  <UploadImage />
                 </div>
                 <div className="form-outline mb-4">
                   <label className="form-label fw-bold" for="form2Example1">
@@ -78,4 +64,4 @@ function App() {
   );
 }
 
-export default App;
+export default EditProfile;
