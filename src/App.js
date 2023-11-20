@@ -48,6 +48,7 @@ const App = () => {
         {/* Trang chung */}
         <Route path="/" element={<HomePage />} />
         <Route path="/search/:title" element={<HomePage />} />
+        <Route path="/searchCategory/:categoryId" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget-password" element={<ForgetPassword />} />

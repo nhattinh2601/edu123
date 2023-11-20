@@ -3,32 +3,34 @@ import axiosClient from "../../api/axiosClient";
 import { useParams } from "react-router-dom";
 import CourseCard from "./CourseCard";
 
-const SearchCourse = () => {
+const FilterCourse = () => {
   const [searchCourses, setSearchCourses] = useState([]);
-  const { title } = useParams();
+  const { categoryId } = useParams();
 
   useEffect(() => {
     const fetchSearchCourses = async () => {
       try {
-        const response = await axiosClient.get(`/courses/search/${title}`);
-        setSearchCourses(response.data);
+        if (categoryId) {
+          const response = await axiosClient.get(`/courses/searchCategory/${categoryId}`);
+          setSearchCourses(response.data);
+        } else {
+          
+          setSearchCourses([]);
+        }
       } catch (error) {
         console.error("Error fetching search courses:", error);
       }
     };
 
-    if (title) {
-      fetchSearchCourses();
-    } else {
-    }
-  }, [title]);
+    fetchSearchCourses();
+  }, [categoryId]);
 
   return (
     <div className="container-fluid col-md-10">
       <div className="row">
         <div className="center_body">
           <br />
-          <h3 className="fw-bold">Kết quả tìm được</h3>
+          <h3 className="fw-bold">Kết quả lọc được </h3>
           <br />
           <div className="row">
             {searchCourses.map((course) => (
@@ -41,4 +43,4 @@ const SearchCourse = () => {
   );
 };
 
-export default SearchCourse;
+export default FilterCourse;

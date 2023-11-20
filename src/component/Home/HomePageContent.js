@@ -4,7 +4,6 @@ import axiosClient from "../../api/axiosClient";
 import CourseCard from "./CourseCard";
 
 const HomePageCotent = () => {
-  
   const [topNewCourses, setTopNewCourses] = useState([]);
   const [topMostCourses, setTopMostCourses] = useState([]);
 

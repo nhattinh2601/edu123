@@ -140,7 +140,6 @@ function ForgetPassWord() {
                     : "Lấy lại mật khẩu"}
                 </button>
 
-  
                 <Link
                   to="/login"
                   className="btn btn-primary btn-block mb-4 w-50"

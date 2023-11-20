@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
@@ -11,29 +11,13 @@ import slideshow1 from "../../image/slideshow_1.jpg";
 import slideshow2 from "../../image/slideshow_2.jpg";
 import slideshow3 from "../../image/slideshow_3.jpg";
 import SearchCourse from "./SearchCourse";
+import FilterCourse from "./FilterCourse";
 
 function HomePage() {
   const [categories, setCategories] = useState([]);
-  const [subcategories, setSubcategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  const [parentCategoryId, setParentCategoryId] = useState(null);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const { title } = useParams();
-
-  const fetchSubcategories = async (categoryId) => {
-    console.log("categoryId before API call:", categoryId);
-    try {
-      const response = await axiosClient.get(
-        `/categories/${categoryId}/features`
-      );
-      setSubcategories(response.data);
-      setSelectedCategoryId(categoryId);
-      setParentCategoryId(categoryId);
-    } catch (error) {
-      console.error(`Error fetching subcategories for ${categoryId}:`, error);
-      console.log("Response data:", error.response.data);
-    }
-  };
 
   useEffect(() => {
     const fetchTopLevelCategories = async () => {
@@ -50,8 +34,6 @@ function HomePage() {
     };
 
     fetchTopLevelCategories();
-
-    fetchSubcategories();
   }, []);
 
   useEffect(() => {
@@ -72,30 +54,12 @@ function HomePage() {
             {categories
               .filter((category) => category.parentCategoryId === 0)
               .map((category) => (
-                <li key={category.id} className="category-item">
-                  <Link to="#" onClick={() => fetchSubcategories(category.id)}>
-                    <FontAwesomeIcon icon={faLanguage} />
-                    &nbsp;{category.name}
-                  </Link>
-                  {selectedCategoryId === category.id && (
-                    <ul className="subcategory-list">
-                      {subcategories
-                        .filter(
-                          (subcategory) =>
-                            subcategory.parentCategoryId === category.id
-                        )
-                        .map((subcategory) => (
-                          <li key={subcategory.id}>
-                            <Link
-                              to="#"
-                              onClick={() => fetchSubcategories(subcategory.id)}
-                            >
-                              <FontAwesomeIcon icon={faLanguage} />
-                              &nbsp;{subcategory.name}
-                            </Link>
-                          </li>
-                        ))}
-                    </ul>
+                <li key={category.Id} className="category-item">
+                  {category.Id && (
+                    <Link to={`/searchCategory/${category.Id}`}>
+                      <FontAwesomeIcon icon={faLanguage} />
+                      &nbsp;{category.name}
+                    </Link>
                   )}
                 </li>
               ))}
@@ -159,7 +123,7 @@ function HomePage() {
           ></span>
         </button>
       </div>
-
+      <FilterCourse />
       {title ? <SearchCourse /> : <HomePageContent />}
       <Footer />
     </div>

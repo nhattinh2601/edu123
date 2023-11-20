@@ -28,7 +28,6 @@ export default function Header() {
     }
   }, [userId]);
 
-
   useEffect(() => {
     console.log("userDetails:", userDetails);
   }, [userDetails]);
@@ -72,7 +71,6 @@ export default function Header() {
       navigate(`/search/${encodeURIComponent(searchQuery)}`);
     }
   };
-  
 
   const renderAuthButtons = () => {
     if (accessToken) {
@@ -157,20 +155,19 @@ export default function Header() {
         </image>
       </div>
       <div className="d-inline-block">
-      <form
-  className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
-  onSubmit={(e) => handleSearchSubmit(e)}
->
-  <input
-    type="search"
-    className="form-control form-control-dark"
-    placeholder="Search..."
-    aria-label="Search"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-  />
-</form>
-
+        <form
+          className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
+          onSubmit={(e) => handleSearchSubmit(e)}
+        >
+          <input
+            type="search"
+            className="form-control form-control-dark"
+            placeholder="Search..."
+            aria-label="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </form>
       </div>
 
       <div className="d-inline-block" style={{ alignItems: "center" }}>

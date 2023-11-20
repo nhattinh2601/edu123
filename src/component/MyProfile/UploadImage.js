@@ -42,10 +42,9 @@ function MyEditor() {
           const encodedId = localStorage.getItem("userId");
           const userId = atob(encodedId);
 
-          const updateResponse = await axiosClient.patch(
-            `/users/${userId}`,
-            { avatar: cloudinaryUrl }
-          );
+          const updateResponse = await axiosClient.patch(`/users/${userId}`, {
+            avatar: cloudinaryUrl,
+          });
 
           if (!updateResponse.error) {
             cogoToast.success("Cập nhật ảnh đại diện thành công", {
