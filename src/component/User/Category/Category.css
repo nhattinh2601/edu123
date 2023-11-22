@@ -1,0 +1,13 @@
+.width-80{
+    width: 80%;
+}
+
+.card-course-img{
+    width: 240px;
+    height: 150px;
+}
+
+.container img {
+    object-fit: contain;  
+} 
+  
