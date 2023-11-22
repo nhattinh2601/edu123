@@ -130,7 +130,7 @@ function Login() {
         const roleId = response.data.UserProfileDto.roleId;
         const encodedRoleId = btoa(roleId); // Mã hóa roleId
         localStorage.setItem("roleId", encodedRoleId);
-        const destination = roleId === 2 ? "/admin" : "/user";
+        const destination = roleId === 3 ? "/admin" : "/user";
         setUserIdValue(response.data.UserProfileDto.Id);
         const Id = response.data.UserProfileDto.Id;
         const encodedId = btoa(Id);

@@ -1,26 +1,20 @@
-import { useNavigate } from "react-router-dom";
+
 import React from "react";
-import logo from "../../image/logo.png";
 import "../../css/headers.css";
 import "../../css/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+
 
 import {
   faList,
   faClock,
   faChevronRight,
-  faSearchDollar,
-  faLightbulb,
-  faCode,
+  
 } from "@fortawesome/free-solid-svg-icons";
 import facebookcourse from "../../image/facebookcourse.jpg";
 
-export default function Header() {
-  const navigate = useNavigate();
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
+export default function InstructorCourse() {
+  
   return (
     <div className="center_body ">
       <div class="bg-light bg-gradient" id="infogiangvien">

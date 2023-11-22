@@ -8,7 +8,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
 import NoiDung from "./InstructorCourse";
-function App() {
+function TeacherDetail() {
   return (
     <div>
       <Header />
@@ -88,4 +88,4 @@ function App() {
   );
 }
 
-export default App;
+export default TeacherDetail;

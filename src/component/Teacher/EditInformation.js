@@ -1,7 +1,73 @@
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import { useEffect, useState } from "react";
+
+import axiosClient from "../../api/axiosClient";
 
 export default function EditInformation() {
+  const [title, setTitle] = useState("");
+  const [teachingSubject, setTeachingSubject] = useState("");
+  const [teachingExperience, setTeachingExperience] = useState("");
+
+  const [error, setError] = useState(""); // Thêm state để lưu thông báo lỗi
+
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const encodedId = localStorage.getItem("userId");
+        const userId = atob(encodedId);
+
+        const response = await axiosClient.get(`users/${userId}`);
+        const userData = response.data;
+
+        const description = userData.description;
+
+        // Tách thành 3 phần sử dụng phương thức split
+        const parts = description.split("**");
+
+        // Bây giờ, bạn có thể truy cập các phần bằng cách sử dụng index
+        const part1 = parts[0];
+        const part2 = parts[1];
+        const part3 = parts[2];
+
+        setTitle(part1);
+        setTeachingSubject(part2);
+        setTeachingExperience(part3);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+
+    fetchUserData();
+  }, []);
+
+  const fieldsToUpdate = {
+    description: `${title}**${teachingSubject}**${teachingExperience}`,
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Kiểm tra xem các trường đều đã được nhập
+    if (!title || !teachingSubject || !teachingExperience) {
+      setError("Vui lòng nhập đầy đủ thông tin");
+      return;
+    }
+
+    try {
+      const encodedId = localStorage.getItem("userId");
+      const userId = atob(encodedId);
+
+      const response = await axiosClient.patch(
+        `/users/${userId}`,
+        fieldsToUpdate
+      );
+      console.log("User updated:", response.data);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -13,34 +79,47 @@ export default function EditInformation() {
                 <h2 className="card-title text-center mb-5  fw-bold ">
                   Chỉnh sửa thông tin giảng viên{" "}
                 </h2>
-                <form action="/login" method="POST">
+                <form onSubmit={handleSubmit}>
+                  {error && <p style={{ color: "red" }}>{error}</p>}
                   <div className="form-outline mb-4">
+                    <label className="form-label fw-bold" htmlFor="name">
+                      Chức danh *
+                    </label>
                     <input
-                      type="phone"
+                      type="text"
                       className="form-control"
                       placeholder="Chức danh"
-                      name="password"
-                      id="password"
+                      name="title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   </div>
 
                   <div className="form-outline mb-4">
+                    <label className="form-label fw-bold" htmlFor="name">
+                      Chủ đề muốn giảng dạy *
+                    </label>
                     <textarea
-                      type="phone"
+                      type="text"
                       className="form-control"
                       placeholder="Chủ đề muốn giảng dạy trên edu123"
-                      name="password"
-                      id="password"
+                      name="teachingSubject"
+                      value={teachingSubject}
+                      onChange={(e) => setTeachingSubject(e.target.value)}
                     />
                   </div>
 
                   <div className="form-outline mb-4">
+                    <label className="form-label fw-bold" htmlFor="name">
+                      Kinh nghiệp giảng dạy *
+                    </label>
                     <textarea
-                      type="phone"
+                      type="text"
                       className="form-control"
                       placeholder="Kinh nghiệp giảng dạy"
-                      name="password"
-                      id="password"
+                      name="teachingExperience"
+                      value={teachingExperience}
+                      onChange={(e) => setTeachingExperience(e.target.value)}
                     />
                   </div>
                   <button

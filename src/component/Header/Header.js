@@ -13,6 +13,8 @@ export default function Header() {
 
   const encodedId = localStorage.getItem("userId");
   const userId = atob(encodedId);
+  const encodedRoleId = localStorage.getItem("roleId");
+  const roleId = atob(encodedRoleId);
 
   useEffect(() => {
     if (userId) {
@@ -98,12 +100,32 @@ export default function Header() {
                 onMouseLeave={handleMouseLeave}
                 style={{ position: "absolute", top: "100%", left: 0 }}
               >
-                <Link className="dropdown-item" to="/course1">
+                <Link className="dropdown-item" to="/user/khoahoccuatoi">
                   Khóa học của tôi
                 </Link>
-                <Link className="dropdown-item" to="/course2">
-                  Cập nhật thông tin
+                {roleId === "1" ? (
+                  <Link className="dropdown-item" to="/user/register-teacher">
+                    Đăng ký giảng viên
+                  </Link>
+                ) : (
+                  <Link className="dropdown-item" to="/user/manage-courses">
+                    Quản lý các khóa học
+                  </Link>
+                )}
+                {roleId === "2" && (
+                  <Link className="dropdown-item" to="/teacher/edit-info">
+                    Cập nhật thông tin giảng viên
+                  </Link>
+                )}
+
+                <Link className="dropdown-item" to="/user/edit-info">
+                  Cập nhật thông tin cá nhân
                 </Link>
+                {roleId === "2" && (
+                  <Link className="dropdown-item" to="/teacher/payment-info">
+                    Thông tin thanh toán
+                  </Link>
+                )}
                 <Link className="dropdown-item" to="/user/change-password">
                   Đổi mật khẩu
                 </Link>

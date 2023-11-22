@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "../../thunks/authThunk";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import Header from "../Header/Header";
 
 function ChangePassword() {
   const dispatch = useDispatch();
@@ -114,6 +115,8 @@ function ChangePassword() {
   };
 
   return (
+    <div>
+    <Header />
     <div className="container">
       <div className="row">
         <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -207,11 +210,18 @@ function ChangePassword() {
                 >
                   {authStatus === "loading" ? "Cập nhật..." : "Cập nhật"}
                 </button>
+                <Link
+                  to="/user/edit-info"
+                  className="btn btn-light btn-block mb-4 w-50"
+                >
+                  Edit Profile
+                </Link>
               </form>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
