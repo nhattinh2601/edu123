@@ -2,11 +2,13 @@
   width: 80%;
 }
 
-.center_body {
-  width: 80%;
+.center_body {  
   margin: 0 auto;  /* căn giữa */
 }
 
+.margin-left {
+  margin-left: 80px;
+}
 nav {
     width: 280px;
     position: absolute;  

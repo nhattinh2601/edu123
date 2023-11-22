@@ -27,12 +27,9 @@ const FilterCourse = () => {
   }, [categoryId]);
 
   return (
-    <div className="container-fluid col-md-6 me-1">
+    <div className="container-fluid col-md-6 ">
       <div className="row">
-        <div className="center_body">
-          <br />
-          <h3 className="fw-bold center_body">Kết quả lọc được </h3>
-          <br />
+        <div className="center_body margin-left">          
           <div className="row ">
             {searchCourses.map((course) => (
               <CourseCard key={course.Id} course={course} />

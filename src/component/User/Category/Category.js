@@ -167,7 +167,7 @@ export default function Category() {
           </nav>
         </div>
         
-          <FilterCourse className="center_body"/>
+          <FilterCourse className="center_body "/>
 
 
         <br />
