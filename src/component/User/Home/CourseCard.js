@@ -23,7 +23,7 @@ const CourseCard = ({ course }) => {
   return (
     <div
       className="card d-inline-block p-2 pt-3 mx-3"
-      style={{ width: "18rem" }}
+      style={{ width: "17rem" }}
     >
       <img className="card-img-top" alt="..." src={course.image} />
       <div className="card-body">
