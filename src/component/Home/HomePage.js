@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLanguage } from "@fortawesome/free-solid-svg-icons";
+import { faLanguage, faDesktop } from "@fortawesome/free-solid-svg-icons";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import HomePageContent from "./HomePageContent";
@@ -15,9 +14,18 @@ import FilterCourse from "./FilterCourse";
 
 function HomePage() {
   const [categories, setCategories] = useState([]);
-
+  const [subcategories, setSubcategories] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { title } = useParams();
+  //const { title } = useLocation().pathname;
+  const [isSubcategoryVisible, setSubcategoryVisible] = useState(false);
+  const [subcategoryPosition, setSubcategoryPosition] = useState({
+    top: 0,
+    left: 0,
+  });
+  const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
+  const [timer, setTimer] = useState(null);
+  const initialTopPosition = useRef(null);
+
 
   useEffect(() => {
     const fetchTopLevelCategories = async () => {
@@ -45,27 +53,124 @@ function HomePage() {
     return () => clearInterval(intervalId);
   }, [activeIndex]);
 
+  const fetchSubcategories = async (parentCategoryId) => {
+    try {
+      const response = await axiosClient.get(
+        `/categories/${parentCategoryId}/features`
+      );
+      setSubcategories(response.data);
+    } catch (error) {
+      console.error(
+        `Error fetching subcategories for parentCategoryId ${parentCategoryId}:`,
+        error
+      );
+    }
+  };
+
+  const handleCategoryMouseEnter = (categoryId, event) => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    if (initialTopPosition.current === null) {
+      // Calculate and store the initial top position
+      initialTopPosition.current = event.currentTarget.offsetTop;
+    }
+
+    fetchSubcategories(categoryId);
+    setSubcategoryVisible(true);
+    setHoveredCategoryId(categoryId);
+
+    // Adjusted the left property for subcategory container
+    const subcategoryLeftPosition = event.currentTarget.offsetLeft + 215;
+
+    setSubcategoryPosition({
+      top: initialTopPosition.current,
+      left: subcategoryLeftPosition,
+    });
+  };
+
+  const handleCategoryMouseLeave = (event) => {
+    const isLeavingCategory =
+      event.relatedTarget &&
+      !event.relatedTarget.classList.contains("subcategory-item");
+
+    if (isLeavingCategory) {
+      const timeoutId = setTimeout(() => {
+        setSubcategories([]);
+        setSubcategoryVisible(false);
+        setHoveredCategoryId(null);
+      }, 300);
+
+      setTimer(timeoutId);
+    }
+  };
+
   return (
     <div>
       <Header />
-      <div className="categories-col">
+      <div className="categories-col" onMouseLeave={handleCategoryMouseLeave}>
         <nav>
           <ul>
             {categories
               .filter((category) => category.parentCategoryId === 0)
               .map((category) => (
-                <li key={category.Id} className="category-item">
+                <li
+                  key={category.Id}
+                  className="category-item dropdown"
+                  onMouseEnter={(event) =>
+                    handleCategoryMouseEnter(category.Id, event)
+                  }
+                >
                   {category.Id && (
-                    <Link to={`/searchCategory/${category.Id}`}>
-                      <FontAwesomeIcon icon={faLanguage} />
-                      &nbsp;{category.name}
-                    </Link>
+                    <div className="category-container">
+                      <Link
+                        to={`/searchCategory/${category.Id}`}
+                        className="dropdown-toggle parent-category"
+                      >
+                        <FontAwesomeIcon icon={faLanguage} />
+                        &nbsp;{category.name}
+                      </Link>
+                      <ul
+                        className={`dropdown-menu subcategory-list ${
+                          isSubcategoryVisible &&
+                          hoveredCategoryId === category.Id
+                            ? "show"
+                            : ""
+                        }`}
+                        style={{
+                          top: subcategoryPosition.top + "px",
+                          left: subcategoryPosition.left + "px",
+                        }}
+                      >
+                        
+                        {subcategories
+                          .filter(
+                            (subcategory) =>
+                              subcategory.parentCategoryId === category.Id
+                          )
+                          .map((subcategory) => (
+                            <li
+                              key={subcategory.Id}
+                              className="subcategory-item"
+                            >
+                              <Link
+                                to={`/searchCategory/${subcategory.Id}`}
+                                className="dropdown-item"
+                              > <FontAwesomeIcon icon={faDesktop} />
+                                {subcategory.name}
+                              </Link>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
                   )}
                 </li>
               ))}
           </ul>
         </nav>
       </div>
+
       <div
         id="demo"
         className="carousel slide col-sm-6 slideshow_homepage carousel-fade"
@@ -124,7 +229,8 @@ function HomePage() {
         </button>
       </div>
       <FilterCourse />
-      {title ? <SearchCourse /> : <HomePageContent />}
+      <SearchCourse />  
+      <HomePageContent />
       <Footer />
     </div>
   );
