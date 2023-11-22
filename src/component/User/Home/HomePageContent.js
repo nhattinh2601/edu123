@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import axiosClient from "../../../api/axiosClient";
-import CourseCard from "./CourseCard";
+import CourseCard from "../Course/CourseCard";
 
 const HomePageCotent = () => {
   const [topNewCourses, setTopNewCourses] = useState([]);

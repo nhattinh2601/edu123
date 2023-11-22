@@ -21,7 +21,7 @@ import EditInfoTeacher from "./component/User/Teacher/EditInformation.js";
 import DashboardUser from "./component/User/Dashboard/Dashboard.js";
 import PaymentInformation from "./component/User/Teacher/PaymentInformation.js";
 import Category from "./component/User/Category/Category.js";
-
+import Search from "./component/User/Search/Search.js";
 import Admin from "./component/Admin/Admin.js";
 
 import NotFound from "./component/User/Others/NotFound";
@@ -48,8 +48,8 @@ const App = () => {
         <Routes>
           {/* Trang chung */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/search/:title" element={<HomePage />} />
-          <Route path="/searchCategory/:categoryId" element={<HomePage />} />
+          <Route path="/search/:title" element={<Search />} />
+          <Route path="/searchCategory/:categoryId" element={<Category />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />

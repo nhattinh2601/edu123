@@ -150,9 +150,11 @@ export default function Header() {
   return (
     <header className="d-flex justify-content-center py-3 bg-white" id="topbar">
       <div className="d-inline-block">
+      <Link to ="/">
         <image className="navbar-brand mr-1">
           <img className="img-fluid logo" alt="logo" src={logo} />
         </image>
+        </Link>
       </div>
       <div className="d-inline-block">
         <form

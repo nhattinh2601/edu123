@@ -9,7 +9,6 @@ import HomePageContent from "./HomePageContent";
 import slideshow1 from "../../../assets/images/slideshow_1.jpg";
 import slideshow2 from "../../../assets/images/slideshow_2.jpg";
 import slideshow3 from "../../../assets/images/slideshow_3.jpg";
-import SearchCourse from "./SearchCourse";
 import FilterCourse from "./FilterCourse";
 import './Home.css';
 
@@ -230,7 +229,7 @@ function HomePage() {
         </button>
       </div>
       <FilterCourse />
-      <SearchCourse />  
+      
       <HomePageContent />
       <Footer />
     </div>
