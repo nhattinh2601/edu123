@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword } from "../../thunks/authThunk";
+import { changePassword } from "../../../thunks/authThunk";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "../Header/Header";
 

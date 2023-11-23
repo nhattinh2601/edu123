@@ -1,5 +1,5 @@
-import "../../css/style.css";
-import "../../css/headers.css";
+import "../../../css/style.css";
+import "../../../css/headers.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -7,7 +7,7 @@ import {
   faPlay,
   faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import avatar from "../../image/August252017100pm_do-trung-thanh_thumb.jpg";
+import avatar from "../../../image/August252017100pm_do-trung-thanh_thumb.jpg";
 
 import Header from "../Header/Header";
 

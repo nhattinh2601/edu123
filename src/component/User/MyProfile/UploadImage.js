@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { useDropzone } from "react-dropzone";
 
-import drag_drop from "../../assets/images/drag_drop.jpg";
-import axiosClient from "../../api/axiosClient";
+import drag_drop from "../../../assets/images/drag_drop.jpg";
+import axiosClient from "../../../api/axiosClient";
 import cogoToast from "cogo-toast";
 
 function MyEditor() {

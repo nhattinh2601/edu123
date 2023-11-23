@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axiosClient from "../../api/axiosClient";
+import axiosClient from "../../../api/axiosClient";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
@@ -10,7 +10,7 @@ export default function RegisterTeacher() {
   const [title, setTitle] = useState("");
   const [teachingSubject, setTeachingSubject] = useState("");
   const [teachingExperience, setTeachingExperience] = useState("");
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchUserData() {

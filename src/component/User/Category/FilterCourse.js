@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axiosClient from "../../api/axiosClient";
+import axiosClient from "../../../api/axiosClient";
 import { useParams } from "react-router-dom";
-import CourseCard from "./CourseCard";
+import CourseCard from "../Course/CourseCard";
+import './Category.css'
 
 const FilterCourse = () => {
   const [searchCourses, setSearchCourses] = useState([]);
@@ -26,13 +27,10 @@ const FilterCourse = () => {
   }, [categoryId]);
 
   return (
-    <div className="container-fluid col-md-10">
+    <div className="container-fluid col-md-6 ">
       <div className="row">
-        <div className="center_body">
-          <br />
-          <h3 className="fw-bold">Kết quả lọc được </h3>
-          <br />
-          <div className="row">
+        <div className="center_body margin-left">          
+          <div className="row ">
             {searchCourses.map((course) => (
               <CourseCard key={course.Id} course={course} />
             ))}

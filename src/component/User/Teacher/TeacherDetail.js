@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
 
-import avatar from "../../assets/images/August252017100pm_do-trung-thanh_thumb.jpg";
-import background from "../../assets/images/background_header_chitietgv.jpg";
+import avatar from "../../../assets/images/August252017100pm_do-trung-thanh_thumb.jpg";
+import background from "../../../assets/images/background_header_chitietgv.jpg";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 

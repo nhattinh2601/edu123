@@ -3,6 +3,7 @@ import "../../css/headers.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Footer from "../User/Footer/Footer";
 
 import { toast } from "react-toastify";
 import {
@@ -110,6 +111,19 @@ function Login() {
         progress: undefined,
         theme: "light",
       });
+
+      const user = response.data.UserProfileDto;
+
+      // Log the value of isDeleted for debugging
+      console.log("IsDeleted:", user.isDeleted);
+
+      // Check if the user is deleted
+      if (user && user.isDeleted) {
+        setLoginError(
+          "Tài khoản của bạn đã bị xóa. Liên hệ quản trị viên để biết thêm thông tin."
+        );
+        return;
+      }
 
       const accessToken = response.data.accessToken;
       const refreshToken = response.data.refreshToken;
@@ -305,6 +319,7 @@ function Login() {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

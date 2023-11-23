@@ -1,9 +1,8 @@
-
 import React from "react";
-import "../../css/headers.css";
-import "../../css/style.css";
+import "../../../css/headers.css";
+import "../../../css/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import Header from "../Header/Header";
 
 import {
   faList,
@@ -11,11 +10,13 @@ import {
   faChevronRight,
   
 } from "@fortawesome/free-solid-svg-icons";
-import facebookcourse from "../../image/facebookcourse.jpg";
+import facebookcourse from "../../../image/facebookcourse.jpg";
 
 export default function InstructorCourse() {
   
   return (
+    <div>
+      <Header />
     <div className="center_body ">
       <div class="bg-light bg-gradient" id="infogiangvien">
         <h3>Giới thiệu</h3>
@@ -221,6 +222,8 @@ export default function InstructorCourse() {
           </div>
         </div>
       </div>
+    </div>
+    <Header/>
     </div>
   );
 }

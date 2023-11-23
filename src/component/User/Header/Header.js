@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import logo from "../../image/logo.png";
-import "../../css/headers.css";
+import logo from "../../../image/logo.png";
+import "../../../css/headers.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link } from "react-router-dom";
-import axiosClient from "../../api/axiosClient";
+import axiosClient from "../../../api/axiosClient";
 
 export default function Header() {
   const [userDetails, setUserDetails] = useState(null);
@@ -46,7 +46,7 @@ export default function Header() {
     event.preventDefault();
 
     if (accessToken) {
-      navigate("/cart");
+      navigate("/user/cart");
     } else {
       alert("Bạn cần đăng nhập để xem giỏ hàng.");
       navigate("/login");
@@ -67,7 +67,7 @@ export default function Header() {
     return lastName;
   };
 
-  const handleSearchSubmit = (e) => {
+   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim() !== "") {
       navigate(`/search/${encodeURIComponent(searchQuery)}`);
@@ -172,9 +172,11 @@ export default function Header() {
   return (
     <header className="d-flex justify-content-center py-3 bg-white" id="topbar">
       <div className="d-inline-block">
+      <Link to ="/">
         <image className="navbar-brand mr-1">
           <img className="img-fluid logo" alt="logo" src={logo} />
         </image>
+        </Link>
       </div>
       <div className="d-inline-block">
         <form

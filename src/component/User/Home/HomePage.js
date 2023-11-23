@@ -3,14 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLanguage, faDesktop } from "@fortawesome/free-solid-svg-icons";
-import Header from "../../Header/Header";
+import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import HomePageContent from "./HomePageContent";
-import slideshow1 from "../../image/slideshow_1.jpg";
-import slideshow2 from "../../image/slideshow_2.jpg";
-import slideshow3 from "../../image/slideshow_3.jpg";
-import SearchCourse from "./SearchCourse";
-import FilterCourse from "./FilterCourse";
+import slideshow1 from "../../../image/slideshow_1.jpg";
+import slideshow2 from "../../../image/slideshow_2.jpg";
+import slideshow3 from "../../../image/slideshow_3.jpg";
+
 
 function HomePage() {
   const [categories, setCategories] = useState([]);
@@ -228,8 +227,7 @@ function HomePage() {
           ></span>
         </button>
       </div>
-      <FilterCourse />
-      <SearchCourse />
+      
       <HomePageContent />
       <Footer />
     </div>

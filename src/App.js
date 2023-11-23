@@ -8,18 +8,22 @@ import {
 
 import { UserProvider } from "./provider/UserProvider.js";
 
-import HomePage from "./component/Home/HomePage";
+import HomePage from "./component/User/Home/HomePage.js";
 import Login from "./component/Login/Login";
-import Register from "./component/Register/Register";
-import ForgetPassword from "./component/MyProfile/ForgetPassword";
-import TeacherDetail from "./component/Teacher/TeacherDetail.js";
-import CourseDetail from "./component/Course/CourseDetail.js";
-import EditProfile from "./component/MyProfile/EditProfile.js";
-import ChangePassword from "./component/MyProfile/ChangePassword.js";
-import RegisterTeacher from "./component/Teacher/RegisterTeacher.js";
-import EditInfoTeacher from "./component/Teacher/EditInformation.js";
-import PaymentInformation from "./component/Teacher/PaymentInformation.js";
-import InstructorCourse from "./component/Teacher/InstructorCourse.js";
+import Register from "./component/Register/Register.js";
+import ForgetPassword from "./component/User/MyProfile/ForgetPassword";
+import TeacherDetail from "./component/User/Teacher/TeacherDetail.js";
+import CourseDetail from "./component/User/Course/CourseDetail.js";
+import EditProfile from "./component/User/MyProfile/EditProfile.js";
+import ChangePassword from "./component/User/MyProfile/ChangePassword.js";
+import RegisterTeacher from "./component/User/Teacher/RegisterTeacher.js";
+import EditInfoTeacher from "./component/User/Teacher/EditInformation.js";
+import PaymentInformation from "./component/User/Teacher/PaymentInformation.js";
+import InstructorCourse from "./component/User/Teacher/InstructorCourse.js";
+import Cart from "./component/User/Cart/Cart.js";
+import Search from "./component/User/Search/Search.js";
+import Category from "./component/User/Category/Category.js";
+import Order from './component/User/Order/Order.js';
 
 import Admin from "./component/Admin/Admin.js";
 
@@ -31,14 +35,12 @@ const checkAccess = (requiredRoleId) => {
   const encodedRoleId = localStorage.getItem("roleId");
   const roleId = atob(encodedRoleId);
 
-  
   if (requiredRoleId === "1" && roleId === "2") {
     return true;
   }
 
   return roleId === requiredRoleId || roleId === "3";
 };
-
 
 const ProtectedRoute = ({ element, path, requiredRoleId }) => {
   const hasAccess = checkAccess(requiredRoleId);
@@ -53,12 +55,14 @@ const App = () => {
         <Routes>
           {/* Trang chung */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/search/:title" element={<HomePage />} />
-          <Route path="/searchCategory/:categoryId" element={<HomePage />} />
+          <Route path="/search/:title" element={<Search />} />
+          <Route path="/searchCategory/:categoryId" element={<Category />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/infor" element={<InstructorCourse/>} />
+          <Route path="/infor" element={<InstructorCourse />} />
+          <Route path="/user/cart" element={<Cart />} />
+          <Route path="/user/order" element={<Order />} />
 
           {/* Trang học viên */}
           <Route

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axiosClient from "../../api/axiosClient";
+import axiosClient from "../../../api/axiosClient";
 import { useParams } from "react-router-dom";
-import CourseCard from "./CourseCard";
+import CourseCard from "../Course/CourseCard";
 
 const SearchCourse = () => {
   const [searchCourses, setSearchCourses] = useState([]);
