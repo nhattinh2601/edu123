@@ -22,6 +22,8 @@ import DashboardUser from "./component/User/Dashboard/Dashboard.js";
 import PaymentInformation from "./component/User/Teacher/PaymentInformation.js";
 import Category from "./component/User/Category/Category.js";
 import Search from "./component/User/Search/Search.js";
+import Cart from './component/User/Cart/Cart.js';
+import Order from './component/User/Order/Order.js';
 import Admin from "./component/Admin/Admin.js";
 
 import NotFound from "./component/User/Others/NotFound";
@@ -55,6 +57,8 @@ const App = () => {
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/category" element={<Category />} />
           <Route path="/teacher/detail" element={<TeacherDetail />} />
+          <Route path="/user/cart" element={<Cart />} />
+          <Route path="/user/order" element={<Order />} />
           {/* Trang học viên */}
           <Route
             path="/user"

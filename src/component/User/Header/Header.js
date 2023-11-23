@@ -44,7 +44,7 @@ export default function Header() {
     event.preventDefault();
 
     if (accessToken) {
-      navigate("/cart");
+      navigate("/user/cart");
     } else {
       alert("Bạn cần đăng nhập để xem giỏ hàng.");
       navigate("/login");
