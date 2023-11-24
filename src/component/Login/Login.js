@@ -1,11 +1,10 @@
-import "../../css/style.css";
-import "../../css/headers.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Footer from "../User/Footer/Footer";
-
 import { toast } from "react-toastify";
+import { Alert } from "react-bootstrap"; // Import Alert from react-bootstrap
+
 import {
   faFacebookF,
   faGoogle,
@@ -181,8 +180,16 @@ function Login() {
               </div>
               <form>
                 <div className="form-outline mb-4">
-                  <label className="form-label" htmlFor="fullName">
-                    <span style={{ color: "red" }}>*</span>
+                  <label
+                    className={`form-label label-above ${
+                      error.invalidEmailFormat && formValues.email.length > 0
+                        ? "label-error"
+                        : ""
+                    }`}
+                    htmlFor="fullName"
+                  >
+                    Email address
+                    <span style={{ color: "red" }}> *</span>
                   </label>
                   <input
                     type="email"
@@ -193,24 +200,24 @@ function Login() {
                     value={formValues.email}
                     onChange={handleChange}
                   />
-                  <label className="form-label" htmlFor="form2Example1">
-                    Email address
-                  </label>
+
                   {error.invalidEmailFormat && formValues.email.length > 0 && (
-                    <span
-                      style={{
-                        backgroundColor: "yellow",
-                        display: "block",
-                        marginTop: "5px",
-                      }}
-                    >
+                    <Alert variant="warning">
                       Định dạng email không hợp lệ.
-                    </span>
+                    </Alert>
                   )}
                 </div>
                 <div className="form-outline mb-4">
-                  <label className="form-label" htmlFor="fullName">
-                    <span style={{ color: "red" }}>*</span>
+                  <label
+                    className={`form-label label-above ${
+                      error.invalidEmailFormat && formValues.email.length > 0
+                        ? "label-error"
+                        : ""
+                    }`}
+                    htmlFor="fullName"
+                  >
+                    Password
+                    <span style={{ color: "red" }}> *</span>
                   </label>
                   <input
                     type="password"
@@ -222,30 +229,10 @@ function Login() {
                     onChange={handleChange}
                   />
                   {error.passwordWeak && formValues.password.length > 0 && (
-                    <span
-                      style={{
-                        backgroundColor: "yellow",
-                        display: "block",
-                        marginTop: "5px",
-                      }}
-                    >
-                      Mật khẩu ít nhất 6 kí tự
-                    </span>
+                    <Alert variant="warning">Mật khẩu ít nhất 6 kí tự</Alert>
                   )}
-                  <label className="form-label" htmlFor="form2Example2">
-                    Password
-                  </label>
-                  {loginError && (
-                    <span
-                      style={{
-                        backgroundColor: "red",
-                        display: "block",
-                        marginTop: "5px",
-                      }}
-                    >
-                      {loginError}
-                    </span>
-                  )}
+
+                  {loginError && <Alert variant="danger">{loginError}</Alert>}
                 </div>
                 <div className="row mb-4">
                   <div className="col d-flex justify-content-center">
@@ -319,7 +306,7 @@ function Login() {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

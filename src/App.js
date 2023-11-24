@@ -19,11 +19,10 @@ import ChangePassword from "./component/User/MyProfile/ChangePassword.js";
 import RegisterTeacher from "./component/User/Teacher/RegisterTeacher.js";
 import EditInfoTeacher from "./component/User/Teacher/EditInformation.js";
 import PaymentInformation from "./component/User/Teacher/PaymentInformation.js";
-import InstructorCourse from "./component/User/Teacher/InstructorCourse.js";
 import Cart from "./component/User/Cart/Cart.js";
 import Search from "./component/User/Search/Search.js";
 import Category from "./component/User/Category/Category.js";
-import Order from './component/User/Order/Order.js';
+import Order from "./component/User/Order/Order.js";
 
 import Admin from "./component/Admin/Admin.js";
 
@@ -60,7 +59,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/infor" element={<InstructorCourse />} />
+
           <Route path="/user/cart" element={<Cart />} />
           <Route path="/user/order" element={<Order />} />
 
@@ -87,6 +86,15 @@ const App = () => {
             path="/user/change-password"
             element={
               <ProtectedRoute element={<ChangePassword />} requiredRoleId="1" />
+            }
+          />
+          <Route
+            path="/user/infor-teacher"
+            element={
+              <ProtectedRoute
+                element={<TeacherDetail />}
+                requiredRoleId="1"
+              />
             }
           />
 

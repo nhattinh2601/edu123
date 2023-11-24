@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
 import "../../css/style.css";
 import "../../css/headers.css";
-import { toast } from "react-toastify";
-
 import UserAPI from "../../api/UserAPI";
 
-function App() {
+function Register() {
   const navigate = useNavigate();
 
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
   const [registerError, setRegisterError] = useState(null);
   const [rememberMe, setRememberMe] = useState(false);
 
   const [error, setError] = useState({
     passwordWeak: true,
     rePasswordWrong: true,
+    invalidEmailFormat: false,
+    invalidPhoneFormat: false,
   });
 
   const [formValues, setFormValues] = useState({
@@ -30,18 +28,10 @@ function App() {
 
   useEffect(() => {
     const message = localStorage.getItem("message");
-    if (message)
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    localStorage.removeItem("message");
+    if (message) {
+      alert(message);
+      localStorage.removeItem("message");
+    }
   }, []);
 
   useEffect(() => {
@@ -89,16 +79,7 @@ function App() {
 
   const handleRegister = async () => {
     if (!formValues.email) {
-      toast.error("Email cannot be empty", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      setRegisterError("Email cannot be empty");
       return;
     }
 
@@ -109,19 +90,8 @@ function App() {
         password: formValues.password,
         phone: formValues.phone,
       };
-      const response = await toast.promise(UserAPI.register(params), {
-        pending: "Đang đăng ký...",
-        success: "Đăng ký thành công!",
-        error: "Đăng ký thất bại.",
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      const response = await UserAPI.register(params);
+      alert("Đăng ký thành công!");
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", formValues.email);
         const encodedPassword = btoa(formValues.password);
@@ -153,8 +123,16 @@ function App() {
               </div>
               <form>
                 <div className="form-outline mb-4">
-                  <label className="form-label" htmlFor="fullName">
-                    <span style={{ color: "red" }}>*</span>
+                  <label
+                    className={`form-label label-above ${
+                      error.invalidEmailFormat && formValues.email.length > 0
+                        ? "label-error"
+                        : ""
+                    }`}
+                    htmlFor="fullName"
+                  >
+                    Họ và tên
+                    <span style={{ color: "red" }}> *</span>
                   </label>
                   <input
                     type="text"
@@ -165,14 +143,19 @@ function App() {
                     value={formValues.fullname}
                     onChange={handleChange}
                   />
-                  <label className="form-label" htmlFor="fullName">
-                    Họ và tên
-                  </label>
                 </div>
 
                 <div className="form-outline mb-4">
-                  <label className="form-label" htmlFor="fullName">
-                    <span style={{ color: "red" }}>*</span>
+                  <label
+                    className={`form-label label-above ${
+                      error.invalidEmailFormat && formValues.email.length > 0
+                        ? "label-error"
+                        : ""
+                    }`}
+                    htmlFor="fullName"
+                  >
+                    Email
+                    <span style={{ color: "red" }}> *</span>
                   </label>
                   <div>
                     <input
@@ -184,22 +167,23 @@ function App() {
                       value={formValues.email}
                       onChange={handleChange}
                     />
-                    <label className="form-label" htmlFor="email">
-                      Email
-                    </label>
                   </div>
                   {error.invalidEmailFormat && formValues.email.length > 0 && (
-                    <div
-                      style={{ backgroundColor: "yellow", marginTop: "5px" }}
-                    >
-                      Không đúng định dạng gmail
-                    </div>
+                    <Alert variant="danger">Không đúng định dạng gmail</Alert>
                   )}
                 </div>
 
                 <div className="form-outline mb-4">
-                  <label className="form-label" htmlFor="fullName">
-                    <span style={{ color: "red" }}>*</span>
+                  <label
+                    className={`form-label label-above ${
+                      error.invalidEmailFormat && formValues.email.length > 0
+                        ? "label-error"
+                        : ""
+                    }`}
+                    htmlFor="fullName"
+                  >
+                    Số điện thoại
+                    <span style={{ color: "red" }}> *</span>
                   </label>
                   <div>
                     <input
@@ -211,20 +195,23 @@ function App() {
                       value={formValues.phone}
                       onChange={handleChange}
                     />
-                    <label className="form-label" htmlFor="phone">
-                      Số điện thoại
-                    </label>
                   </div>
                   {error.invalidPhoneFormat && formValues.phone.length > 0 && (
-                    <div
-                      style={{ backgroundColor: "yellow", marginTop: "5px" }}
-                    >
+                    <Alert variant="danger">
                       Số điện thoại có 10 hoặc 11 số không có ký tự khác
-                    </div>
+                    </Alert>
                   )}
                 </div>
-                <label className="form-label" htmlFor="fullName">
-                  <span style={{ color: "red" }}>*</span>
+                <label
+                  className={`form-label label-above ${
+                    error.invalidEmailFormat && formValues.email.length > 0
+                      ? "label-error"
+                      : ""
+                  }`}
+                  htmlFor="fullName"
+                >
+                  Mật khẩu
+                  <span style={{ color: "red" }}> *</span>
                 </label>
 
                 <div className="form-outline mb-4">
@@ -237,27 +224,24 @@ function App() {
                     value={formValues.password}
                     onChange={handleChange}
                   />
-                  <label className="form-label" htmlFor="password">
-                    Mật khẩu
-                  </label>
                   <div>
                     {error.passwordWeak && formValues.password.length > 0 && (
-                      <span style={{ backgroundColor: "yellow" }}>
-                        Mật khẩu ít nhất 6 kí tự
-                      </span>
+                      <Alert variant="danger">Mật khẩu ít nhất 6 kí tự</Alert>
                     )}
                   </div>
                 </div>
-                <div>
-                  {error.rePasswordWrong &&
-                    formValues.rePassword.length > 0 && (
-                      <span style={{ backgroundColor: "yellow" }}>
-                        {" "}
-                        Mật khẩu nhập lại không trùng khớp
-                      </span>
-                    )}
-                </div>
 
+                <label
+                  className={`form-label label-above ${
+                    error.invalidEmailFormat && formValues.email.length > 0
+                      ? "label-error"
+                      : ""
+                  }`}
+                  htmlFor="fullName"
+                >
+                  Nhập lại mật khẩu
+                  <span style={{ color: "red" }}> *</span>
+                </label>
                 <div className="form-outline mb-4">
                   <input
                     type="password"
@@ -268,9 +252,14 @@ function App() {
                     value={formValues.rePassword}
                     onChange={handleChange}
                   />
-                  <label className="form-label" htmlFor="rePassword">
-                    Nhập lại mật khẩu
-                  </label>
+                  <div>
+                    {error.rePasswordWrong &&
+                      formValues.rePassword.length > 0 && (
+                        <Alert variant="danger">
+                          Mật khẩu nhập lại không trùng khớp
+                        </Alert>
+                      )}
+                  </div>
                 </div>
 
                 <div className="row mb-4">
@@ -294,15 +283,7 @@ function App() {
                   </div>
                 </div>
                 {registerError && (
-                  <span
-                    style={{
-                      backgroundColor: "red",
-                      display: "block",
-                      marginTop: "5px",
-                    }}
-                  >
-                    {registerError}
-                  </span>
+                  <Alert variant="danger">{registerError}</Alert>
                 )}
 
                 <button
@@ -338,4 +319,4 @@ function App() {
   );
 }
 
-export default App;
+export default Register;

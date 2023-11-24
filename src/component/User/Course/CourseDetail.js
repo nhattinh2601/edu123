@@ -1,21 +1,66 @@
 import "../../../css/style.css";
 import "../../../css/headers.css";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import {
-  faPlay,
-  faCheckCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import avatar from "../../../image/August252017100pm_do-trung-thanh_thumb.jpg";
-
 import Header from "../Header/Header";
 
-function App() {
- 
-  const textpre = {
-    "white-space": "pre-line",
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+
+import React, { useState, useEffect } from "react";
+import axiosClient from "../../../api/axiosClient";
+import { useSelector } from "react-redux";
+import { selectId } from "../../../slices/courseSlice";
+
+const CourseDetail = () => {
+  const id = useSelector(selectId);
+  console.log("ID from Redux Store:", id);
+
+  const [teacherData, setTeacherData] = useState(null);
+  const [courseData, setCourseData] = useState([]);
+  const [reviewData, setReviewData] = useState([]);
+
+
+  const splitDescription = (description) =>
+    description.split("**").map((part, index) => (
+      <span key={index}>
+        {part}
+        {index < 2 && " - "}{" "}
+      </span>
+    ));
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const courseResponse = await axiosClient.get(`/courses/${id}`);
+        setCourseData(courseResponse.data);
+
+        const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
+        setReviewData(reviewResponse.data);
+
+        const userId = courseResponse.data.userId;
+        const teacherResponse = await axiosClient.get(`/users/${userId}`);
+        setTeacherData(teacherResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (!teacherData || !courseData || !reviewData) {
+    return <div>Loading...</div>;
+  }
+
+  const { fullname, description: teacherDescription, avatar } = teacherData;
+  const { title, description, createAt, updateAt } = courseData;
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
   };
+
   return (
     <div>
       <Header />
@@ -25,13 +70,12 @@ function App() {
             <div className="row">
               <div className="col-sm-2"></div>
               <div className="col-sm-6 ">
-                <h1 className="text-white">Khóa học python</h1>
+                <h1 className="text-white">{title}</h1>
                 <p className="text-white">
-                  Kỹ năng giao tiếp thông minh sẽ "Bật mí" những bí mật về giao
-                  tiếp cực hiệu quả để bạn biết cách giao tiếp dễ dàng, biết
-                  lắng nghe và nhanh chóng nắm bắt được vấn đề ngay từ lần trò
-                  chuyện đầu tiên. Giúp bạn nắm được những cách giao tiếp và ứng
-                  xử thông minh, hiệu quả trong mọi tình huống
+                  Ngày tạo khóa học : {formatDate(createAt)}
+                </p>
+                <p className="text-white">
+                  Ngày cập nhật mới nhất : {formatDate(updateAt)}
                 </p>
                 <div className="d-inline-block">
                   <img
@@ -41,10 +85,10 @@ function App() {
                     src={avatar}
                     alt="Đỗ Trung Thành"
                   />
-                  <a href="teacher/nguyen-hoang-khac-hieu">
+                  <Link to="teacher/nguyen-hoang-khac-hieu">
                     {" "}
-                    <span className="text-white">Nguyễn Nhật Tính</span>
-                  </a>
+                    <span className="text-white">{fullname}</span>
+                  </Link>
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div className="d-inline-block text-white">
@@ -73,64 +117,7 @@ function App() {
           <div className="col-sm-2"></div>
           <div className="col-sm-6 ">
             <div className="bg-light bg-gradient card shadow mb-3">
-              <h3>Bạn sẽ học được gì</h3>
-              <div className="container">
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <FontAwesomeIcon icon={faCheckCircle}></FontAwesomeIcon>
-                      <span className="title-learn">
-                        Làm chủ phần mềm Word 2016 nhanh chóng và chi tiết nhất
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <FontAwesomeIcon icon={faCheckCircle}></FontAwesomeIcon>
-                      <span className="title-learn">
-                        Có thể áp dụng ngay vào công việc và học tập thi cử
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <FontAwesomeIcon icon={faCheckCircle}></FontAwesomeIcon>
-                      <span className="title-learn">
-                        Nắm được các bước xây dựng, soạn thảo văn bản và chỉnh
-                        sửa hợp lý và nhanh chóng, đúng quy trình.
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <FontAwesomeIcon icon={faCheckCircle}></FontAwesomeIcon>
-                      <span className="title-learn">
-                        Biết cách thiết kế, thiết lập văn bản, chỉnh sửa, bảo
-                        mật văn bản word dể ứng dụng vào hợp đồng, báo cáo, các
-                        tài liệu văn phòng, chứng từ cụ thể,...
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <FontAwesomeIcon icon={faCheckCircle}></FontAwesomeIcon>
-                      <span className="title-learn">
-                        Được trau dồi kiến thức nâng cao ứng dụng vào công việc
-                        thêm tối ưu và hiệu quả
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <FontAwesomeIcon icon={faCheckCircle}></FontAwesomeIcon>
-                      <span className="title-learn">
-                        Tự tin nâng cao trình độ để thi chứng chỉ tin học văn
-                        phòng
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div className="container"></div>
             </div>
             <br />
             <div className="bg-light bg-gradient navbar navbar-expand card shadow mb-3 ">
@@ -165,40 +152,7 @@ function App() {
             <div className="bg-light bg-gradient  card shadow mb-3 ">
               <h3>Giới thiệu khóa học</h3>
               <hr />
-              <p style={{ whiteSpace: "pre-line" }}>
-                Microsoft Word đã trở nên vô cùng quen thuộc với tất cả mọi
-                người, đặc biệt là đối với dân văn phòng và bất cứ công việc nào
-                cần phải soạn thảo văn bản. Phát hành lần đầu tiên năm 1983, đến
-                nay Word đã được cập nhật rất nhiều tính năng và công cụ thông
-                minh mới, hỗ trợ ngày càng đắc lực cho người soạn thảo văn bản
-                có được những bản word tốt nhất. Cũng bởi có rất nhiều tính năng
-                được cập nhật trong Microsoft Word mà không ít người vì đã quen
-                sử dụng phiên bản cũ đã không bắt kịp tốc độ cập nhật của Word,
-                dẫn đến khó khăn trong quá trình làm việc với công cụ soạn thảo
-                này. Ngoài ra đối với những người mới tiếp xúc đến Word như sinh
-                viên cũng sẽ khó mà ngay lập tức sử dụng tốt và thành thạo công
-                cụ Word nếu không có một lộ trình học word cơ bản phù hợp và chi
-                tiết. Đó là lý do khóa học "Làm chủ Word 2016 từ cơ bản đến nâng
-                cao" được ra đời! Khóa học Làm chủ Word 2016 từ cơ bản đến nâng
-                cao của giảng viên Đỗ Trung Thành phù hợp với tất cả các đối
-                tượng, đặc biệt dành cho các bạn có nhu cầu học tin học văn
-                phòng đặc biệt về Word từ những bước đi đầu tiên; những bạn cần
-                nâng cao trình độ về công cụ tin học văn phòng; hay chuẩn bị thi
-                các loại chứng chỉ tin học… Khóa học gồm hơn 40 bài giảng bằng
-                video, được xây dựng theo lộ trình từ cơ bản đến nâng cao về
-                Word với phiên bản mới nhất hiện tại (Office 2016), với đầy đủ
-                các nội dung: - Cách định dạng văn bản - Cách chèn và định dạng
-                các đối tượng - Các thiết lập cho văn bản Với quan điểm "Học đi
-                đôi với hành", trong từng nội dung của bài học sẽ có phần thực
-                hành trực tiếp để học viên có thể hiểu và làm theo các hướng dẫn
-                chi tiết của giảng viên. Đặc biệt khi sở hữu khóa học trực tuyến
-                tại Unica bạn sẽ nhận được những ưu đãi vô cùng đặc biệt chỉ có
-                tại đây: + Mua một lần học MÃI MÃI + Không giới hạn thời gian
-                học tập + Được hỗ trợ 24/7 từ đội ngũ chuyên viên nhiệt tình
-                chuyên nghiệp + Cấp chứng nhận hoàn thành khóa học sau khi học
-                xong tất cả Đừng bỏ lỡ cơ hội sở hữu khóa học "Làm chủ Word 2016
-                từ cơ bản đến nâng cao" cùng với hàng loạt những ưu đãi lớn!
-              </p>
+              <p style={{ whiteSpace: "pre-line" }}>{description}</p>
             </div>
 
             <br />
@@ -305,7 +259,8 @@ function App() {
                     <div>
                       <img
                         className="lazy"
-                        src="/uploads/thaoptt09@gmail.com/August252017100pm_do-trung-thanh_thumb.jpg"
+                        src={avatar}
+                        alt={title}
                         align=""
                         loading="lazy"
                       />
@@ -330,26 +285,7 @@ function App() {
                   <div className="col-sm-8">
                     <p className="fw-bold">Đỗ Trung Thành </p>
                     <div className="pre">
-                      Giảng viên Trường Cao đẳng Sư phạm Yên Bái, Thạc sỹ Khoa
-                      học Máy tính Đỗ Trung Thành - Giảng viên Trường Cao đẳng
-                      Sư phạm Yên Bái Trình độ: Thạc sỹ Khoa học Máy tính Đạt
-                      giải nhì Hội thi sáng tạo kỹ thuật tỉnh Yên Bái (năm 2016)
-                      Đạt giải nhì Cuộc thi Thiết kế bài giảng e-Learning Quốc
-                      gia lần thứ 4 (2017). Nhiều năm đạt giáo viên dạy giỏi cấp
-                      tỉnh, có học sinh giỏi cấp quốc gia Đỗ Trung Thành với
-                      kinh nghiệm 20 năm tham gia công tác giảng dạy. Tham gia
-                      nhiều dự án xây dựng website, phần mềm. Có kinh nghiệm
-                      giảng dạy Tin học Văn phòng; thiết kế đồ họa; biên tập âm
-                      thanh; biên tập videos; lập trình thiết kế, xây dựng
-                      website, xây dựng phần mềm với các ngôn ngữ C# và PHP
-                    </div>
-                    <div>
-                      <a
-                        className="see-more-info-btn"
-                        href="javascript:void(0)"
-                      >
-                        Xem thêm
-                      </a>
+                      {splitDescription(teacherDescription)}
                     </div>
                   </div>
                 </div>
@@ -517,159 +453,18 @@ function App() {
               <h3>Nhận xét của học viên</h3>
               <div>
                 <ul className="load_comment">
-                  <li className="u-block-cmhv">
-                    <div className="ava-hv">C</div>
-                    <div className="block-hv">
-                      <div className="block-inner user-rate-detail">
-                        <span className="star-rate-detail">
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>{" "}
-                        </span>
-                        <div className="name-hv">Đỗ Thị Cúc</div>
-                      </div>
-                      <div className="cm-hv">
-                        <div className="rate-hv">
-                          <p>
-                            Khóa học rất tốt, giảng viên giảng bài dễ hiểu và
-                            nhiệt tình hỗ trợ học viên.
-                          </p>
+                  {reviewData.map((review) => (
+                    <li key={review.Id} className="u-block-cmhv">
+                      <div className="block-hv">
+                        <div className="cm-hv">
+                          <div className="rate-hv">
+                            <p>Ngày bình luận: {formatDate(review.createAt)}</p>
+                            <p>{review.content}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li className="u-block-cmhv">
-                    <div className="ava-hv">C</div>
-                    <div className="block-hv">
-                      <div className="block-inner user-rate-detail">
-                        <span
-                          className="star-rate-detail"
-                          style={{ paddingTop: "3px" }}
-                        >
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>{" "}
-                        </span>
-                        <div className="name-hv">Vi văn cường</div>
-                      </div>
-                      <div className="cm-hv">
-                        <div className="rate-hv">
-                          <p>
-                            Rất hay và hữu ích ạ mong chương trình mỗi ngày một
-                            phát triển hơn
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="u-block-cmhv">
-                    <div className="ava-hv">K</div>
-                    <div className="block-hv">
-                      <div className="block-inner user-rate-detail">
-                        <span style={{ paddingTop: "3px" }}>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>{" "}
-                        </span>
-                        <div className="name-hv">Nguyễn Hoàng Kim</div>
-                      </div>
-                      <div className="cm-hv">
-                        <div className="rate-hv">
-                          <p>
-                            Khóa hoc chất lượng cao, bổ ích và đầy đủ thông tin
-                            cần cho người học
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li className="u-block-cmhv">
-                    <div className="ava-hv">H</div>
-                    <div className="block-hv">
-                      <div className="block-inner user-rate-detail">
-                        <span style={{ paddingTop: "3px" }}>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>
-                          <i
-                            className="fa fa-star co-or"
-                            aria-hidden="true"
-                          ></i>{" "}
-                        </span>
-                        <div className="name-hv">Nguyễn Thị Thu Hà</div>
-                      </div>
-                      <div className="cm-hv">
-                        <div className="rate-hv">
-                          <p>thầy dậy rễ hiểu, chi tiết ạ</p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -678,6 +473,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default CourseDetail;

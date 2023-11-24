@@ -132,7 +132,7 @@ function ForgetPassWord() {
                 )}
                 <button
                   type="submit"
-                  className="btn btn-primary btn-block mb-4 w-50"
+                  className="btn btn-success btn-block mb-4 w-50" 
                   disabled={resetPasswordStatus === "loading"}
                 >
                   {resetPasswordStatus === "loading"
