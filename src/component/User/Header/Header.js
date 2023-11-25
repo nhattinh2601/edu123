@@ -98,8 +98,11 @@ export default function Header() {
                 onMouseLeave={handleMouseLeave}
                 style={{ position: "absolute", top: "100%", left: 0 }}
               >
-                <Link className="dropdown-item" to="/course1">
+                <Link className="dropdown-item" to="/user/dashboard">
                   Khóa học của tôi
+                </Link>
+                <Link className="dropdown-item" to="/teacher/dashboard">
+                  Giảng viên
                 </Link>
                 <Link className="dropdown-item" to="/course2">
                   Cập nhật thông tin

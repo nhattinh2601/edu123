@@ -25,7 +25,9 @@ import Search from "./component/User/Search/Search.js";
 import Cart from './component/User/Cart/Cart.js';
 import Order from './component/User/Order/Order.js';
 import Admin from "./component/Admin/Admin.js";
-
+import DashboardTeacher from "./component/User/DashboardTeacher/Dashboard.js";
+import NewCourseProcess from "./component/User/NewCourse/NewCourseProcess.js";
+import NewCourse from "./component/User/NewCourse/NewCourse.js";
 import NotFound from "./component/User/Others/NotFound";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -59,6 +61,9 @@ const App = () => {
           <Route path="/teacher/detail" element={<TeacherDetail />} />
           <Route path="/user/cart" element={<Cart />} />
           <Route path="/user/order" element={<Order />} />
+          <Route path="/teacher/dashboard" element={<DashboardTeacher />} />
+          <Route path="/teacher/course/new-course-process" element={<NewCourseProcess />} />
+          <Route path="/teacher/course/new-course" element={<NewCourse />} />
           {/* Trang học viên */}
           <Route
             path="/user"
