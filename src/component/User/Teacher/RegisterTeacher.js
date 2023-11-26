@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Alert } from "react-bootstrap";
 import axiosClient from "../../../api/axiosClient";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
@@ -11,6 +12,7 @@ export default function RegisterTeacher() {
   const [teachingSubject, setTeachingSubject] = useState("");
   const [teachingExperience, setTeachingExperience] = useState("");
   const [error, setError] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -42,7 +44,6 @@ export default function RegisterTeacher() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Kiểm tra xem các trường đều đã được nhập
     if (
       !name ||
       !email ||
@@ -52,6 +53,7 @@ export default function RegisterTeacher() {
       !teachingExperience
     ) {
       setError("Vui lòng nhập đầy đủ thông tin");
+      setShowAlert(true);
       return;
     }
 
@@ -81,7 +83,16 @@ export default function RegisterTeacher() {
                   Đăng Ký Giảng Viên
                 </h2>
                 <form onSubmit={handleSubmit}>
-                  {error && <p style={{ color: "red" }}>{error}</p>}
+                  {showAlert && (
+                    <Alert
+                      variant="danger"
+                      onClose={() => setShowAlert(false)}
+                      dismissible
+                    >
+                      {error}
+                    </Alert>
+                  )}
+
                   <div className="form-group mb-4 d-flex">
                     <div className="form-subgroup mr-3 flex-2">
                       <label className="form-label fw-bold" htmlFor="name">
@@ -113,6 +124,7 @@ export default function RegisterTeacher() {
                       />
                     </div>
                   </div>
+
                   <div className="form-outline mb-4">
                     <label className="form-label fw-bold" htmlFor="name">
                       Số điện thoại *
@@ -168,6 +180,7 @@ export default function RegisterTeacher() {
                       onChange={(e) => setTeachingExperience(e.target.value)}
                     />
                   </div>
+
                   <button
                     type="submit"
                     className="btn btn-primary btn-block mb-4 w-100"

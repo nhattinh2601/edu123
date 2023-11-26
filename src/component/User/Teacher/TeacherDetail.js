@@ -6,14 +6,17 @@ import Footer from "../Footer/Footer";
 import axiosClient from "../../../api/axiosClient";
 import { useState, useEffect } from "react";
 import TeacherDetailContent from "./TeacherDetailContent";
-
+import { useSelector } from "react-redux";
+import { selectId } from "../../../slices/idSlice";
 function extractFirstPart(str) {
   return str.split("**")[0];
 }
 
-function TeacherDetail() {
+const TeacherDetail = ({ courseDatas }) => {
+  const id = useSelector(selectId);
+  console.log("ID from Redux Store:", id);
   const [teacherData, setTeacherData] = useState(null);
-  const id = 1;
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +35,7 @@ function TeacherDetail() {
     return <div>Loading...</div>;
   }
 
-  const { fullname, avatar, description, phone, email } = teacherData;
+  const { fullname, avatar, description, phone} = teacherData;
 
   return (
     <div>
@@ -74,13 +77,7 @@ function TeacherDetail() {
                 >
                   Liên hệ mình
                 </a>
-                <button
-                  className="btn btn-light"
-                  role="button"
-                  aria-disabled="false"
-                >
-                  Flow mình
-                </button>
+               
               </div>
             </div>
             <div className="d-inline-block text-black">

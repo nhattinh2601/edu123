@@ -3,17 +3,21 @@ import axiosClient from "../../../api/axiosClient";
 import { useParams } from "react-router-dom";
 import CourseCard from "../Course/CourseCard";
 
-
+import Pagination from "../../Others/Pagination"; 
 
 const SearchCourse = () => {
   const [searchCourses, setSearchCourses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const { title } = useParams();
 
   useEffect(() => {
     const fetchSearchCourses = async () => {
       try {
         const response = await axiosClient.get(`/courses/search/${title}`);
-        setSearchCourses(response.data);
+        const filteredCourses = response.data.filter(
+          (course) => course.isDeleted !== true && course.active === true
+        );
+        setSearchCourses(filteredCourses);
       } catch (error) {
         console.error("Error fetching search courses:", error);
       }
@@ -21,9 +25,17 @@ const SearchCourse = () => {
 
     if (title) {
       fetchSearchCourses();
-    } else {
     }
   }, [title]);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const itemsPerPage = 8;
+  const offset = currentPage * itemsPerPage;
+
+  const currentCourses = searchCourses.slice(offset, offset + itemsPerPage);
 
   return (
     <div className="container-fluid col-md-10">
@@ -33,10 +45,14 @@ const SearchCourse = () => {
           <h3 className="fw-bold">Kết quả tìm được</h3>
           <br />
           <div className="row">
-            {searchCourses.map((course) => (
+            {currentCourses.map((course) => (
               <CourseCard key={course.Id} course={course} />
             ))}
           </div>
+          <Pagination
+            pageCount={Math.ceil(searchCourses.length / itemsPerPage)}
+            handlePageClick={handlePageClick}
+          />
         </div>
       </div>
     </div>

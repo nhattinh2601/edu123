@@ -23,6 +23,10 @@ import Cart from "./component/User/Cart/Cart.js";
 import Search from "./component/User/Search/Search.js";
 import Category from "./component/User/Category/Category.js";
 import Order from "./component/User/Order/Order.js";
+import DashboardTeacher from "./component/User/DashboardTeacher/Dashboard.js";
+import NewCourseProcess from "./component/User/NewCourse/NewCourseProcess.js";
+import NewCourse from "./component/User/NewCourse/NewCourse.js";
+import Dashboard from "./component/User/Dashboard/Dashboard.js";
 
 import Admin from "./component/Admin/Admin.js";
 
@@ -59,9 +63,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-
-          <Route path="/user/cart" element={<Cart />} />
-          <Route path="/user/order" element={<Order />} />
+          <Route path="/user/dashboard" element={<Dashboard />} />
 
           {/* Trang học viên */}
           <Route
@@ -91,14 +93,20 @@ const App = () => {
           <Route
             path="/user/infor-teacher"
             element={
-              <ProtectedRoute
-                element={<TeacherDetail />}
-                requiredRoleId="1"
-              />
+              <ProtectedRoute element={<TeacherDetail />} requiredRoleId="1" />
             }
           />
 
-          {/* Trang giảng viên */}
+          <Route
+            path="/user/cart"
+            element={<ProtectedRoute element={<Cart />} requiredRoleId="1" />}
+          />
+
+          <Route
+            path="/user/order"
+            element={<ProtectedRoute element={<Order />} requiredRoleId="1" />}
+          />
+
           <Route
             path="/user/register-teacher"
             element={
@@ -108,6 +116,7 @@ const App = () => {
               />
             }
           />
+          {/* Trang giảng viên */}
 
           <Route
             path="/teacher/infor-teacher"
@@ -132,6 +141,31 @@ const App = () => {
                 element={<PaymentInformation />}
                 requiredRoleId="2"
               />
+            }
+          />
+
+          <Route
+            path="/teacher/dashboard"
+            element={
+              <ProtectedRoute
+                element={<DashboardTeacher />}
+                requiredRoleId="2"
+              />
+            }
+          />
+          <Route
+            path="/teacher/course/new-course-process"
+            element={
+              <ProtectedRoute
+                element={<NewCourseProcess />}
+                requiredRoleId="2"
+              />
+            }
+          />
+          <Route
+            path="/teacher/course/new-course"
+            element={
+              <ProtectedRoute element={<NewCourse />} requiredRoleId="2" />
             }
           />
 

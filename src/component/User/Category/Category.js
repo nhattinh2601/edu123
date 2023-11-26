@@ -118,7 +118,7 @@ export default function Category() {
                     }
                   >
                     {category.Id && (
-                      <div >
+                      <div>
                         <Link
                           to={`/searchCategory/${category.Id}`}
                           className="dropdown-toggle parent-category"
@@ -166,9 +166,8 @@ export default function Category() {
             </ul>
           </nav>
         </div>
-        
-          <FilterCourse className="center_body "/>
 
+        <FilterCourse className="center_body " />
 
         <br />
       </div>

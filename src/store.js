@@ -13,6 +13,7 @@ import feedbackReducer from './slices/feedbackSlice';
 import documentReducer from './slices/documentSlice';
 import courseRegisterReducer from './slices/courseRegisterSlice';
 import courseReducer from './slices/courseSlice';
+import idReducer from './slices/idSlice'
 
 
 const store = configureStore({
@@ -30,7 +31,9 @@ const store = configureStore({
     feedback: feedbackReducer,
     document: documentReducer,
     courseRegister: courseRegisterReducer,
-    course: courseReducer
+    course: courseReducer,
+    id: idReducer
+
   }
 });
 

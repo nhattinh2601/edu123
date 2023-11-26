@@ -9,17 +9,22 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../../api/axiosClient";
-import { useSelector } from "react-redux";
-import { selectId } from "../../../slices/courseSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { setId, selectId } from "../../../slices/idSlice";
 
-const CourseDetail = () => {
+const CourseDetail = ({ courseDatas }) => {
+  const dispatch = useDispatch();
+
+  const handleCourseClick = (clickedCourseId) => {
+    console.log("Clicked Course ID:", clickedCourseId); 
+    dispatch(setId(clickedCourseId));
+  };
   const id = useSelector(selectId);
   console.log("ID from Redux Store:", id);
 
   const [teacherData, setTeacherData] = useState(null);
   const [courseData, setCourseData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
-
 
   const splitDescription = (description) =>
     description.split("**").map((part, index) => (
@@ -53,7 +58,7 @@ const CourseDetail = () => {
     return <div>Loading...</div>;
   }
 
-  const { fullname, description: teacherDescription, avatar } = teacherData;
+  const { Id, fullname, description: teacherDescription, avatar } = teacherData;
   const { title, description, createAt, updateAt } = courseData;
 
   const formatDate = (timestamp) => {
@@ -85,7 +90,7 @@ const CourseDetail = () => {
                     src={avatar}
                     alt="Đỗ Trung Thành"
                   />
-                  <Link to="teacher/nguyen-hoang-khac-hieu">
+                  <Link to="/user/infor-teacher" onClick={() => handleCourseClick(Id)}>
                     {" "}
                     <span className="text-white">{fullname}</span>
                   </Link>

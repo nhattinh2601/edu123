@@ -100,7 +100,7 @@ export default function Header() {
                 onMouseLeave={handleMouseLeave}
                 style={{ position: "absolute", top: "100%", left: 0 }}
               >
-                <Link className="dropdown-item" to="/user/khoahoccuatoi">
+                <Link className="dropdown-item" to="/user/dashboard">
                   Khóa học của tôi
                 </Link>
                 {roleId === "1" ? (
@@ -108,7 +108,7 @@ export default function Header() {
                     Đăng ký giảng viên
                   </Link>
                 ) : (
-                  <Link className="dropdown-item" to="/user/manage-courses">
+                  <Link className="dropdown-item" to="/teacher/dashboard">
                     Quản lý các khóa học
                   </Link>
                 )}

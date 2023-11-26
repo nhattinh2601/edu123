@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { useDropzone } from "react-dropzone";
-
-import drag_drop from "../../../assets/images/drag_drop.jpg";
+import defaultImage from "../../../assets/images/drag_drop.jpg";
 import axiosClient from "../../../api/axiosClient";
 import cogoToast from "cogo-toast";
 
 function MyEditor() {
-  const [image, setImage] = useState(drag_drop);
+  const [image, setImage] = useState(defaultImage);
   const [editor, setEditor] = useState(null);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -19,7 +18,17 @@ function MyEditor() {
   });
 
   const handleSave = async () => {
-    if (editor) {
+    if (!editor) {
+      cogoToast.error("Vui lòng chọn hoặc kéo thả ảnh trước khi lưu", {
+        position: "bottom-right",
+        hideAfter: 3,
+        onClick: () => console.log("Clicked"),
+      });
+      return;
+    }
+
+    // Check if the image is different from the default image
+    if (image !== defaultImage) {
       const canvas = editor.getImageScaledToCanvas();
       canvas.toBlob(async (blob) => {
         const formData = new FormData();
@@ -61,6 +70,12 @@ function MyEditor() {
         } catch (error) {
           console.error("Lỗi khi tải ảnh lên Cloudinary:", error);
         }
+      });
+    } else {
+      cogoToast.error("Vui lòng chọn hoặc kéo thả ảnh trước khi lưu", {
+        position: "bottom-right",
+        hideAfter: 3,
+        onClick: () => console.log("Clicked"),
       });
     }
   };

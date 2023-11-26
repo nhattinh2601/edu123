@@ -8,19 +8,21 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch } from "react-redux";
-import { setId } from "../../../slices/courseSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setId, selectId } from "../../../slices/idSlice";
 
 const CourseList = ({ courseDatas }) => {
   const dispatch = useDispatch();
 
   const handleCourseClick = (clickedCourseId) => {
-    console.log("Clicked Course ID:", clickedCourseId); // Kiểm tra xem có giá trị không
+    console.log("Clicked Course ID:", clickedCourseId);
     dispatch(setId(clickedCourseId));
   };
+  const id = useSelector(selectId);
+  console.log("ID from Redux Store:", id);
+
   const [teacherData, setTeacherData] = useState(null);
   const [courseData, setCourseData] = useState([]);
-  const id = 1;
 
   const splitDescription = (description) =>
     description.split("**").map((part, index) => (
@@ -75,7 +77,6 @@ const CourseList = ({ courseDatas }) => {
           <div
             key={course.Id}
             className="p-2 mb-4 border border-primary rounded"
-            
           >
             <div className="d-inline-block float-start p-2">
               <Link to="/">

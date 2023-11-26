@@ -1,15 +1,14 @@
+import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { useEffect, useState } from "react";
-
 import axiosClient from "../../../api/axiosClient";
 
 export default function EditInformation() {
   const [title, setTitle] = useState("");
   const [teachingSubject, setTeachingSubject] = useState("");
   const [teachingExperience, setTeachingExperience] = useState("");
-
-  const [error, setError] = useState(""); // Thêm state để lưu thông báo lỗi
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     async function fetchUserData() {
@@ -22,10 +21,8 @@ export default function EditInformation() {
 
         const description = userData.description;
 
-        // Tách thành 3 phần sử dụng phương thức split
         const parts = description.split("**");
 
-        // Bây giờ, bạn có thể truy cập các phần bằng cách sử dụng index
         const part1 = parts[0];
         const part2 = parts[1];
         const part3 = parts[2];
@@ -48,9 +45,9 @@ export default function EditInformation() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Kiểm tra xem các trường đều đã được nhập
     if (!title || !teachingSubject || !teachingExperience) {
       setError("Vui lòng nhập đầy đủ thông tin");
+      setSuccess("");
       return;
     }
 
@@ -62,9 +59,13 @@ export default function EditInformation() {
         `/users/${userId}`,
         fieldsToUpdate
       );
-      console.log("User updated:", response.data);
+
+      setSuccess("Cập nhật thành công!");
+      setError("");
     } catch (error) {
       console.error("Error updating user:", error);
+      setError("Cập nhật thất bại. Vui lòng thử lại.");
+      setSuccess("");
     }
   };
 
@@ -81,6 +82,7 @@ export default function EditInformation() {
                 </h2>
                 <form onSubmit={handleSubmit}>
                   {error && <p style={{ color: "red" }}>{error}</p>}
+                  {success && <p style={{ color: "green" }}>{success}</p>}
                   <div className="form-outline mb-4">
                     <label className="form-label fw-bold" htmlFor="name">
                       Chức danh *
