@@ -48,6 +48,12 @@ export default function NewCourse() {
           <label htmlFor="shortDescription" className="form-label fw-bold">Mô tả ngắn</label>
           <textarea className="form-control" id="shortDescription" rows="2"></textarea>
         </div>
+        
+        {/* Giá tiền */}
+        <div className="mb-3">
+          <label htmlFor="shortDescription" className="form-label fw-bold">Giá đề nghị:</label>
+          <input type="text" className="form-control" id="courseName" />
+        </div>
 
         {/* Giới thiệu */}
         <div className="mb-3">

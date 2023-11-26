@@ -29,6 +29,13 @@ import DashboardTeacher from "./component/User/DashboardTeacher/Dashboard.js";
 import NewCourseProcess from "./component/User/NewCourse/NewCourseProcess.js";
 import NewCourse from "./component/User/NewCourse/NewCourse.js";
 import NotFound from "./component/User/Others/NotFound";
+import ThankYouPage from "./component/User/Order/ThankYouPage .js";
+import ActivateCoursePage from "./component/User/Course/ActivateCoursePage.js"
+import HistoryOrder from "./component/User/Dashboard/History.js"
+import Lession from "./component/User/Dashboard/Lession.js";
+import NewVideo from "./component/User/Video/NewVideo.js";
+import EditVideo from "./component/User/Video/EditVideo.js";
+import UploadDocument from "./component/User/Document/UploadDocument.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -64,6 +71,13 @@ const App = () => {
           <Route path="/teacher/dashboard" element={<DashboardTeacher />} />
           <Route path="/teacher/course/new-course-process" element={<NewCourseProcess />} />
           <Route path="/teacher/course/new-course" element={<NewCourse />} />
+          <Route path="/user/order/thankyou" element={<ThankYouPage />} />
+          <Route path="/user/course/activate" element={<ActivateCoursePage />} />
+          <Route path="/user/order/history" element={<HistoryOrder />} />
+          <Route path="/teacher/course/upload-lession" element={<Lession />} />
+          <Route path="/teacher/course/new-video" element={<NewVideo />} />
+          <Route path="/teacher/course/edit-video" element={<EditVideo />} />
+          <Route path="/teacher/course/upload-document" element={<UploadDocument />} />
           {/* Trang học viên */}
           <Route
             path="/user"

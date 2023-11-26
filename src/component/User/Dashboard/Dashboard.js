@@ -88,7 +88,7 @@ export default function Dashboard() {
                   <p class="text-start text-md-center text-decoration-line-through">
                     <button
                       className="btn btn-primary margin-button-header"
-                      onClick={() => handleNavigate("")}
+                      onClick={() => handleNavigate("/user/course")}
                     >
                       Vào học
                     </button>
@@ -125,7 +125,7 @@ export default function Dashboard() {
                   <p class="text-start text-md-center text-decoration-line-through">
                   <button
                       className="btn btn-primary margin-button-header"
-                      onClick={() => handleNavigate("")}
+                      onClick={() => handleNavigate("/user/course")}
                     >
                       Vào học
                     </button>
