@@ -36,6 +36,11 @@ import Lession from "./component/User/Dashboard/Lession.js";
 import NewVideo from "./component/User/Video/NewVideo.js";
 import EditVideo from "./component/User/Video/EditVideo.js";
 import UploadDocument from "./component/User/Document/UploadDocument.js";
+import EditCourse from "./component/User/Course/EditCourse.js";
+import EditDocument from "./component/User/Document/EditDocument.js";
+import EditDocumentDetail from "./component/User/Document/EditDocumentDetail.js";
+import EditPrice from "./component/User/Price/EditPrice.js";
+import EditLession from "./component/User/Document/EditLession.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -78,6 +83,11 @@ const App = () => {
           <Route path="/teacher/course/new-video" element={<NewVideo />} />
           <Route path="/teacher/course/edit-video" element={<EditVideo />} />
           <Route path="/teacher/course/upload-document" element={<UploadDocument />} />
+          <Route path="/teacher/course/edit-course" element={<EditCourse />} />
+          <Route path="/teacher/course/edit-document" element={<EditDocument />} />
+          <Route path="/teacher/course/edit-document-detail" element={<EditDocumentDetail />} />
+          <Route path="/teacher/course/edit-price" element={<EditPrice />} />
+          <Route path="/teacher/course/edit-lession" element={<EditLession />} />
           {/* Trang học viên */}
           <Route
             path="/user"
