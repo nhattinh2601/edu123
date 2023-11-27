@@ -1,10 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleInfo,
-  faEdit,
-  faTrash,
-  faFile,
-} from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axiosClient from "../../../api/axiosClient";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function ToTeacherDetail() {
@@ -13,6 +9,26 @@ export default function ToTeacherDetail() {
   const handleNavigate = (path) => {
     navigate(path);
   };
+  const { id } = useParams();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axiosClient.get(`/users/${id}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchUser();
+  }, [id]);
+
+  if (!user) {
+    return <div>Loading...</div>; // or some loading spinner
+  }
+
   return (
     <div>
       <div className="container">
@@ -24,63 +40,60 @@ export default function ToTeacherDetail() {
                   Thông tin người dùng{" "}
                 </h2>
                 <form action="/login" method="POST">
-                  <div className="form-outline mb-4">
+                  {/* <div className="form-outline mb-4">
                     <input
-                      type="phone"
+                      type="text"
                       className="form-control"
                       placeholder="Chức danh"
-                      name="password"
-                      id="password"
+                      value={user.title}
+                      readOnly
                     />
-                  </div>
+                  </div> */}
 
                   <div className="form-outline mb-4">
                     <textarea
-                      type="phone"
                       className="form-control"
                       placeholder="Chủ đề muốn giảng dạy trên edu123"
-                      name="password"
-                      id="password"
+                      value={user.description}
+                      readOnly
                     />
                   </div>
 
-                  <div className="form-outline mb-4">
+                  {/* <div className="form-outline mb-4">
                     <textarea
-                      type="phone"
                       className="form-control"
                       placeholder="Kinh nghiệp giảng dạy"
-                      name="password"
-                      id="password"
+                      value={user.experience}
+                      readOnly
                     />
-                  </div>
+                  </div> */}
                   <div className="form-outline mb-4">
-                    <textarea
-                      type="phone"
+                    <input
+                      type="text"
                       className="form-control"
                       placeholder="Số điện thoại"
-                      name="password"
-                      id="password"
+                      value={user.phone}
+                      readOnly
                     />
                   </div>
                   <div className="form-outline mb-4">
-                    <textarea
-                      type="phone"
+                    <input
+                      type="text"
                       className="form-control"
                       placeholder="Họ và tên"
-                      name="password"
-                      id="password"
+                      value={user.fullname}
+                      readOnly
                     />
                   </div>
-                  <div className="form-outline mb-4">
-                    <textarea
-                      type="phone"
+                  {/* <div className="form-outline mb-4">
+                    <input
+                      type="text"
                       className="form-control"
                       placeholder="Hình ảnh"
-                      name="password"
-                      id="password"
+                      value={user.image}
+                      readOnly
                     />
-                  </div>
-
+                  </div> */}
                   <button
                     type="submit"
                     className="btn btn-primary btn-block mb-4 w-50 "
