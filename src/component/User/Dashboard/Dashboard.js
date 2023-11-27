@@ -35,19 +35,19 @@ export default function Dashboard() {
           <div class="d-inline-block text-black d-flex justify-content-center">
             <ul class="nav nav-tabs text-white mx-auto">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <Link to = "/user/dashboard" class="nav-link active" aria-current="page">
                   Khóa học của tôi
-                </a>
+                </Link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <Link to = "/user/course/activate" class="nav-link">
                   Kích hoạt khóa học
-                </a>
+                </Link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <Link to = "/user/order/history" class="nav-link">
                   Lịch sử thanh toán
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

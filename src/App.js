@@ -28,6 +28,18 @@ import NewCourseProcess from "./component/User/NewCourse/NewCourseProcess.js";
 import NewCourse from "./component/User/NewCourse/NewCourse.js";
 import Dashboard from "./component/User/Dashboard/Dashboard.js";
 
+import ThankYouPage from "./component/User/Order/ThankYouPage.js";
+import ActivateCoursePage from "./component/User/Course/ActivateCoursePage.js";
+import HistoryOrder from "./component/User/Dashboard/History.js";
+import NewVideo from "./component/User/Video/NewVideo.js";
+import EditVideo from "./component/User/Video/EditVideo.js";
+import UploadDocument from "./component/User/Document/UploadDocument.js";
+import EditCourse from "./component/User/Course/EditCourse.js";
+import EditDocument from "./component/User/Document/EditDocument.js";
+import EditDocumentDetail from "./component/User/Document/EditDocumentDetail.js";
+
+import EditLession from "./component/User/Document/EditLession.js";
+
 import Admin from "./component/Admin/Admin.js";
 
 import NotFound from "./component/Others/NotFound";
@@ -64,6 +76,13 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/user/dashboard" element={<Dashboard />} />
+
+          <Route path="/user/order/thankyou" element={<ThankYouPage />} />
+          <Route
+            path="/user/course/activate"
+            element={<ActivateCoursePage />}
+          />
+          <Route path="/user/order/history" element={<HistoryOrder />} />
 
           {/* Trang học viên */}
           <Route
@@ -153,6 +172,13 @@ const App = () => {
               />
             }
           />
+
+          <Route
+            path="/teacher/course/edit-course"
+            element={
+              <ProtectedRoute element={<EditCourse />} requiredRoleId="2" />
+            }
+          />
           <Route
             path="/teacher/course/new-course-process"
             element={
@@ -167,6 +193,39 @@ const App = () => {
             element={
               <ProtectedRoute element={<NewCourse />} requiredRoleId="2" />
             }
+          />
+
+          <Route path="/teacher/course/new-video" element={
+              <ProtectedRoute element={<NewVideo />} requiredRoleId="2" />
+            }
+          />
+          <Route path="/teacher/course/edit-video" element={
+              <ProtectedRoute element={<EditVideo />} requiredRoleId="2" />
+            }
+          />
+          <Route
+            path="/teacher/course/upload-document"
+            element={
+              <ProtectedRoute element={<UploadDocument />} requiredRoleId="2" />
+            }
+          />
+
+          <Route
+            path="/teacher/course/edit-document"
+            element={
+              <ProtectedRoute element={<EditDocument />} requiredRoleId="2" />
+            }
+          />
+          <Route
+            path="/teacher/course/edit-document-detail"
+            element={
+              <ProtectedRoute element={<EditDocumentDetail />} requiredRoleId="2" />
+            }
+          />
+
+          <Route
+            path="/teacher/course/edit-lession"
+            element={<EditLession />}
           />
 
           {/* Trang admin */}

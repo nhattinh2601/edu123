@@ -1,31 +1,28 @@
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAdd, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import axiosClient from "../../../api/axiosClient";
+import { setId } from "../../../slices/idSlice";
+import Pagination from "../../Others/Pagination";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import "./Notification.css";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { faAdd, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-
 import background from "../../../assets/images/background_dashboard.jpg";
-
-import { useNavigate } from "react-router-dom";
-
-import axiosClient from "../../../api/axiosClient";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setId } from "../../../slices/idSlice";
-import Pagination from "../../Others/Pagination";
 
 const Dashboard = ({ course }) => {
   const dispatch = useDispatch();
-  const [teacherData, setTeacherData] = useState(null);
+ // const [teacherData, setTeacherData] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [videoCounts, setVideoCounts] = useState({});
+  const [documentCounts, setDocumentCounts] = useState({});
+
   const itemsPerPage = 10;
   const offset = currentPage * itemsPerPage;
-
   const currentCourses = courses.slice(offset, offset + itemsPerPage);
 
   const navigate = useNavigate();
@@ -40,14 +37,22 @@ const Dashboard = ({ course }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const teacherResponse = await axiosClient.get(`/users/${id}`);
-        setTeacherData(teacherResponse.data);
+       // const teacherResponse = await axiosClient.get(`/users/${id}`);
+       // setTeacherData(teacherResponse.data);
 
         const courseResponse = await axiosClient.get(`/courses/user=${id}`);
         const filteredCourses = courseResponse.data.filter(
           (course) => course.isDeleted !== true
         );
-        setCourses(filteredCourses);
+        
+        // Sắp xếp theo thời gian created_at từ mới nhất đến cũ nhất
+        const sortedCourses = filteredCourses.sort((a, b) => {
+          const dateA = new Date(a.createAt);
+          const dateB = new Date(b.createAt);
+          return dateB - dateA;
+        });
+        
+        setCourses(sortedCourses);
 
         setLoading(false);
       } catch (error) {
@@ -58,6 +63,48 @@ const Dashboard = ({ course }) => {
 
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const fetchVideoCounts = async () => {
+      try {
+        const videoCountsData = {};
+        for (const course of courses) {
+          if (course && course.Id) {
+            const videoCountResponse = await axiosClient.get(
+              `/videos/countByCourse/${course.Id}`
+            );
+            videoCountsData[course.Id] = videoCountResponse.data;
+          }
+        }
+        setVideoCounts(videoCountsData);
+      } catch (error) {
+        console.error("Error fetching video counts:", error);
+      }
+    };
+
+    fetchVideoCounts();
+  }, [courses]);
+
+  useEffect(() => {
+    const fetchDocumentCounts = async () => {
+      try {
+        const documentCountsData = {};
+        for (const course of courses) {
+          if (course && course.Id) {
+            const documentCountResponse = await axiosClient.get(
+              `/documents/countByCourse/${course.Id}`
+            );
+            documentCountsData[course.Id] = documentCountResponse.data;
+          }
+        }
+        setDocumentCounts(documentCountsData); 
+      } catch (error) {
+        console.error("Error fetching document counts:", error);
+      }
+    };
+  
+    fetchDocumentCounts();
+  }, [courses]);
 
   const handleDeleteCourse = async (courseId) => {
     try {
@@ -85,11 +132,12 @@ const Dashboard = ({ course }) => {
       setNotification({ type: "error", message: "Error deleting course" });
     }
   };
-  if (!teacherData || loading) {
+
+  if ( loading) {
     return <div>Loading...</div>;
   }
 
-  const { fullname } = teacherData;
+  //const { fullname } = teacherData;
 
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -105,30 +153,36 @@ const Dashboard = ({ course }) => {
     navigate("/user/course");
   };
 
+  const handleEditCourseClick = (clickedCourseId) => {
+    console.log("Clicked Course ID:", clickedCourseId);
+    dispatch(setId(clickedCourseId));
+    navigate("/teacher/course/edit-course");
+  };
+
   return (
     <div>
       <Header />
       <div className="container">
-        <div class="container-fluid pt-5 overlay">
+        <div className="container-fluid pt-5 overlay">
           <img
-            class="img-background"
+            className="img-background"
             width="1555px"
             height="220px"
             style={{ marginTop: "80px" }}
             src={background}
-            alt={fullname}
+            alt="a"
             loading="lazy"
           />
-          <div class="row"></div>
+          <div className="row"></div>
           <br />
           <br />
           <br />
 
-          <div class="d-inline-block text-black d-flex justify-content-center">
-            <ul class="nav nav-tabs text-white mx-auto">
-              <li class="nav-item">
+          <div className="d-inline-block text-black d-flex justify-content-center">
+            <ul className="nav nav-tabs text-white mx-auto">
+              <li className="nav-item">
                 <a
-                  class="nav-link active"
+                  className="nav-link active"
                   aria-current="page"
                   href="/teacher/edit-info"
                 >
@@ -151,25 +205,22 @@ const Dashboard = ({ course }) => {
             id="content"
             className="bg-light bg-gradient col-md-10 center_body"
           >
-            <div class="card mb-4">
-              <div class="card-header py-3">
-                <h5 class="mb-0 d-inline-block">Khóa học của tôi</h5>
+            <div className="card mb-4">
+              <div className="card-header py-3">
+                <h5 className="mb-0 d-inline-block">Khóa học của tôi</h5>
                 <button
                   type="button"
-                  class="btn btn-primary btn-sm me-1 mb-2 d-inline-block float-end"
+                  className="btn btn-primary btn-sm me-1 mb-2 d-inline-block float-end"
                   data-mdb-toggle="tooltip"
                   title="Remove item"
-                  onClick={() =>
-                    handleNavigate("/teacher/course/new-course-process")
-                  }
+                  onClick={() => handleNavigate("/teacher/course/new-course-process")}
                 >
                   <FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>
                 </button>
               </div>
-              <div class="card-body">
+              <div className="card-body">
                 {currentCourses.map((course, index) => (
                   <div key={course.Id} className="row">
-                    {/* Course Image */}
                     <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                       <div className="bg-image hover-overlay hover-zoom ripple rounded">
                         <img
@@ -184,23 +235,26 @@ const Dashboard = ({ course }) => {
                       </div>
                     </div>
 
-                    {/* Course Details */}
                     <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
                       <p>
                         <strong>{course.title}</strong>
                       </p>
-                      <p>Giảng viên: {fullname}</p>
+                      {videoCounts[course.Id] !== undefined && (
+                        <p>Số video: {videoCounts[course.Id]}</p>
+                      )}
+                      {documentCounts[course.Id] !== undefined && (
+                        <p>Số tài liệu: {documentCounts[course.Id]}</p>
+                      )}
                       <div className="d-flex">
-                        {/* Edit Button */}
                         <button
                           type="button"
                           className="btn btn-primary btn-sm me-1 mb-2"
                           data-mdb-toggle="tooltip"
                           title="Edit item"
+                          onClick={() => handleEditCourseClick(course.Id)}
                         >
                           <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
                         </button>
-                        {/* Trash Icon */}
                         <button
                           type="button"
                           className="btn btn-danger btn-sm me-1 mb-2"
@@ -213,7 +267,6 @@ const Dashboard = ({ course }) => {
                       </div>
                     </div>
 
-                    {/* Course Prices */}
                     <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
                       <p className="text-start text-md-center text-decoration-line-through">
                         <strong>{formatPrice(course.price)}</strong>

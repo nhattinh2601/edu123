@@ -10,6 +10,7 @@ export default function NewCourse() {
   const [discountCode, setDiscountCode] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [formError, setFormError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); 
   const [promotionalPrice, setPromotionalPrice] = useState(0);
   const encodedId = localStorage.getItem("userId");
   const userId = atob(encodedId);
@@ -45,7 +46,11 @@ export default function NewCourse() {
     const inputDiscountCode = e.target.value.replace(/\D/g, "");
     if (inputDiscountCode !== "") {
       const discountCodeValue = parseInt(inputDiscountCode, 10);
-      if (!isNaN(discountCodeValue) && discountCodeValue >= 0 && discountCodeValue <= 100) {
+      if (
+        !isNaN(discountCodeValue) &&
+        discountCodeValue >= 0 &&
+        discountCodeValue <= 100
+      ) {
         setDiscountCode(discountCodeValue.toString());
       }
     } else {
@@ -110,6 +115,8 @@ export default function NewCourse() {
         userId: userId,
       });
 
+      setSuccessMessage("Khóa học đã được tạo thành công"); 
+
       console.log(response.data);
     } catch (error) {
       console.error("Error creating course:", error);
@@ -137,17 +144,33 @@ export default function NewCourse() {
                       </div>
                     )}
 
+                    {successMessage && ( // Display success message
+                      <div className="alert alert-success" role="alert">
+                        {successMessage}
+                      </div>
+                    )}
+
                     <div className="row">
                       <div className="col-6 mb-3">
-                        <label htmlFor="courseName" className="form-label fw-bold">
+                        <label
+                          htmlFor="courseName"
+                          className="form-label fw-bold"
+                        >
                           Tên khóa học *
                         </label>
-                        <input type="text" className="form-control" id="courseName" />
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="courseName"
+                        />
                       </div>
 
                       <div className="col-3 mb-3">
-                        <label htmlFor="category" className="form-label fw-bold">
-                          Chuyên mục * 
+                        <label
+                          htmlFor="category"
+                          className="form-label fw-bold"
+                        >
+                          Chuyên mục *
                         </label>
                         <select
                           className="form-select"
@@ -168,7 +191,7 @@ export default function NewCourse() {
 
                       <div className="col-3 mb-3">
                         <label htmlFor="upload" className="form-label fw-bold">
-                          Tải ảnh * 
+                          Tải ảnh *
                         </label>
                         <input
                           type="file"
@@ -181,16 +204,23 @@ export default function NewCourse() {
                     </div>
 
                     <div className="mb-3">
-                      <label htmlFor="introduction" className="form-label fw-bold">
-                        Giới thiệu * 
+                      <label
+                        htmlFor="introduction"
+                        className="form-label fw-bold"
+                      >
+                        Giới thiệu *
                       </label>
-                      <textarea className="form-control" id="introduction" rows="4"></textarea>
+                      <textarea
+                        className="form-control"
+                        id="introduction"
+                        rows="4"
+                      ></textarea>
                     </div>
 
                     <div className="row">
                       <div className="col-6 mb-3">
                         <label htmlFor="price" className="form-label fw-bold">
-                          Giá tiền * 
+                          Giá tiền *
                         </label>
                         <input
                           type="text"
@@ -202,8 +232,11 @@ export default function NewCourse() {
                       </div>
 
                       <div className="col-6 mb-3">
-                        <label htmlFor="discountCode" className="form-label fw-bold">
-                          Mã giảm giá * 
+                        <label
+                          htmlFor="discountCode"
+                          className="form-label fw-bold"
+                        >
+                          Mã giảm giá *
                         </label>
                         <input
                           type="text"
@@ -216,8 +249,11 @@ export default function NewCourse() {
                     </div>
 
                     <div className="mb-3">
-                      <label htmlFor="promotionalPrice" className="form-label fw-bold">
-                        Giá khuyến mãi * 
+                      <label
+                        htmlFor="promotionalPrice"
+                        className="form-label fw-bold"
+                      >
+                        Giá khuyến mãi *
                       </label>
                       <input
                         type="text"
