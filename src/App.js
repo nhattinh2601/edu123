@@ -41,6 +41,7 @@ import EditDocument from "./component/User/Document/EditDocument.js";
 import EditDocumentDetail from "./component/User/Document/EditDocumentDetail.js";
 import EditPrice from "./component/User/Price/EditPrice.js";
 import EditLession from "./component/User/Document/EditLession.js";
+import WatchVideo from "./component/User/Video/WatchVideo.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -88,6 +89,7 @@ const App = () => {
           <Route path="/teacher/course/edit-document-detail" element={<EditDocumentDetail />} />
           <Route path="/teacher/course/edit-price" element={<EditPrice />} />
           <Route path="/teacher/course/edit-lession" element={<EditLession />} />
+          <Route path="/user/course/watch-video" element={<WatchVideo />} />
           {/* Trang học viên */}
           <Route
             path="/user"
