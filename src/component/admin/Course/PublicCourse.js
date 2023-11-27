@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 
 
-export default function UpgradeToTeacher() {
+export default function PublicCourse() {
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
@@ -24,21 +24,19 @@ export default function UpgradeToTeacher() {
                   {/* List of documents */}
                   <div className="card mb-4">
                     <div className="card-header py-3 d-flex justify-content-between align-items-center">
-                      <h5 className="mb-0 d-inline-block">Danh sách yêu cầu người dùng</h5>                      
+                      <h5 className="mb-0 d-inline-block">Danh sách yêu cầu public khóa học</h5>                      
                       
                     </div>
 
                     <div className="card-body">
                       <div className="row">
-                        
-
-                        
+                                                
                           
                             <div>
-                              <p className="d-inline-block float-lg-start"><strong>Trương Minh Hiếu yêu cầu trở thành giảng viên</strong></p>                              
+                              <p className="d-inline-block float-lg-start"><strong>Khóa học luyện gõ 10 ngón tay</strong></p>                              
                               <button
                                 className="btn btn-primary btn-sm margin-button-header d-inline-block float-end"
-                                onClick={() => handleNavigate("/admin/upgrade-to-teacher/detail")}
+                                onClick={() => handleNavigate("/admin/public-course/course-info")}
                               >
                                 <FontAwesomeIcon icon={faCircleInfo} /> Chi tiết
                               </button>                             

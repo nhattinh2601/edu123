@@ -40,8 +40,20 @@ import EditCourse from "./component/User/Course/EditCourse.js";
 import EditDocument from "./component/User/Document/EditDocument.js";
 import EditDocumentDetail from "./component/User/Document/EditDocumentDetail.js";
 import EditPrice from "./component/User/Price/EditPrice.js";
-import EditLession from "./component/User/Document/EditLession.js";
+import EditLession from "./component/User/Course/EditLession.js";
 import WatchVideo from "./component/User/Video/WatchVideo.js";
+import UpgradeToTeacher from "./component/Admin/User/UpgradeToTeacher.js";
+import ToTeacherDetail from "./component/Admin/User/ToTeacherDetail.js";
+import NotificationReject from "./component/Admin/User/NotificationReject.js";
+import PublicCourse from "./component/Admin/Course/PublicCourse.js";
+import CourseInfo from "./component/Admin/Course/CourseInfo.js";
+import PublicLession from "./component/Admin/Course/PublicLession.js";
+import PublicLessionDetail from "./component/Admin/Course/PublicLessionDetail.js";
+import PublicDocument from "./component/Admin/Course/PublicDocument.js";
+import PublicDocumentDetail from "./component/Admin/Course/PublicDocumentDetail.js";
+import Summary from "./component/Admin/Course/Summary.js";
+import NotificationRejectCourse from "./component/Admin/Course/NotificationReject.js";
+import PaymentConfirm from "./component/Admin/PaymentConfirm/PaymentConfirm.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -90,6 +102,18 @@ const App = () => {
           <Route path="/teacher/course/edit-price" element={<EditPrice />} />
           <Route path="/teacher/course/edit-lession" element={<EditLession />} />
           <Route path="/user/course/watch-video" element={<WatchVideo />} />
+          <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
+          <Route path="/admin/upgrade-to-teacher/detail" element={<ToTeacherDetail />} />
+          <Route path="/admin/upgrade-to-teacher/detail/reject" element={<NotificationReject />} />
+          <Route path="/admin/public-course" element={<PublicCourse />} />          
+          <Route path="/admin/public-course/course-info" element={<CourseInfo />} />
+          <Route path="/admin/public-course/lession" element={<PublicLession />} />
+          <Route path="/admin/public-course/lession/detail" element={<PublicLessionDetail />} />
+          <Route path="/admin/public-course/document" element={<PublicDocument />} />
+          <Route path="/admin/public-course/document/detail" element={<PublicDocumentDetail />} />
+          <Route path="/admin/public-course/summary" element={<Summary />} />
+          <Route path="/admin/public-course/reject" element={<NotificationRejectCourse />} />
+          <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
           {/* Trang học viên */}
           <Route
             path="/user"
