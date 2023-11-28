@@ -75,7 +75,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/user/dashboard" element={<Dashboard />} />
+          
 
           <Route path="/user/order/thankyou" element={<ThankYouPage />} />
           <Route
@@ -89,6 +89,10 @@ const App = () => {
             path="/user"
             element={
               <ProtectedRoute element={<HomePage />} requiredRoleId="1" />
+            }
+          />
+          <Route path="/user/dashboard" element={
+              <ProtectedRoute element={<Dashboard />} requiredRoleId="1" />
             }
           />
           <Route

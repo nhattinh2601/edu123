@@ -8,14 +8,14 @@ import { faPlay, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
 
-import { useDispatch ,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setId, selectId } from "../../../slices/idSlice";
 
 export default function EditLession() {
   const dispatch = useDispatch();
 
   const handleCourseClick = (clickedCourseId) => {
-    console.log("Clicked Course ID:", clickedCourseId); 
+    console.log("Clicked Course ID:", clickedCourseId);
     dispatch(setId(clickedCourseId));
     navigate("/teacher/course/edit-video");
   };
@@ -24,7 +24,6 @@ export default function EditLession() {
   const [videoData, setVideoData] = useState([]);
   const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
-
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -38,7 +37,7 @@ export default function EditLession() {
         const filteredCourses = response.data.filter(
           (course) => course.isDeleted !== true
         );
-        
+
         // Sắp xếp theo thời gian created_at từ mới nhất đến cũ nhất
         const sortedCourses = filteredCourses.sort((a, b) => {
           const dateA = new Date(a.createAt);
@@ -70,7 +69,7 @@ export default function EditLession() {
       const filteredCourses = updatedCourses.data.filter(
         (course) => course.isDeleted !== true
       );
-      
+
       // Sắp xếp theo thời gian created_at từ mới nhất đến cũ nhất
       const sortedCourses = filteredCourses.sort((a, b) => {
         const dateA = new Date(a.createAt);
@@ -118,10 +117,10 @@ export default function EditLession() {
                 </button>
               </div>
               {notification && (
-            <div className={`notification ${notification.type}`}>
-              {notification.message}
-            </div>
-          )}
+                <div className={`notification ${notification.type}`}>
+                  {notification.message}
+                </div>
+              )}
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -139,7 +138,6 @@ export default function EditLession() {
                       </td>
                       <td>{video.title}</td>
                       <td>{video.description}</td>{" "}
-                     
                       <td>
                         <button
                           className="btn btn-primary margin-button-header"
