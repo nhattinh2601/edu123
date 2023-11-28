@@ -28,10 +28,17 @@ export default function ToTeacherDetail() {
         roleId: 2,
       });
       console.log(response);
-      // After the request is successful, you can navigate to another route
-      navigate('/pathAfterSuccessfulUpdate'); 
+      
+      // After the PATCH request is successful, make a POST request
+      const messageResponse = await axiosClient.post(`/auth/send/message/${user.email}`, {
+        message: "Chúc mừng bạn đã trở thành giảng viên, hãy upload khóa học của mình và kiếm tiền ngay thôi!",
+      });
+      console.log(messageResponse);
+  
+      // After both requests are successful, navigate to another route
+      navigate('/admin/upgrade-to-teacher'); 
     } catch (error) {
-      console.error("Error updating role:", error);
+      console.error("Error updating role or sending message:", error);
     }
   };
 

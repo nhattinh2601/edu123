@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosClient from '../../../api/axiosClient'; // assuming you have a client set up
+import { useNavigate, Link } from "react-router-dom";
 
 export default function NotificationReject() {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
   const [message, setMessage] = useState('');
   const { email } = useParams();
   const handleMessageChange = (event) => {
@@ -19,6 +25,7 @@ export default function NotificationReject() {
     .then(response => {
       console.log(response);
       // You might want to navigate somewhere else here or set some state to indicate the email was sent
+      navigate('/admin/upgrade-to-teacher'); 
     })
     .catch(error => {
       console.error(error);
