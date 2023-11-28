@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axiosClient from '../../../api/axiosClient'; // assuming you have a client set up
 
 export default function NotificationReject() {
   const [message, setMessage] = useState('');
-  const email = 'tinh26012002@gmail.com'; // fixed email address
-
+  const { email } = useParams();
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };

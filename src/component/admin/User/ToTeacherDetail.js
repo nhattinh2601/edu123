@@ -5,10 +5,6 @@ import { useNavigate, Link } from "react-router-dom";
 
 export default function ToTeacherDetail() {
   const navigate = useNavigate();
-
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
   const { id } = useParams();
   const [user, setUser] = useState(null);
 
@@ -25,6 +21,24 @@ export default function ToTeacherDetail() {
     fetchUser();
   }, [id]);
 
+  const handleSubmit = async event => {
+    event.preventDefault();
+    try {
+      const response = await axiosClient.patch(`/users/${user.Id}`, {
+        roleId: 2,
+      });
+      console.log(response);
+      // After the request is successful, you can navigate to another route
+      navigate('/pathAfterSuccessfulUpdate'); 
+    } catch (error) {
+      console.error("Error updating role:", error);
+    }
+  };
+
+  const handleReject = () => {
+    navigate(`/admin/upgrade-to-teacher/detail/reject/${user.email}`);
+  };
+
   if (!user) {
     return <div>Loading...</div>; // or some loading spinner
   }
@@ -39,7 +53,7 @@ export default function ToTeacherDetail() {
                 <h2 className="card-title text-center mb-5  fw-bold ">
                   Thông tin người dùng{" "}
                 </h2>
-                <form action="/login" method="POST">
+                <form onSubmit={handleSubmit}>
                   {/* <div className="form-outline mb-4">
                     <input
                       type="text"
@@ -50,7 +64,7 @@ export default function ToTeacherDetail() {
                     />
                   </div> */}
 
-                  <div className="form-outline mb-4">
+<div className="form-outline mb-4">
                     <textarea
                       className="form-control"
                       placeholder="Chủ đề muốn giảng dạy trên edu123"
@@ -101,10 +115,9 @@ export default function ToTeacherDetail() {
                     Chấp nhận
                   </button>
                   <button
+                    type="button"
                     className="btn btn-primary btn-block mb-4 w-50 "
-                    onClick={() =>
-                      handleNavigate("/admin/upgrade-to-teacher/detail/reject")
-                    }
+                    onClick={handleReject}
                   >
                     Từ chối
                   </button>
