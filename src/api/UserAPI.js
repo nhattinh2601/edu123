@@ -1,37 +1,34 @@
-import axiosClient from './axiosClient';
+import axiosClient from "./axiosClient";
 
 const UserAPI = {
-  getMyUserInfor: () => {
-    const url = '/app-user';
-    return axiosClient.get(url);
-  },
-
   register: (params) => {
-    const url = '/auth/register';
+    const url = "/auth/register";
     return axiosClient.post(url, params);
   },
 
   login: (params) => {
-    const url = '/auth/login';
-    return axiosClient.post(url, { email: params.email, password: params.password });
+    const url = "/auth/login";
+    return axiosClient.post(url, {
+      email: params.email,
+      password: params.password,
+    });
   },
   uploadImage: (formData) => {
-    const url = '/cloud/images/upload';
+    const url = "/cloud/images/upload";
     return axiosClient.post(url, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
   },
   uploadVideo: (formData) => {
-    const url = '/cloud/videos/upload'; 
+    const url = "/cloud/videos/upload";
     return axiosClient.post(url, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
-  }
-
+  },
 };
 
 export default UserAPI;

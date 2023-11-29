@@ -38,7 +38,7 @@ export default function RegisterTeacher() {
     name: name,
     phone: phone,
     description: `${title}**${teachingSubject}**${teachingExperience}`,
-    roleId: 2,
+    roleId: 4,
   };
 
   const handleSubmit = async (event) => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import axiosClient from "../../../api/axiosClient";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectId } from "../../../slices/idSlice";
 
 export default function NewVideo() {
@@ -26,32 +26,36 @@ export default function NewVideo() {
         setFormError("Vui lòng chọn video để tải lên.");
         return;
       }
-  
+
       if (uploadMethod === "youtube") {
         // Check if youtubeLink is not empty
         if (!youtubeLink.trim()) {
           setFormError("Vui lòng nhập đường link YouTube.");
           return;
         }
-  
-        // Validate YouTube link
-        // You can use a regex pattern or a library like 'valid-url' for more robust validation
-        const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
+
+        const youtubeRegex =
+          /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
         if (!youtubeRegex.test(youtubeLink)) {
           setFormError("Đường link YouTube không hợp lệ.");
           return;
         }
       }
-  
+
       if (!videoTitle.trim() || !shortDescription.trim()) {
         setFormError("Vui lòng điền đầy đủ thông tin.");
         return;
       }
-  
+
       // Check if the title and short description exceed the character limit
       const maxCharLimit = 255;
-      if (videoTitle.length > maxCharLimit || shortDescription.length > maxCharLimit) {
-        setFormError(`Tiêu đề và mô tả ngắn không được quá ${maxCharLimit} ký tự.`);
+      if (
+        videoTitle.length > maxCharLimit ||
+        shortDescription.length > maxCharLimit
+      ) {
+        setFormError(
+          `Tiêu đề và mô tả ngắn không được quá ${maxCharLimit} ký tự.`
+        );
         return;
       }
 
@@ -161,7 +165,8 @@ export default function NewVideo() {
                           className="form-check-label"
                           htmlFor="youtubeLink"
                         >
-                          Nhập link YouTube (Bài giảng sẽ bị công khai cân nhắc trước khi chọn)
+                          Nhập link YouTube (Bài giảng sẽ bị công khai cân nhắc
+                          trước khi chọn)
                         </label>
                       </div>
                     </div>

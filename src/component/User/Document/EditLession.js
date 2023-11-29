@@ -4,7 +4,7 @@ import EditCoursePanel from "../Panel/EditCoursePanel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 
-import { faPlay, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faTrash, faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
 
@@ -139,6 +139,11 @@ export default function EditLession() {
                       <td>{video.title}</td>
                       <td>{video.description}</td>{" "}
                       <td>
+                        <button
+                          className="btn btn-primary margin-button-header"
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </button>
                         <button
                           className="btn btn-primary margin-button-header"
                           onClick={() => handleCourseClick(video.Id)}
