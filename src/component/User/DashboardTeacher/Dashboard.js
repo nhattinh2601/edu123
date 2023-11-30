@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axiosClient from "../../../api/axiosClient";
-import { setId } from "../../../slices/idSlice";
 import Pagination from "../../Others/Pagination";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import "./Notification.css";
 import background from "../../../assets/images/background_dashboard.jpg";
+import LoadingSpinner from "../../Others/LoadingSpinner";
 
 const Dashboard = ({ course }) => {
-  const dispatch = useDispatch();
- // const [teacherData, setTeacherData] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
@@ -37,21 +35,21 @@ const Dashboard = ({ course }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-       // const teacherResponse = await axiosClient.get(`/users/${id}`);
-       // setTeacherData(teacherResponse.data);
+        // const teacherResponse = await axiosClient.get(`/users/${id}`);
+        // setTeacherData(teacherResponse.data);
 
         const courseResponse = await axiosClient.get(`/courses/user=${id}`);
         const filteredCourses = courseResponse.data.filter(
           (course) => course.isDeleted !== true
         );
-        
+
         // Sắp xếp theo thời gian created_at từ mới nhất đến cũ nhất
         const sortedCourses = filteredCourses.sort((a, b) => {
           const dateA = new Date(a.createAt);
           const dateB = new Date(b.createAt);
           return dateB - dateA;
         });
-        
+
         setCourses(sortedCourses);
 
         setLoading(false);
@@ -97,12 +95,12 @@ const Dashboard = ({ course }) => {
             documentCountsData[course.Id] = documentCountResponse.data;
           }
         }
-        setDocumentCounts(documentCountsData); 
+        setDocumentCounts(documentCountsData);
       } catch (error) {
         console.error("Error fetching document counts:", error);
       }
     };
-  
+
     fetchDocumentCounts();
   }, [courses]);
 
@@ -133,11 +131,10 @@ const Dashboard = ({ course }) => {
     }
   };
 
-  if ( loading) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <LoadingSpinner/>;
   }
 
-  //const { fullname } = teacherData;
 
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -147,16 +144,13 @@ const Dashboard = ({ course }) => {
     setCurrentPage(selected);
   };
 
-  const handleCourseClick = (clickedCourseId) => {
-    console.log("Clicked Course ID:", clickedCourseId);
-    dispatch(setId(clickedCourseId));
-    navigate("/user/course");
+  const handleCourseClick = (courseId) => {
+    navigate(`/user/course/${courseId}`);
   };
 
-  const handleEditCourseClick = (clickedCourseId) => {
-    console.log("Clicked Course ID:", clickedCourseId);
-    dispatch(setId(clickedCourseId));
-    navigate("/teacher/course/edit-course");
+  const handleEditCourseClick = (iid) => {
+    console.log(iid); // Check the value in the console
+    navigate(`/teacher/course/edit-course/${iid}`);
   };
 
   return (
@@ -213,7 +207,9 @@ const Dashboard = ({ course }) => {
                   className="btn btn-primary btn-sm me-1 mb-2 d-inline-block float-end"
                   data-mdb-toggle="tooltip"
                   title="Remove item"
-                  onClick={() => handleNavigate("/teacher/course/new-course-process")}
+                  onClick={() =>
+                    handleNavigate("/teacher/course/new-course-process")
+                  }
                 >
                   <FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>
                 </button>

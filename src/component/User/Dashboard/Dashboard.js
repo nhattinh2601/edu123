@@ -1,9 +1,6 @@
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, Link } from "react-router-dom";
-
-import { faAdd, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 import background from "../../../assets/images/background_dashboard.jpg";
 
@@ -35,17 +32,21 @@ export default function Dashboard() {
           <div class="d-inline-block text-black d-flex justify-content-center">
             <ul class="nav nav-tabs text-white mx-auto">
               <li class="nav-item">
-                <Link to = "/user/dashboard" class="nav-link active" aria-current="page">
+                <Link
+                  to="/user/dashboard"
+                  class="nav-link active"
+                  aria-current="page"
+                >
                   Khóa học của tôi
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to = "/user/course/activate" class="nav-link">
+                <Link to="/user/course/activate" class="nav-link">
                   Kích hoạt khóa học
                 </Link>
               </li>
               <li class="nav-item">
-                <Link to = "/user/order/history" class="nav-link">
+                <Link to="/user/order/history" class="nav-link">
                   Lịch sử thanh toán
                 </Link>
               </li>
@@ -119,18 +120,18 @@ export default function Dashboard() {
                   <p>
                     <strong>Bí kíp nắm vững React trong vòng 2 tuần</strong>
                   </p>
-                  <p>Giảng viên: Đỗ Trung Thành</p>                 
+                  <p>Giảng viên: Đỗ Trung Thành</p>
                 </div>
 
                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                   <p class="text-start text-md-center text-decoration-line-through">
-                  <button
+                    <button
                       className="btn btn-primary margin-button-header"
                       onClick={() => handleNavigate("")}
                     >
                       Vào học
                     </button>
-                  </p>                  
+                  </p>
                 </div>
               </div>
             </div>

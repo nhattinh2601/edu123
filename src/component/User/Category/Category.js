@@ -12,7 +12,6 @@ export default function Category() {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  //const { title } = useLocation().pathname;
   const [isSubcategoryVisible, setSubcategoryVisible] = useState(false);
   const [subcategoryPosition, setSubcategoryPosition] = useState({
     top: 0,

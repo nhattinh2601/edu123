@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,18 +8,14 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useDispatch, useSelector } from "react-redux";
-import { setId, selectId } from "../../../slices/idSlice";
-
 const CourseList = ({ courseDatas }) => {
-  const dispatch = useDispatch();
 
-  const handleCourseClick = (clickedCourseId) => {
-    console.log("Clicked Course ID:", clickedCourseId);
-    dispatch(setId(clickedCourseId));
+  const navigate = useNavigate();
+
+  const handleCourseClick = (courseId) => {
+    navigate(`/user/course/${courseId}`);
   };
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
+  const { id } = useParams();
 
   const [teacherData, setTeacherData] = useState(null);
   const [courseData, setCourseData] = useState([]);
@@ -47,7 +43,7 @@ const CourseList = ({ courseDatas }) => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   if (!teacherData || !courseData) {
     return <div>Loading...</div>;
@@ -127,11 +123,8 @@ const CourseList = ({ courseDatas }) => {
                 </p>
                 <p className="">SALE {course.sold}%</p>
 
-                <Link
-                  to="/user/course"
-                  className="btn btn-danger"
-                  onClick={() => handleCourseClick(course.Id)}
-                >
+                
+                <Link to={`/user/course/${course.Id}`}  className="btn btn-danger" onClick={() => handleCourseClick(course.Id)}>
                   CHI TIẾT
                 </Link>
               </div>

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import axiosClient from "../../../api/axiosClient";
-import { useSelector } from "react-redux";
-import { selectId } from "../../../slices/idSlice";
+import { useParams } from "react-router-dom";
 
 export default function NewVideo() {
   const [uploadMethod, setUploadMethod] = useState("file");
@@ -13,8 +12,8 @@ export default function NewVideo() {
   const [shortDescription, setShortDescription] = useState("");
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
+  const { id } = useParams();
+  console.log("ID from params:", id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

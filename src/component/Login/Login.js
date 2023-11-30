@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Footer from "../User/Footer/Footer";
 import { toast } from "react-toastify";
-import { Alert } from "react-bootstrap"; // Import Alert from react-bootstrap
+import { Alert } from "react-bootstrap"; 
 
 import {
   faFacebookF,

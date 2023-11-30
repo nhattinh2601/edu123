@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLanguage, faDesktop } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +16,6 @@ function HomePage() {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  //const { title } = useLocation().pathname;
   const [isSubcategoryVisible, setSubcategoryVisible] = useState(false);
   const [subcategoryPosition, setSubcategoryPosition] = useState({
     top: 0,

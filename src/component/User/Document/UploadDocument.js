@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import axiosClient from "../../../api/axiosClient";
-import { useSelector } from "react-redux";
-import { selectId } from "../../../slices/idSlice";
+import { useParams } from "react-router-dom";
 
 export default function UploadDocument() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -11,8 +10,7 @@ export default function UploadDocument() {
   const [link, setLink] = useState("");
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
+  const {id} = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,8 +20,6 @@ export default function UploadDocument() {
         setFormError("Vui lòng điền đầy đủ thông tin.");
         return;
       }
-
-      // Check if the title and link exceed the character limit
       const maxCharLimit = 255;
       if (title.length > maxCharLimit || link.length > maxCharLimit) {
         setFormError(`Tiêu đề và đường link không được quá ${maxCharLimit} ký tự.`);

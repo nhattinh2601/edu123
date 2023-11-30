@@ -3,23 +3,18 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setId, selectId } from "../../../slices/idSlice";
+import { useNavigate, useParams } from "react-router-dom";
+
 import axiosClient from "../../../api/axiosClient";
 
 import EditCoursePanel from "../Panel/EditCoursePanel";
 
 export default function EditDocument() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
-  const handleCourseClick = (clickedCourseId) => {
-    console.log("Clicked Course ID:", clickedCourseId);
-    dispatch(setId(clickedCourseId));
-    navigate("/teacher/course/edit-document-detail");
+  const { id } = useParams();
+  const handleNavigate = (path) => {
+    navigate(path);
   };
 
   const [documentData, setDocumentData] = useState([]);
@@ -49,10 +44,6 @@ export default function EditDocument() {
 
     fetchData();
   }, [id]);
-
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
 
   const handleDeleteDocument = async (documentId) => {
     try {
@@ -113,7 +104,9 @@ export default function EditDocument() {
                         className="btn btn-primary btn-sm"
                         style={{ backgroundColor: "green" }}
                         onClick={() =>
-                          handleNavigate("/teacher/course/upload-document")
+                          handleNavigate(
+                            `/teacher/course/upload-document/${id}`
+                          )
                         }
                       >
                         <FontAwesomeIcon icon={faPlus} /> Thêm tài liệu
@@ -151,11 +144,15 @@ export default function EditDocument() {
                                 </div>
 
                                 <div className="float-end">
-                                  <button
-                                    className="btn btn-primary btn-sm margin-button-header"
-                                    onClick={() => handleCourseClick(document.Id)}
-                                  >
-                                    <FontAwesomeIcon icon={faEdit} />
+                                  <button className="btn btn-primary btn-sm margin-button-header">
+                                    <FontAwesomeIcon
+                                      icon={faEdit}
+                                      onClick={() =>
+                                        handleNavigate(
+                                          `/teacher/course/edit-document-detail/${document.Id}`
+                                        )
+                                      }
+                                    />
                                   </button>
                                   <button
                                     className="btn btn-danger btn-sm margin-button-header"
@@ -183,7 +180,7 @@ export default function EditDocument() {
           </div>
           <div className="col-sm-12 col-md-3 col-lg-3">
             <div className="card border-0 shadow rounded-3 my-5">
-              <EditCoursePanel />
+              <EditCoursePanel courseId={id} />
             </div>
           </div>
         </div>

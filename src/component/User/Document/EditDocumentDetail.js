@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import EditCoursePanel from "../Panel/EditCoursePanel";
-import { useSelector } from "react-redux";
-import { selectId } from "../../../slices/idSlice";
+
 import axiosClient from "../../../api/axiosClient";
+import { useParams } from "react-router-dom";
 
 export default function EditDocumentDetail() {
   const [link, setLink] = useState("");
@@ -12,8 +11,7 @@ export default function EditDocumentDetail() {
   const [title, setTitle] = useState("");
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchUserData() {
@@ -170,11 +168,7 @@ export default function EditDocumentDetail() {
               </div>
             </div>
           </div>
-          <div className="col-sm-12 col-md-3 col-lg-3">
-            <div className="card border-0 shadow rounded-3 my-5">
-              <EditCoursePanel />
-            </div>
-          </div>
+          
         </div>
       </div>
       <Footer />

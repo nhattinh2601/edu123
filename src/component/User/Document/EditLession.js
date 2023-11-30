@@ -1,26 +1,21 @@
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import EditCoursePanel from "../Panel/EditCoursePanel";
+import LoadingSpinner from "../../Others/LoadingSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { faPlay, faTrash, faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlay,
+  faTrash,
+  faEdit,
+  faEye,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
 
-import { useDispatch, useSelector } from "react-redux";
-import { setId, selectId } from "../../../slices/idSlice";
-
 export default function EditLession() {
-  const dispatch = useDispatch();
-
-  const handleCourseClick = (clickedCourseId) => {
-    console.log("Clicked Course ID:", clickedCourseId);
-    dispatch(setId(clickedCourseId));
-    navigate("/teacher/course/edit-video");
-  };
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
+  const { id } = useParams();
   const [videoData, setVideoData] = useState([]);
   const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
@@ -51,7 +46,7 @@ export default function EditLession() {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   const handleDeleteCourse = async (videoId) => {
     try {
@@ -91,7 +86,7 @@ export default function EditLession() {
   };
 
   if (!videoData) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />; ;
   }
   return (
     <div>
@@ -111,7 +106,9 @@ export default function EditLession() {
                 <button
                   className="btn btn-primary margin-button-header"
                   style={{ backgroundColor: "green" }}
-                  onClick={() => handleNavigate("/teacher/course/new-video")}
+                  onClick={() =>
+                    handleNavigate(`/teacher/course/new-video/${id}`)
+                  }
                 >
                   Thêm Video
                 </button>
@@ -139,16 +136,26 @@ export default function EditLession() {
                       <td>{video.title}</td>
                       <td>{video.description}</td>{" "}
                       <td>
-                        <button
-                          className="btn btn-primary margin-button-header"
-                        >
-                          <FontAwesomeIcon icon={faEye} />
+                        <button className="btn btn-primary margin-button-header">
+                          <FontAwesomeIcon
+                            icon={faEye}
+                            style={{ backgroundColor: "green" }}
+                            onClick={() =>
+                              handleNavigate(
+                                `/user/course/watch-video/${video.Id}`
+                              ) 
+                            }
+                          />
                         </button>
-                        <button
-                          className="btn btn-primary margin-button-header"
-                          onClick={() => handleCourseClick(video.Id)}
-                        >
-                          <FontAwesomeIcon icon={faEdit} />
+                        <button className="btn btn-primary margin-button-header">
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                            onClick={() =>
+                              handleNavigate(
+                                `/teacher/course/edit-video/${video.Id}`
+                              ) 
+                            }
+                          />
                         </button>
                         <button
                           className="btn btn-primary margin-button-header"
@@ -166,7 +173,7 @@ export default function EditLession() {
           </div>
           <div className="col-sm-12 col-md-3 col-lg-3">
             <div className="bg-white" id="panel">
-              <EditCoursePanel /> {/* panel component */}
+              <EditCoursePanel courseId={id} /> {/* panel component */}
             </div>
           </div>
         </div>

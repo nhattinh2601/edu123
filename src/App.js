@@ -52,6 +52,7 @@ import PublicDocumentDetail from "./component/Admin/Course/PublicDocumentDetail.
 import Summary from "./component/Admin/Course/Summary.js";
 import NotificationRejectCourse from "./component/Admin/Course/NotificationReject.js";
 import PaymentConfirm from "./component/Admin/PaymentConfirm/PaymentConfirm.js";
+import CourseStudy from "./component/User/Course/CourseStudy.js";
 
 import Admin from "./component/Admin/Admin.js";
 
@@ -97,7 +98,7 @@ const App = () => {
           />
           <Route path="/user/order/history" element={<HistoryOrder />} />
 
-          <Route path="/user/course/watch-video" element={<WatchVideo />} />
+          <Route path="/user/course/watch-video/:id" element={<WatchVideo />} />
           <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
           <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ToTeacherDetail />} />
           <Route path="/admin/upgrade-to-teacher/detail/reject" element={<NotificationReject />} />
@@ -123,9 +124,15 @@ const App = () => {
             }
           />
           <Route
-            path="/user/course"
+            path="/user/course/:id"
             element={
               <ProtectedRoute element={<CourseDetail />} requiredRoleId="1" />
+            }
+          />
+          <Route
+            path="/user/course/study/:id"
+            element={
+              <ProtectedRoute element={<CourseStudy />} requiredRoleId="1" />
             }
           />
           <Route
@@ -141,7 +148,7 @@ const App = () => {
             }
           />
           <Route
-            path="/user/infor-teacher"
+            path="/user/infor-teacher/:id"
             element={
               <ProtectedRoute element={<TeacherDetail />} requiredRoleId="1" />
             }
@@ -205,7 +212,7 @@ const App = () => {
           />
 
           <Route
-            path="/teacher/course/edit-course"
+            path="/teacher/course/edit-course/:id"
             element={
               <ProtectedRoute element={<EditCourse />} requiredRoleId="2" />
             }
@@ -226,36 +233,36 @@ const App = () => {
             }
           />
 
-          <Route path="/teacher/course/new-video" element={
+          <Route path="/teacher/course/new-video/:id" element={
               <ProtectedRoute element={<NewVideo />} requiredRoleId="2" />
             }
           />
-          <Route path="/teacher/course/edit-video" element={
+          <Route path="/teacher/course/edit-video/:id" element={
               <ProtectedRoute element={<EditVideo />} requiredRoleId="2" />
             }
           />
           <Route
-            path="/teacher/course/upload-document"
+            path="/teacher/course/upload-document/:id"
             element={
               <ProtectedRoute element={<UploadDocument />} requiredRoleId="2" />
             }
           />
 
           <Route
-            path="/teacher/course/edit-document"
+            path="/teacher/course/edit-document/:id"
             element={
               <ProtectedRoute element={<EditDocument />} requiredRoleId="2" />
             }
           />
           <Route
-            path="/teacher/course/edit-document-detail"
+            path="/teacher/course/edit-document-detail/:id"
             element={
               <ProtectedRoute element={<EditDocumentDetail />} requiredRoleId="2" />
             }
           />
 
           <Route
-            path="/teacher/course/edit-lession"
+            path="/teacher/course/edit-lession/:id"
             element={<EditLession />}
           />
 

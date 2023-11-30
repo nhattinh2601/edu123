@@ -2,8 +2,6 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setId } from "../../../slices/idSlice";
 
 const formatPrice = (price) => {
   if (typeof price !== "string") {
@@ -18,26 +16,18 @@ const formatPrice = (price) => {
 };
 
 const CourseCard = ({ course }) => {
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleCourseClick = (clickedCourseId) => {
-    const isAddToCartButton = clickedCourseId.target.classList.contains('btn-primary');
+  const handleCourseClick = (event) => {
     
-  
-    if (!isAddToCartButton) {
+    if (!event.target.classList.contains("btn-primary")) {
       console.log("Clicked Course ID:", course.Id);
-      dispatch(setId(course.Id));
-      navigate("/user/course");
+      navigate(`/user/course/${course.Id}`);
     }
-    
   };
+
   const formattedPrice = formatPrice(course.price);
   const formattedPromotionalPrice = formatPrice(course.promotional_price);
-
-
-
 
   return (
     <div

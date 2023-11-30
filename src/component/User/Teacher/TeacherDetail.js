@@ -6,15 +6,14 @@ import Footer from "../Footer/Footer";
 import axiosClient from "../../../api/axiosClient";
 import { useState, useEffect } from "react";
 import TeacherDetailContent from "./TeacherDetailContent";
-import { useSelector } from "react-redux";
-import { selectId } from "../../../slices/idSlice";
+import { useParams } from "react-router-dom";
+
 function extractFirstPart(str) {
   return str.split("**")[0];
 }
 
 const TeacherDetail = ({ courseDatas }) => {
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
+  const { id } = useParams();
   const [teacherData, setTeacherData] = useState(null);
   
 

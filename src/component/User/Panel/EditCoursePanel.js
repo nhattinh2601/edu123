@@ -6,7 +6,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-export default function EditCoursePanel() {
+export default function EditCoursePanel({ courseId }) {
+
+  
   return (
     <div className="card-body">
       <h3 className="card-title">Panel</h3>
@@ -17,7 +19,7 @@ export default function EditCoursePanel() {
             style={{ color: "#999", fontSize: "20px", marginRight: "10px" }}
           />
           <Link
-            to="/teacher/course/edit-course"
+            to={`/teacher/course/edit-course/${courseId}`} 
             className="fw-bold text-decoration-none"
           >
             Thông tin cơ bản
@@ -30,7 +32,7 @@ export default function EditCoursePanel() {
             style={{ color: "#999", fontSize: "20px", marginRight: "10px" }}
           />
           <Link
-            to="/teacher/course/edit-lession"
+            to={`/teacher/course/edit-lession/${courseId}`} 
             className="fw-bold text-decoration-none"
           >
             Danh sách bài học
@@ -42,7 +44,7 @@ export default function EditCoursePanel() {
             style={{ color: "#999", fontSize: "20px", marginRight: "10px" }}
           />
           <Link
-            to="/teacher/course/edit-document"
+            to={`/teacher/course/edit-document/${courseId}`} 
             className="fw-bold text-decoration-none"
           >
             Tài liệu

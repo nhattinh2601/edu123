@@ -3,8 +3,7 @@ import Footer from "../Footer/Footer";
 import EditCoursePanel from "../Panel/EditCoursePanel";
 import { useState, useEffect } from "react";
 import axiosClient from "../../../api/axiosClient";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { selectId } from "../../../slices/idSlice";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function EditCourse() {
   const [title, setTitle] = useState("");
@@ -19,9 +18,9 @@ export default function EditCourse() {
   const [errorMessage, setErrorMessage] = useState("");
   const [nameError, setNameError] = useState(false);
   const [phoneError, setDescriptionError] = useState(false);
+  const navigate = useNavigate();
 
-  const id = useSelector(selectId);
-  console.log("ID from Redux Store:", id);
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchUserData() {
@@ -34,13 +33,22 @@ export default function EditCourse() {
         setPrice(formatCurrency(courseData.price));
         setDiscountCode(formatCurrency(courseData.sold));
         setSelectedCategory(courseData.categoryId);
+        
+        const encodedId = localStorage.getItem("userId");
+        const user = parseInt(atob(encodedId), 10);
+        console.log("Decoded userId:", user);
+        console.log("courseData.userId:", courseData.userId);
+        if (user!== courseData.userId) {
+          navigate("/user");
+        }
+        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
 
     fetchUserData();
-  }, []);
+  }, [id, navigate]);
 
   useEffect(() => {
     axiosClient
@@ -78,7 +86,11 @@ export default function EditCourse() {
 
     if (inputDiscountCode !== "") {
       const discountCodeValue = parseInt(inputDiscountCode, 10);
-      if (!isNaN(discountCodeValue) && discountCodeValue >= 0 && discountCodeValue <= 100) {
+      if (
+        !isNaN(discountCodeValue) &&
+        discountCodeValue >= 0 &&
+        discountCodeValue <= 100
+      ) {
         setDiscountCode(discountCodeValue.toString());
       }
     } else {
@@ -88,40 +100,44 @@ export default function EditCourse() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
+
     setSuccessMessage("");
     setErrorMessage("");
     setNameError(false);
     setDescriptionError(false);
-  
+
     if (!title || !description) {
       setNameError(!title);
       setDescriptionError(!description);
       setErrorMessage("Vui lòng nhập hết các trường.");
       return;
     }
-  
+
     try {
       const formData = new FormData();
-  
+
       if (selectedImage) {
         formData.append("file", selectedImage);
-  
-        const uploadResponse = await axiosClient.post("cloud/images/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-  
+
+        const uploadResponse = await axiosClient.post(
+          "cloud/images/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
         const imageUrl = uploadResponse.data.data;
-  
+
         const parsedPrice = parseFloat(price.replace(/\./g, ""));
         const parsedDiscountCode = parseFloat(discountCode);
-  
+
         // Check if the parsed values are valid numbers
         if (!isNaN(parsedPrice) && !isNaN(parsedDiscountCode)) {
           const promotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
-  
+
           const fieldsToUpdate = {
             title: document.getElementById("courseName").value,
             price: parsedPrice,
@@ -132,9 +148,12 @@ export default function EditCourse() {
             image: imageUrl,
             categoryId: parseInt(selectedCategory, 10),
           };
-  
-          const response = await axiosClient.patch(`/courses/${id}`, fieldsToUpdate);
-  
+
+          const response = await axiosClient.patch(
+            `/courses/${id}`,
+            fieldsToUpdate
+          );
+
           if (response.status === 200) {
             setSuccessMessage("Khóa học đã được cập nhật thành công");
           } else {
@@ -147,11 +166,11 @@ export default function EditCourse() {
         // If no image is selected, update other fields directly
         const parsedPrice = parseFloat(price.replace(/\./g, ""));
         const parsedDiscountCode = parseFloat(discountCode);
-  
+
         // Check if the parsed values are valid numbers
         if (!isNaN(parsedPrice) && !isNaN(parsedDiscountCode)) {
           const promotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
-  
+
           const fieldsToUpdate = {
             title: document.getElementById("courseName").value,
             price: parsedPrice,
@@ -161,9 +180,12 @@ export default function EditCourse() {
             active: true,
             categoryId: parseInt(selectedCategory, 10),
           };
-  
-          const response = await axiosClient.patch(`/courses/${id}`, fieldsToUpdate);
-  
+
+          const response = await axiosClient.patch(
+            `/courses/${id}`,
+            fieldsToUpdate
+          );
+
           if (response.status === 200) {
             setSuccessMessage("Khóa học đã được cập nhật thành công");
           } else {
@@ -203,13 +225,18 @@ export default function EditCourse() {
                     <div className="row">
                       {/* Tên khóa học */}
                       <div className="col-6 mb-3">
-                        <label htmlFor="courseName" className="form-label fw-bold">
+                        <label
+                          htmlFor="courseName"
+                          className="form-label fw-bold"
+                        >
                           Tên khóa học
                         </label>
                         <input
                           type="text"
                           id="courseName"
-                          className={`form-control ${nameError ? "is-invalid" : ""}`}
+                          className={`form-control ${
+                            nameError ? "is-invalid" : ""
+                          }`}
                           value={title}
                           onChange={(e) => setTitle(e.target.value)}
                         />
@@ -217,7 +244,10 @@ export default function EditCourse() {
 
                       {/* Chuyên mục */}
                       <div className="col-3 mb-3">
-                        <label htmlFor="category" className="form-label fw-bold">
+                        <label
+                          htmlFor="category"
+                          className="form-label fw-bold"
+                        >
                           Chuyên mục
                         </label>
                         <select
@@ -254,13 +284,18 @@ export default function EditCourse() {
 
                     {/* Mô tả ngắn */}
                     <div className="mb-3">
-                      <label htmlFor="introduction" className="form-label fw-bold">
+                      <label
+                        htmlFor="introduction"
+                        className="form-label fw-bold"
+                      >
                         Giới thiệu *
                       </label>
                       <textarea
                         id="introduction"
                         rows="4"
-                        className={`form-control ${nameError ? "is-invalid" : ""}`}
+                        className={`form-control ${
+                          nameError ? "is-invalid" : ""
+                        }`}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                       ></textarea>
@@ -281,7 +316,10 @@ export default function EditCourse() {
                       </div>
 
                       <div className="col-6 mb-3">
-                        <label htmlFor="discountCode" className="form-label fw-bold">
+                        <label
+                          htmlFor="discountCode"
+                          className="form-label fw-bold"
+                        >
                           Mã giảm giá *
                         </label>
                         <input
@@ -295,7 +333,10 @@ export default function EditCourse() {
                     </div>
 
                     <div className="mb-3">
-                      <label htmlFor="promotionalPrice" className="form-label fw-bold">
+                      <label
+                        htmlFor="promotionalPrice"
+                        className="form-label fw-bold"
+                      >
                         Giá khuyến mãi *
                       </label>
                       <input
@@ -317,7 +358,7 @@ export default function EditCourse() {
           </div>
           <div className="col-sm-12 col-md-3 col-lg-3">
             <div className="card border-0 shadow rounded-3 my-5">
-              <EditCoursePanel />
+              <EditCoursePanel courseId={id} />
             </div>
           </div>
         </div>

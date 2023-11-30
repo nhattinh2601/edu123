@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
 import "./Video.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
 export default function WatchVideo() {
-  const id = 11;
+  const {id} = useParams();
 
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");

@@ -3,6 +3,7 @@ import "../../../css/headers.css";
 import Header from "../Header/Header";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
@@ -13,15 +14,11 @@ import axiosClient from "../../../api/axiosClient";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../Others/LoadingSpinner";
 
-const CourseDetail = ({ courseDatas }) => {
+const CourseStudy = ({ courseDatas }) => {
   const navigate = useNavigate();
 
   const handleCourseClick = () => {
     navigate(`/user/infor-teacher/${Id}`);
-  };
-  const handleVideoClick = (title) => {
-    // Hiển thị cửa sổ alert khi click vào video
-    alert(`Bạn cần mua khóa học mới để xem video: ${title}`);
   };
 
   const { id } = useParams();
@@ -30,6 +27,7 @@ const CourseDetail = ({ courseDatas }) => {
   const [courseData, setCourseData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
   const [videoData, setVideoData] = useState([]);
+  const [documentData, setDocumentData] = useState([]);
 
   const splitDescription = (description) =>
     description.split("**").map((part, index) => (
@@ -50,6 +48,10 @@ const CourseDetail = ({ courseDatas }) => {
 
         const videoResponse = await axiosClient.get(`/videos/course=${id}`);
         setVideoData(videoResponse.data);
+        const documentResponse = await axiosClient.get(
+          `/documents/course=${id}`
+        );
+        setDocumentData(documentResponse.data);
 
         const userId = courseResponse.data.userId;
         const teacherResponse = await axiosClient.get(`/users/${userId}`);
@@ -174,22 +176,42 @@ const CourseDetail = ({ courseDatas }) => {
             <br />
 
             <div className="bg-white" id="noidung">
-        <h3 className="mb-4">Nội dung khóa học</h3>
-        {videoData.map((video) => (
-          <div key={video.Id} className="video-item mb-3">
-            <FontAwesomeIcon icon={faPlay} className="play-icon" />
-            <Link
-              to="#"
-              className="video-link"
-              onClick={() => handleVideoClick(video.title)}
-            >
-              {video.title}
-            </Link>
-            <div className="duration float-right">{video.duration}</div>
-            <hr className="mt-2 mb-2" />
-          </div>
-        ))}
-      </div>
+              <h3 className="mb-4">Nội dung khóa học</h3>
+              {videoData.map((video) => (
+                <div key={video.Id} className="video-item mb-3">
+                  <FontAwesomeIcon icon={faPlay} className="play-icon" />
+                  <Link
+                    to={`/user/course/watch-video/${video.Id}`}
+                    className="video-link"
+                  >
+                    {video.title}
+                  </Link>
+                  <div className="duration float-right">{video.duration}</div>
+                  <hr className="mt-2 mb-2" />
+                </div>
+              ))}
+            </div>
+            <br />
+            <div className="bg-white" id="noidung">
+              <h3 className="mb-4">Tài liệu tham khảo</h3>
+              <div
+                className="documents-container"
+                style={{ display: "flex", flexDirection: "row" }}
+              >
+                {documentData.map((document) => (
+                  <div key={document.Id} className="document-item">
+                    <FontAwesomeIcon icon={faFile} className="file-icon" />
+                    <div className="document-title">
+                      {document.title}:{" "}
+                      <Link to={document.file_path} className="file-path">
+                        {document.file_path}
+                      </Link>
+                      <hr className="mt-2 mb-2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="bg-white" id="infogiangvien">
               <h3>Thông tin giảng viên</h3>
@@ -420,4 +442,4 @@ const CourseDetail = ({ courseDatas }) => {
   );
 };
 
-export default CourseDetail;
+export default CourseStudy;

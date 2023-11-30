@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLanguage, faDesktop } from "@fortawesome/free-solid-svg-icons";
@@ -10,12 +10,10 @@ import slideshow1 from "../../../image/slideshow_1.jpg";
 import slideshow2 from "../../../image/slideshow_2.jpg";
 import slideshow3 from "../../../image/slideshow_3.jpg";
 
-
 function HomePage() {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  //const { title } = useLocation().pathname;
   const [isSubcategoryVisible, setSubcategoryVisible] = useState(false);
   const [subcategoryPosition, setSubcategoryPosition] = useState({
     top: 0,
@@ -71,7 +69,6 @@ function HomePage() {
     }
 
     if (initialTopPosition.current === null) {
-      // Calculate and store the initial top position
       initialTopPosition.current = event.currentTarget.offsetTop;
     }
 
@@ -79,7 +76,6 @@ function HomePage() {
     setSubcategoryVisible(true);
     setHoveredCategoryId(categoryId);
 
-    // Adjusted the left property for subcategory container
     const subcategoryLeftPosition = event.currentTarget.offsetLeft + 215;
 
     setSubcategoryPosition({
@@ -227,7 +223,7 @@ function HomePage() {
           ></span>
         </button>
       </div>
-      
+
       <HomePageContent />
       <Footer />
     </div>
