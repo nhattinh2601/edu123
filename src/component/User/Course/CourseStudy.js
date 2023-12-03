@@ -3,18 +3,27 @@ import "../../../css/headers.css";
 import Header from "../Header/Header";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlay,
+  faPencilAlt,
+  faTrash,
+  faFile,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../../api/axiosClient";
 
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../Others/LoadingSpinner";
+import Pagination from "../../Others/Pagination";
+import StarRating from "./StarRating"; 
 
-const CourseStudy = ({ courseDatas }) => {
+import "./review.css";
+
+const CourseDetail = ({ courseDatas }) => {
   const navigate = useNavigate();
 
   const handleCourseClick = () => {
@@ -28,6 +37,17 @@ const CourseStudy = ({ courseDatas }) => {
   const [reviewData, setReviewData] = useState([]);
   const [videoData, setVideoData] = useState([]);
   const [documentData, setDocumentData] = useState([]);
+  const [commentInput, setCommentInput] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedComment, setEditedComment] = useState("");
+  const [ratingDistribution, setRatingDistribution] = useState({});
+  const [ratingCount, setRatingCount] = useState("");
+  const [studentCount, setStudentCount] = useState("");
+  const [userRating, setUserRating] = useState(0);
+
+  const handleRatingChange = (newRating) => {
+    setUserRating(newRating);
+  };
 
   const splitDescription = (description) =>
     description.split("**").map((part, index) => (
@@ -36,6 +56,16 @@ const CourseStudy = ({ courseDatas }) => {
         {index < 2 && " - "}{" "}
       </span>
     ));
+
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const itemsPerPage = 5;
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,8 +83,21 @@ const CourseStudy = ({ courseDatas }) => {
         );
         setDocumentData(documentResponse.data);
 
+        const ratingCountResponse = await axiosClient.get(
+          `/ratings/course/${id}/students/count`
+        );
+        const ratingCount = ratingCountResponse.data;
+        setRatingCount(ratingCount);
+
+        const studentCountResponse = await axiosClient.get(
+          `/courseRegisters/course/${id}/students/count`
+        );
+        const studentCount = studentCountResponse.data;
+        setStudentCount(studentCount);
+
         const userId = courseResponse.data.userId;
         const teacherResponse = await axiosClient.get(`/users/${userId}`);
+        
         setTeacherData(teacherResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -62,6 +105,21 @@ const CourseStudy = ({ courseDatas }) => {
     };
 
     fetchData();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchRatingDistribution = async () => {
+      try {
+        const response = await axiosClient.get(
+          `/ratings/course/${id}/distribution`
+        );
+        setRatingDistribution(response.data);
+      } catch (error) {
+        console.error("Error fetching rating distribution:", error);
+      }
+    };
+
+    fetchRatingDistribution();
   }, [id]);
 
   if (!teacherData || !courseData || !reviewData) {
@@ -74,6 +132,73 @@ const CourseStudy = ({ courseDatas }) => {
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
+  };
+
+  const handleAddComment = async () => {
+    try {
+      const encodedUserId = localStorage.getItem("userId");
+      const userId = parseInt(atob(encodedUserId), 10);
+      const response = await axiosClient.post("/reviews", {
+        courseId: id,
+        userId: userId,
+        content: commentInput,
+      });
+
+      const newComment = response.data;
+      setReviewData([...reviewData, newComment]);
+      setCommentInput("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const handleEditComment = async (commentId) => {
+    setEditingCommentId(commentId);
+    const commentToEdit = reviewData.find(
+      (comment) => comment.reviewId === commentId
+    );
+    setEditedComment(commentToEdit.content);
+  };
+
+  const handleSaveEdit = async (commentId) => {
+    try {
+      const response = await axiosClient.patch(`/reviews/${commentId}`, {
+        content: editedComment,
+      });
+
+      if (response.data) {
+        const updatedReviewData = reviewData.map((comment) =>
+          comment.reviewId === commentId
+            ? { ...comment, content: editedComment }
+            : comment
+        );
+        setReviewData(updatedReviewData);
+
+        setEditingCommentId(null);
+        setEditedComment("");
+      } else {
+        console.error("Failed to edit comment");
+      }
+    } catch (error) {
+      console.error("Error editing comment:", error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await axiosClient.delete(`/reviews/${commentId}`);
+
+      if (response.data === "Đánh dấu xóa thành công") {
+        const updatedReviewData = reviewData.filter(
+          (comment) => comment.reviewId !== commentId
+        );
+        setReviewData(updatedReviewData);
+      } else {
+        console.error("Failed to delete comment");
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
   };
 
   return (
@@ -98,7 +223,7 @@ const CourseStudy = ({ courseDatas }) => {
                     height="30"
                     className="rounded-circle"
                     src={avatar}
-                    alt="Đỗ Trung Thành"
+                    alt=" "
                   />
                   <Link
                     to={`/user/infor-teacher/${Id}`}
@@ -115,12 +240,12 @@ const CourseStudy = ({ courseDatas }) => {
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
-                  <span>248 </span>Đánh giá
+                  <span>{ratingCount} </span>Đánh giá
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div className="d-inline-block text-white">
                   <span>
-                    <i className="fa fa-users" aria-hidden="true"></i> 14111 Học
+                    <i className="fa fa-users" aria-hidden="true"></i> {studentCount} Học
                     viên{" "}
                   </span>
                 </div>
@@ -181,7 +306,7 @@ const CourseStudy = ({ courseDatas }) => {
                 <div key={video.Id} className="video-item mb-3">
                   <FontAwesomeIcon icon={faPlay} className="play-icon" />
                   <Link
-                    to={`/user/course/watch-video/${video.Id}`}
+                    to={`/user/course/watch-video/${video.Id}/${id}`}
                     className="video-link"
                   >
                     {video.title}
@@ -191,23 +316,27 @@ const CourseStudy = ({ courseDatas }) => {
                 </div>
               ))}
             </div>
+
             <br />
             <div className="bg-white" id="noidung">
               <h3 className="mb-4">Tài liệu tham khảo</h3>
-              <div
-                className="documents-container"
-                style={{ display: "flex", flexDirection: "row" }}
-              >
+              <div className="documents-container">
                 {documentData.map((document) => (
                   <div key={document.Id} className="document-item">
-                    <FontAwesomeIcon icon={faFile} className="file-icon" />
-                    <div className="document-title">
-                      {document.title}:{" "}
+                    <div className="document-row">
+                      <FontAwesomeIcon icon={faFile} className="file-icon" />
+
+                      <span>
+                        {" "}
+                        {document.title}
+                        {": "}
+                      </span>
                       <Link to={document.file_path} className="file-path">
                         {document.file_path}
                       </Link>
-                      <hr className="mt-2 mb-2" />
                     </div>
+
+                    <hr className="mt-2 mb-2" />
                   </div>
                 ))}
               </div>
@@ -223,26 +352,12 @@ const CourseStudy = ({ courseDatas }) => {
                       <img
                         className="lazy"
                         src={avatar}
-                        alt={title}
+                        alt="Không có ảnh"
                         align=""
                         loading="lazy"
                       />
                     </div>
-                    <div className="uct-rate-gv">
-                      <ul>
-                        <li>
-                          <i className="fa fa-users" aria-hidden="true"></i>
-                          <span>8896</span> Học viên
-                        </li>
-                        <li>
-                          <i
-                            className="fa fa-play-circle"
-                            aria-hidden="true"
-                          ></i>{" "}
-                          <span>6</span> Khóa học
-                        </li>
-                      </ul>
-                    </div>
+                    
                   </div>
 
                   <div className="col-sm-8">
@@ -263,155 +378,38 @@ const CourseStudy = ({ courseDatas }) => {
 
             <div className="bg-white" id="danhgia">
               <h3>Đánh giá của học viên</h3>
-              <div className="u-rate-hv" id="u-rate-hv">
-                <div className="urh-left">
-                  <div className="number-big-rate">5</div>
-                  <div className="star-big-rate">
-                    <span className="star-rate">
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i
-                        className="fa fa-star co-or"
-                        aria-hidden="true"
-                      ></i>{" "}
-                    </span>
-                  </div>
-                  <div className="count-rate">49 Đánh giá</div>
-                </div>
-                <div className="urh-right">
-                  <div className="u-rate-f1">
+              <StarRating onRatingChange={handleRatingChange} courseId={id} />
+              <hr/>
+              <div className="u-rate-f1">
+                {Object.keys(ratingDistribution).map((rating) => (
+                  <div key={rating} className="u-rate-f1">
+                    <div className="u-rate-f1-star">
+                      <span className="star-rate">
+                        <p className="star-rating-num">
+                          {rating}{" "}
+                          {Array.from({ length: 1 }, (_, i) => (
+                            <FontAwesomeIcon key={i} icon={faStar} />
+                          ))}
+                        </p>
+                      </span>
+                    </div>
                     <div className="u-rate-f1-progress">
                       <div className="progress">
                         <div
                           className="progress-bar progress-bar-success"
                           role="progressbar"
-                          aria-valuenow="86"
+                          aria-valuenow={ratingDistribution[rating]}
                           aria-valuemin="0"
                           aria-valuemax="100"
-                          style={{ width: "86%" }}
+                          style={{ width: `${ratingDistribution[rating]}%` }}
                         ></div>
                       </div>
                     </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                      </span>
-                    </div>
                     <div className="u-rate-f1-num">
-                      <p>86%</p>
+                      <p>{ratingDistribution[rating]}%</p>
                     </div>
                   </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="5"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "5%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>5%</p>
-                    </div>
-                  </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="2"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "2%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>2%</p>
-                    </div>
-                  </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="5"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "5%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>5%</p>
-                    </div>
-                  </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="2"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "2%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>2%</p>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -419,14 +417,78 @@ const CourseStudy = ({ courseDatas }) => {
             <div className="bg-white">
               <h3>Nhận xét của học viên</h3>
               <div>
+                <div>
+                  <textarea
+                    value={commentInput}
+                    onChange={(e) => setCommentInput(e.target.value)}
+                    placeholder="Nhập bình luận của bạn..."
+                  />
+                  <button onClick={handleAddComment}>Thêm bình luận</button>
+                </div>
                 <ul className="load_comment">
-                  {reviewData.map((review) => (
-                    <li key={review.Id} className="u-block-cmhv">
+                  {reviewData.slice(startIndex, endIndex).map((review) => (
+                    <li key={review.reviewId} className="u-block-cmhv">
                       <div className="block-hv">
                         <div className="cm-hv">
                           <div className="rate-hv">
-                            <p>Ngày bình luận: {formatDate(review.createAt)}</p>
-                            <p>{review.content}</p>
+                            <img
+                              src={review.avatar}
+                              alt="Avatar"
+                              className="avatar"
+                            />
+                            <p>Người đăng: {review.fullname}</p>
+                            <p>
+                              Ngày bình luận:{" "}
+                              {formatDate(
+                                review.update !== review.create
+                                  ? review.update
+                                  : review.create
+                              )}
+                              {review.update !== review.create &&
+                                " (Đã chỉnh sửa)"}
+                            </p>
+
+                            {editingCommentId === review.reviewId ? (
+                              <div>
+                                <textarea
+                                  value={editedComment}
+                                  onChange={(e) =>
+                                    setEditedComment(e.target.value)
+                                  }
+                                />
+                                <button
+                                  onClick={() =>
+                                    handleSaveEdit(review.reviewId)
+                                  }
+                                >
+                                  Lưu chỉnh sửa
+                                </button>
+                              </div>
+                            ) : (
+                              <div>
+                                <p>{review.content}</p>
+                                {parseInt(
+                                  atob(localStorage.getItem("userId"))
+                                ) === review.userId && (
+                                  <div>
+                                    <FontAwesomeIcon
+                                      icon={faPencilAlt}
+                                      onClick={() =>
+                                        handleEditComment(review.reviewId)
+                                      }
+                                      className="edit-icon"
+                                    /> {" "}
+                                    <FontAwesomeIcon
+                                      icon={faTrash}
+                                      onClick={() =>
+                                        handleDeleteComment(review.reviewId)
+                                      }
+                                      className="delete-icon"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -434,6 +496,11 @@ const CourseStudy = ({ courseDatas }) => {
                   ))}
                 </ul>
               </div>
+
+              <Pagination
+                pageCount={Math.ceil(reviewData.length / itemsPerPage)}
+                handlePageClick={handlePageClick}
+              />
             </div>
           </div>
         </div>
@@ -442,4 +509,4 @@ const CourseStudy = ({ courseDatas }) => {
   );
 };
 
-export default CourseStudy;
+export default CourseDetail;

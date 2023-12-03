@@ -53,6 +53,7 @@ import Summary from "./component/Admin/Course/Summary.js";
 import NotificationRejectCourse from "./component/Admin/Course/NotificationReject.js";
 import PaymentConfirm from "./component/Admin/PaymentConfirm/PaymentConfirm.js";
 import CourseStudy from "./component/User/Course/CourseStudy.js";
+import FeedBack from "./component/User/Feedback/FeedBack.js";
 
 import Admin from "./component/Admin/Admin.js";
 
@@ -64,10 +65,15 @@ const checkAccess = (requiredRoleId) => {
   const encodedRoleId = localStorage.getItem("roleId");
   const roleId = atob(encodedRoleId);
 
-  if (requiredRoleId === "1" && roleId === "2") {
-    return true;
+   if (requiredRoleId === "4") {
+    // Nếu requiredRoleId là 4, kiểm tra xem roleId có phải là 1 không
+    return roleId === "1";
   }
 
+  // Cho các trường hợp khác, giữ nguyên logic cũ
+  if (requiredRoleId === "1" && (roleId === "2" || roleId === "4")) {
+    return true;
+  }
   return roleId === requiredRoleId || roleId === "3";
 };
 
@@ -98,7 +104,7 @@ const App = () => {
           />
           <Route path="/user/order/history" element={<HistoryOrder />} />
 
-          <Route path="/user/course/watch-video/:id" element={<WatchVideo />} />
+          <Route path="/user/course/watch-video/:courseId/:id" element={<WatchVideo />} />
           <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
           <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ToTeacherDetail />} />
           <Route path="/admin/upgrade-to-teacher/detail/reject" element={<NotificationReject />} />
@@ -117,6 +123,12 @@ const App = () => {
             path="/user"
             element={
               <ProtectedRoute element={<HomePage />} requiredRoleId="1" />
+            }
+          />
+          <Route
+            path="/user/feedback"
+            element={
+              <ProtectedRoute element={<FeedBack />} requiredRoleId="1" />
             }
           />
           <Route path="/user/dashboard" element={
