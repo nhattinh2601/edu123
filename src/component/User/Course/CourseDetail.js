@@ -5,13 +5,19 @@ import Header from "../Header/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlay,
+  faPencilAlt,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../../api/axiosClient";
 
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../Others/LoadingSpinner";
+
+import "./review.css";
 
 const CourseDetail = ({ courseDatas }) => {
   const navigate = useNavigate();
@@ -20,7 +26,6 @@ const CourseDetail = ({ courseDatas }) => {
     navigate(`/user/infor-teacher/${Id}`);
   };
   const handleVideoClick = (title) => {
-    // Hiển thị cửa sổ alert khi click vào video
     alert(`Bạn cần mua khóa học mới để xem video: ${title}`);
   };
 
@@ -30,6 +35,9 @@ const CourseDetail = ({ courseDatas }) => {
   const [courseData, setCourseData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
   const [videoData, setVideoData] = useState([]);
+  const [commentInput, setCommentInput] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedComment, setEditedComment] = useState("");
 
   const splitDescription = (description) =>
     description.split("**").map((part, index) => (
@@ -72,6 +80,73 @@ const CourseDetail = ({ courseDatas }) => {
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
+  };
+
+  const handleAddComment = async () => {
+    try {
+      const encodedUserId = localStorage.getItem("userId");
+      const userId = parseInt(atob(encodedUserId), 10);
+      const response = await axiosClient.post("/reviews", {
+        courseId: id,
+        userId: userId,
+        content: commentInput,
+      });
+
+      const newComment = response.data;
+      setReviewData([...reviewData, newComment]);
+      setCommentInput("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const handleEditComment = async (commentId) => {
+    setEditingCommentId(commentId);
+    const commentToEdit = reviewData.find(
+      (comment) => comment.reviewId === commentId
+    );
+    setEditedComment(commentToEdit.content);
+  };
+
+  const handleSaveEdit = async (commentId) => {
+    try {
+      const response = await axiosClient.patch(`/reviews/${commentId}`, {
+        content: editedComment,
+      });
+
+      if (response.data) {
+        const updatedReviewData = reviewData.map((comment) =>
+          comment.reviewId === commentId
+            ? { ...comment, content: editedComment }
+            : comment
+        );
+        setReviewData(updatedReviewData);
+
+        setEditingCommentId(null);
+        setEditedComment("");
+      } else {
+        console.error("Failed to edit comment");
+      }
+    } catch (error) {
+      console.error("Error editing comment:", error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await axiosClient.delete(`/reviews/${commentId}`);
+
+      if (response.data === "Đánh dấu xóa thành công") {
+        const updatedReviewData = reviewData.filter(
+          (comment) => comment.reviewId !== commentId
+        );
+        setReviewData(updatedReviewData);
+      } else {
+        console.error("Failed to delete comment");
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
   };
 
   return (
@@ -174,22 +249,22 @@ const CourseDetail = ({ courseDatas }) => {
             <br />
 
             <div className="bg-white" id="noidung">
-        <h3 className="mb-4">Nội dung khóa học</h3>
-        {videoData.map((video) => (
-          <div key={video.Id} className="video-item mb-3">
-            <FontAwesomeIcon icon={faPlay} className="play-icon" />
-            <Link
-              to="#"
-              className="video-link"
-              onClick={() => handleVideoClick(video.title)}
-            >
-              {video.title}
-            </Link>
-            <div className="duration float-right">{video.duration}</div>
-            <hr className="mt-2 mb-2" />
-          </div>
-        ))}
-      </div>
+              <h3 className="mb-4">Nội dung khóa học</h3>
+              {videoData.map((video) => (
+                <div key={video.Id} className="video-item mb-3">
+                  <FontAwesomeIcon icon={faPlay} className="play-icon" />
+                  <Link
+                    to="#"
+                    className="video-link"
+                    onClick={() => handleVideoClick(video.title)}
+                  >
+                    {video.title}
+                  </Link>
+                  <div className="duration float-right">{video.duration}</div>
+                  <hr className="mt-2 mb-2" />
+                </div>
+              ))}
+            </div>
 
             <div className="bg-white" id="infogiangvien">
               <h3>Thông tin giảng viên</h3>
@@ -399,18 +474,82 @@ const CourseDetail = ({ courseDatas }) => {
               <div>
                 <ul className="load_comment">
                   {reviewData.map((review) => (
-                    <li key={review.Id} className="u-block-cmhv">
+                    <li key={review.reviewId} className="u-block-cmhv">
                       <div className="block-hv">
                         <div className="cm-hv">
                           <div className="rate-hv">
-                            <p>Ngày bình luận: {formatDate(review.createAt)}</p>
-                            <p>{review.content}</p>
+                            <img
+                              src={review.avatar}
+                              alt="Avatar"
+                              className="avatar"
+                            />
+                            <p>Người đăng: {review.fullname}</p>
+                            <p>
+                              Ngày bình luận:{" "}
+                              {formatDate(
+                                review.update !== review.create
+                                  ? review.update
+                                  : review.create
+                              )}
+                              {review.update !== review.create &&
+                                " (đã chỉnh sửa)"}
+                            </p>
+
+                            {editingCommentId === review.reviewId ? (
+                              <div>
+                                <textarea
+                                  value={editedComment}
+                                  onChange={(e) =>
+                                    setEditedComment(e.target.value)
+                                  }
+                                />
+                                <button
+                                  onClick={() =>
+                                    handleSaveEdit(review.reviewId)
+                                  }
+                                >
+                                  Lưu chỉnh sửa
+                                </button>
+                              </div>
+                            ) : (
+                              <div>
+                                <p>{review.content}</p>
+                                {parseInt(
+                                  atob(localStorage.getItem("userId"))
+                                ) === review.userId && (
+                                  <div>
+                                    <FontAwesomeIcon
+                                      icon={faPencilAlt}
+                                      onClick={() =>
+                                        handleEditComment(review.reviewId)
+                                      }
+                                      className="edit-icon"
+                                    />
+                                    <FontAwesomeIcon
+                                      icon={faTrash}
+                                      onClick={() =>
+                                        handleDeleteComment(review.reviewId)
+                                      }
+                                      className="delete-icon"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
                     </li>
                   ))}
                 </ul>
+              </div>
+              <div>
+                <textarea
+                  value={commentInput}
+                  onChange={(e) => setCommentInput(e.target.value)}
+                  placeholder="Nhập bình luận của bạn..."
+                />
+                <button onClick={handleAddComment}>Thêm bình luận</button>
               </div>
             </div>
           </div>

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axiosClient from "../../../api/axiosClient";
 
 const formatPrice = (price) => {
   if (typeof price !== "string") {
@@ -17,12 +18,70 @@ const formatPrice = (price) => {
 
 const CourseCard = ({ course }) => {
   const navigate = useNavigate();
+  const [isRegistered, setIsRegistered] = useState(false);
 
-  const handleCourseClick = (event) => {
-    
-    if (!event.target.classList.contains("btn-primary")) {
-      console.log("Clicked Course ID:", course.Id);
-      navigate(`/user/course/${course.Id}`);
+  useEffect(() => {
+    const checkRegistration = async () => {
+      try {
+        const encodedUserId = localStorage.getItem("userId");
+        const decodedUserId = parseInt(atob(encodedUserId), 10);
+
+        const response = await axiosClient.get("/courseRegisters");
+        const courseRegisters = response.data;
+
+        const isCourseRegistered = courseRegisters.some((register) => {
+          const userIdMatch = register.userId === decodedUserId;
+          const courseIdMatch = register.courseId === course.Id;
+
+          return userIdMatch && courseIdMatch;
+        });
+
+        setIsRegistered(isCourseRegistered);
+      } catch (error) {
+        console.error("Error checking course registration:", error.message);
+      }
+    };
+
+    checkRegistration();
+  }, [course.Id]);
+
+  const handleButtonClick = () => {
+    if (isRegistered) {
+      navigate(`/user/course/study/${course.Id}`);
+    } else {
+      handleAddToCart();
+    }
+  };
+
+  const handleClick = () => {
+    navigate(`/user/course/${course.Id}`);
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      const encodedUserId = localStorage.getItem("userId");
+      const decodedUserId = atob(encodedUserId);
+
+      const response = await axiosClient.post("/carts/create", {
+        userId: decodedUserId,
+        courseId: course.Id,
+      });
+
+      console.log("Course added to cart:", response.data);
+      const confirmed = window.confirm(
+        "Đã thêm khóa học và giỏ hàng. Bạn có muốn chuyển đến giỏ hàng không?"
+      );
+
+      if (confirmed) {
+        setTimeout(() => {
+          navigate("/user/cart");
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Error adding course to cart:", error.message);
+      window.alert(
+        "Khóa học đã có trong giỏ hàng hoặc khóa học đã được đăng kí"
+      );
     }
   };
 
@@ -33,9 +92,13 @@ const CourseCard = ({ course }) => {
     <div
       className="card d-inline-block p-2 pt-3 mx-3"
       style={{ width: "18rem" }}
-      onClick={handleCourseClick}
     >
-      <img className="card-img-top" alt="..." src={course.image} />
+      <img
+        className="card-img-top"
+        alt="..."
+        src={course.image}
+        onClick={handleClick}
+      />
       <div className="card-body">
         <h5 className="card-title">{course.title}</h5>
         <p className="card-text">
@@ -49,9 +112,14 @@ const CourseCard = ({ course }) => {
             ))}
           </span>
         </div>
-        <Link to="/user/cart" className="btn btn-primary w-100">
-          Thêm vào giỏ hàng
-        </Link>
+        <button
+          className={`btn ${
+            isRegistered ? "btn-success" : "btn-primary"
+          } w-100`}
+          onClick={handleButtonClick}
+        >
+          {isRegistered ? "Vào học" : "Thêm vào giỏ hàng"}
+        </button>
       </div>
     </div>
   );
