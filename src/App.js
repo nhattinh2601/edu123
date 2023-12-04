@@ -53,6 +53,7 @@ import Summary from "./component/Admin/Course/Summary.js";
 import NotificationRejectCourse from "./component/Admin/Course/NotificationReject.js";
 import PaymentConfirm from "./component/Admin/PaymentConfirm/PaymentConfirm.js";
 import CourseStudy from "./component/User/Course/CourseStudy.js";
+import FeedBack from "./component/User/Feedback/Feedback.js";
 
 import Admin from "./component/Admin/Admin.js";
 
@@ -64,7 +65,7 @@ const checkAccess = (requiredRoleId) => {
   const encodedRoleId = localStorage.getItem("roleId");
   const roleId = atob(encodedRoleId);
 
-   if (requiredRoleId === "4") {
+  if (requiredRoleId === "4") {
     // Nếu requiredRoleId là 4, kiểm tra xem roleId có phải là 1 không
     return roleId === "1";
   }
@@ -75,7 +76,6 @@ const checkAccess = (requiredRoleId) => {
   }
   return roleId === requiredRoleId || roleId === "3";
 };
-
 
 const ProtectedRoute = ({ element, path, requiredRoleId }) => {
   const hasAccess = checkAccess(requiredRoleId);
@@ -94,11 +94,13 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/search/:title" element={<Search />} />
           <Route path="/searchCategory/:categoryId" element={<Category />} />
-          <Route path="/sortCourseInCategory/:categoryId/:sortName" element={<Category />} />
+          <Route
+            path="/sortCourseInCategory/:categoryId/:sortName"
+            element={<Category />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          
 
           <Route path="/user/order/thankyou" element={<ThankYouPage />} />
           <Route
@@ -108,17 +110,44 @@ const App = () => {
           <Route path="/user/order/history" element={<HistoryOrder />} />
 
           <Route path="/user/course/watch-video/:id" element={<WatchVideo />} />
-          <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
-          <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ToTeacherDetail />} />
-          <Route path="/admin/upgrade-to-teacher/detail/reject" element={<NotificationReject />} />
-          <Route path="/admin/public-course" element={<PublicCourse />} />          
-          <Route path="/admin/public-course/course-info" element={<CourseInfo />} />
-          <Route path="/admin/public-course/lession" element={<PublicLession />} />
-          <Route path="/admin/public-course/lession/detail" element={<PublicLessionDetail />} />
-          <Route path="/admin/public-course/document" element={<PublicDocument />} />
-          <Route path="/admin/public-course/document/detail" element={<PublicDocumentDetail />} />
+          <Route
+            path="/admin/upgrade-to-teacher"
+            element={<UpgradeToTeacher />}
+          />
+          <Route
+            path="/admin/upgrade-to-teacher/detail/:id"
+            element={<ToTeacherDetail />}
+          />
+          <Route
+            path="/admin/upgrade-to-teacher/detail/reject"
+            element={<NotificationReject />}
+          />
+          <Route path="/admin/public-course" element={<PublicCourse />} />
+          <Route
+            path="/admin/public-course/course-info"
+            element={<CourseInfo />}
+          />
+          <Route
+            path="/admin/public-course/lession"
+            element={<PublicLession />}
+          />
+          <Route
+            path="/admin/public-course/lession/detail"
+            element={<PublicLessionDetail />}
+          />
+          <Route
+            path="/admin/public-course/document"
+            element={<PublicDocument />}
+          />
+          <Route
+            path="/admin/public-course/document/detail"
+            element={<PublicDocumentDetail />}
+          />
           <Route path="/admin/public-course/summary" element={<Summary />} />
-          <Route path="/admin/public-course/reject" element={<NotificationRejectCourse />} />
+          <Route
+            path="/admin/public-course/reject"
+            element={<NotificationRejectCourse />}
+          />
           <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
           <Route path="/user/course/:id" element={<CourseDetail />} />
 
@@ -135,7 +164,7 @@ const App = () => {
               <ProtectedRoute element={<Dashboard />} requiredRoleId="1" />
             }
           />
-          
+
           <Route
             path="/user/course/study/:id"
             element={
@@ -178,6 +207,13 @@ const App = () => {
                 element={<RegisterTeacher />}
                 requiredRoleId="1"
               />
+            }
+          />
+
+          <Route
+            path="/user/feedback"
+            element={
+              <ProtectedRoute element={<FeedBack />} requiredRoleId="1" />
             }
           />
           {/* Trang giảng viên */}
@@ -240,11 +276,15 @@ const App = () => {
             }
           />
 
-          <Route path="/teacher/course/new-video/:id" element={
+          <Route
+            path="/teacher/course/new-video/:id"
+            element={
               <ProtectedRoute element={<NewVideo />} requiredRoleId="2" />
             }
           />
-          <Route path="/teacher/course/edit-video/:id" element={
+          <Route
+            path="/teacher/course/edit-video/:id"
+            element={
               <ProtectedRoute element={<EditVideo />} requiredRoleId="2" />
             }
           />
@@ -264,7 +304,10 @@ const App = () => {
           <Route
             path="/teacher/course/edit-document-detail/:id"
             element={
-              <ProtectedRoute element={<EditDocumentDetail />} requiredRoleId="2" />
+              <ProtectedRoute
+                element={<EditDocumentDetail />}
+                requiredRoleId="2"
+              />
             }
           />
 

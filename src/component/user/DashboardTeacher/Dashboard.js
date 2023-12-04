@@ -132,9 +132,8 @@ const Dashboard = ({ course }) => {
   };
 
   if (loading) {
-    return <LoadingSpinner/>;
+    return <LoadingSpinner />;
   }
-
 
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -218,16 +217,21 @@ const Dashboard = ({ course }) => {
                 {currentCourses.map((course, index) => (
                   <div key={course.Id} className="row">
                     <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                      <div className="bg-image hover-overlay hover-zoom ripple rounded">
-                        <img
-                          src={course.image}
-                          className="image-course"
-                          alt="Không có ảnh"
-                          onClick={() => handleCourseClick(course.Id)}
-                        />
-                        <a href="#!">
-                          <div className="mask background-color"></div>
-                        </a>
+                      <div className="card h-100 border-0">
+                        <div className="position-relative overflow-hidden">
+                          <img
+                            src={course.image}
+                            className="card-img-top image-course"
+                            alt="Không có ảnh"
+                            onClick={() => handleCourseClick(course.Id)}
+                          />
+                          <a href="#!">
+                            <div className="mask background-color"></div>
+                          </a>
+                        </div>
+                        <div className="card-body">
+                          {/* Course details, title, description, etc., can be added here */}
+                        </div>
                       </div>
                     </div>
 

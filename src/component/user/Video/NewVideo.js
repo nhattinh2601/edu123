@@ -13,7 +13,7 @@ export default function NewVideo() {
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const { id } = useParams();
-  console.log("ID from params:", id);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

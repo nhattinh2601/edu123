@@ -9,6 +9,7 @@ import {
   faPlay,
   faPencilAlt,
   faTrash,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
 import React, { useState, useEffect } from "react";
@@ -16,6 +17,7 @@ import axiosClient from "../../../api/axiosClient";
 
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../Others/LoadingSpinner";
+import Pagination from "../../Others/Pagination";
 
 import "./review.css";
 
@@ -23,7 +25,7 @@ const CourseDetail = ({ courseDatas }) => {
   const navigate = useNavigate();
 
   const handleCourseClick = () => {
-    navigate(`/user/info-teacher/${Id}`);
+    navigate(`/user/infor-teacher/${Id}`);
   };
   const handleVideoClick = (title) => {
     alert(`Bạn cần mua khóa học mới để xem video: ${title}`);
@@ -38,6 +40,9 @@ const CourseDetail = ({ courseDatas }) => {
   const [commentInput, setCommentInput] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedComment, setEditedComment] = useState("");
+  const [ratingDistribution, setRatingDistribution] = useState({});
+  const [ratingCount, setRatingCount] = useState("");
+  const [studentCount, setStudentCount] = useState("");
 
   const splitDescription = (description) =>
     description.split("**").map((part, index) => (
@@ -46,6 +51,16 @@ const CourseDetail = ({ courseDatas }) => {
         {index < 2 && " - "}{" "}
       </span>
     ));
+
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const itemsPerPage = 5;
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,12 +77,39 @@ const CourseDetail = ({ courseDatas }) => {
         const userId = courseResponse.data.userId;
         const teacherResponse = await axiosClient.get(`/users/${userId}`);
         setTeacherData(teacherResponse.data);
+
+        const ratingCountResponse = await axiosClient.get(
+          `/ratings/course/${id}/students/count`
+        );
+        const ratingCount = ratingCountResponse.data;
+        setRatingCount(ratingCount);
+
+        const studentCountResponse = await axiosClient.get(
+          `/courseRegisters/course/${id}/students/count`
+        );
+        const studentCount = studentCountResponse.data;
+        setStudentCount(studentCount);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchRatingDistribution = async () => {
+      try {
+        const response = await axiosClient.get(
+          `/ratings/course/${id}/distribution`
+        );
+        setRatingDistribution(response.data);
+      } catch (error) {
+        console.error("Error fetching rating distribution:", error);
+      }
+    };
+
+    fetchRatingDistribution();
   }, [id]);
 
   if (!teacherData || !courseData || !reviewData) {
@@ -171,10 +213,10 @@ const CourseDetail = ({ courseDatas }) => {
                     height="30"
                     className="rounded-circle"
                     src={avatar}
-                    alt="Đỗ Trung Thành"
+                    alt=" "
                   />
                   <Link
-                    to={`/user/info-teacher/${Id}`}
+                    to={`/user/infor-teacher/${Id}`}
                     onClick={handleCourseClick}
                   >
                     {" "}
@@ -188,13 +230,13 @@ const CourseDetail = ({ courseDatas }) => {
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
                   <i className="fas fa-star"></i>
-                  <span>248 </span>Đánh giá
+                  <span>{ratingCount} </span>Đánh giá
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div className="d-inline-block text-white">
                   <span>
-                    <i className="fa fa-users" aria-hidden="true"></i> 14111 Học
-                    viên{" "}
+                    <i className="fa fa-users" aria-hidden="true"></i>{" "}
+                    {studentCount} Học viên{" "}
                   </span>
                 </div>
               </div>
@@ -276,25 +318,10 @@ const CourseDetail = ({ courseDatas }) => {
                       <img
                         className="lazy"
                         src={avatar}
-                        alt={title}
+                        alt="Không có ảnh"
                         align=""
                         loading="lazy"
                       />
-                    </div>
-                    <div className="uct-rate-gv">
-                      <ul>
-                        <li>
-                          <i className="fa fa-users" aria-hidden="true"></i>
-                          <span>8896</span> Học viên
-                        </li>
-                        <li>
-                          <i
-                            className="fa fa-play-circle"
-                            aria-hidden="true"
-                          ></i>{" "}
-                          <span>6</span> Khóa học
-                        </li>
-                      </ul>
                     </div>
                   </div>
 
@@ -316,155 +343,36 @@ const CourseDetail = ({ courseDatas }) => {
 
             <div className="bg-white" id="danhgia">
               <h3>Đánh giá của học viên</h3>
-              <div className="u-rate-hv" id="u-rate-hv">
-                <div className="urh-left">
-                  <div className="number-big-rate">5</div>
-                  <div className="star-big-rate">
-                    <span className="star-rate">
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i className="fa fa-star co-or" aria-hidden="true"></i>
-                      <i
-                        className="fa fa-star co-or"
-                        aria-hidden="true"
-                      ></i>{" "}
-                    </span>
-                  </div>
-                  <div className="count-rate">49 Đánh giá</div>
-                </div>
-                <div className="urh-right">
-                  <div className="u-rate-f1">
+              <div className="u-rate-f1">
+                {Object.keys(ratingDistribution).map((rating) => (
+                  <div key={rating} className="u-rate-f1">
+                    <div className="u-rate-f1-star">
+                      <span className="star-rate">
+                        <p className="star-rating-num">
+                          {rating}{" "}
+                          {Array.from({ length: 1 }, (_, i) => (
+                            <FontAwesomeIcon key={i} icon={faStar} />
+                          ))}
+                        </p>
+                      </span>
+                    </div>
                     <div className="u-rate-f1-progress">
                       <div className="progress">
                         <div
                           className="progress-bar progress-bar-success"
                           role="progressbar"
-                          aria-valuenow="86"
+                          aria-valuenow={ratingDistribution[rating]}
                           aria-valuemin="0"
                           aria-valuemax="100"
-                          style={{ width: "86%" }}
+                          style={{ width: `${ratingDistribution[rating]}%` }}
                         ></div>
                       </div>
                     </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                      </span>
-                    </div>
                     <div className="u-rate-f1-num">
-                      <p>86%</p>
+                      <p>{ratingDistribution[rating]}%</p>
                     </div>
                   </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="5"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "5%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>5%</p>
-                    </div>
-                  </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="2"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "2%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>2%</p>
-                    </div>
-                  </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="5"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "5%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>5%</p>
-                    </div>
-                  </div>
-                  <div className="u-rate-f1">
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow="2"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "2%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <i className="fa fa-star co-or"></i>{" "}
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>
-                        <i className="fa fa-star-o co-or"></i>{" "}
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>2%</p>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -472,8 +380,16 @@ const CourseDetail = ({ courseDatas }) => {
             <div className="bg-white">
               <h3>Nhận xét của học viên</h3>
               <div>
+                <div>
+                  <textarea
+                    value={commentInput}
+                    onChange={(e) => setCommentInput(e.target.value)}
+                    placeholder="Nhập bình luận của bạn..."
+                  />
+                  <button onClick={handleAddComment}>Thêm bình luận</button>
+                </div>
                 <ul className="load_comment">
-                  {reviewData.map((review) => (
+                  {reviewData.slice(startIndex, endIndex).map((review) => (
                     <li key={review.reviewId} className="u-block-cmhv">
                       <div className="block-hv">
                         <div className="cm-hv">
@@ -492,7 +408,7 @@ const CourseDetail = ({ courseDatas }) => {
                                   : review.create
                               )}
                               {review.update !== review.create &&
-                                " (đã chỉnh sửa)"}
+                                " (Đã chỉnh sửa)"}
                             </p>
 
                             {editingCommentId === review.reviewId ? (
@@ -524,7 +440,7 @@ const CourseDetail = ({ courseDatas }) => {
                                         handleEditComment(review.reviewId)
                                       }
                                       className="edit-icon"
-                                    />
+                                    /> {" "}
                                     <FontAwesomeIcon
                                       icon={faTrash}
                                       onClick={() =>
@@ -543,14 +459,11 @@ const CourseDetail = ({ courseDatas }) => {
                   ))}
                 </ul>
               </div>
-              <div>
-                <textarea
-                  value={commentInput}
-                  onChange={(e) => setCommentInput(e.target.value)}
-                  placeholder="Nhập bình luận của bạn..."
-                />
-                <button onClick={handleAddComment}>Thêm bình luận</button>
-              </div>
+
+              <Pagination
+                pageCount={Math.ceil(reviewData.length / itemsPerPage)}
+                handlePageClick={handlePageClick}
+              />
             </div>
           </div>
         </div>
