@@ -3,7 +3,7 @@ import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
-
+import Header from '../Header/Header';
 export default function UpgradeToTeacher() {
   const navigate = useNavigate();
 
@@ -28,6 +28,7 @@ export default function UpgradeToTeacher() {
 
   return (
     <div className="container">
+      <Header/>
       <div className="card mb-4">
         <div className="card-header py-3 d-flex justify-content-between align-items-center">
           <h5 className="mb-0 d-inline-block">Danh sách yêu cầu người dùng</h5>

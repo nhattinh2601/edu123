@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
 import { useNavigate, Link } from "react-router-dom";
-
+import Header from '../Header/Header';
 export default function ToTeacherDetail() {
   const navigate = useNavigate();
 
@@ -32,6 +32,7 @@ export default function ToTeacherDetail() {
   return (
     <div>
       <div className="container">
+        <Header/>
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-9 mx-auto">
             <div className="card border-0 shadow rounded-3 my-5">

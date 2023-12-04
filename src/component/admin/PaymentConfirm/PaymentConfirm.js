@@ -9,6 +9,7 @@ import {
   faPaperPlane // icon for "Send Activation Code"
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link } from "react-router-dom";
+import Header from '../Header/Header';
 
 export default function PaymentConfirm() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function PaymentConfirm() {
   return (
     <div>
       <div className="container">
+        <Header/>
         <div className="row">
           <div className="col-sm-12 col-md-9 col-lg-7 mx-auto">
             <div className="card border-0 shadow rounded-3 my-5">

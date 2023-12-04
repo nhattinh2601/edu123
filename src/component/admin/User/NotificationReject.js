@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axiosClient from '../../../api/axiosClient'; // assuming you have a client set up
+import Header from '../Header/Header';
 
 export default function NotificationReject() {
   const [message, setMessage] = useState('');
@@ -28,6 +29,7 @@ export default function NotificationReject() {
   return (
     <div>
       <div className="container">
+        <Header/>
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-9 mx-auto">
             <div className="card border-0 shadow rounded-3 my-5">

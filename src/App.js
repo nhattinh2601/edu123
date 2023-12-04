@@ -323,6 +323,18 @@ const App = () => {
           />
 
           <Route path="*" element={<NotFound />} />
+          <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
+          <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ToTeacherDetail />} />
+          <Route path="/admin/upgrade-to-teacher/detail/reject/:email" element={<NotificationReject />} />
+          <Route path="/admin/public-course" element={<PublicCourse />} />          
+          <Route path="/admin/public-course/course-info" element={<CourseInfo />} />
+          <Route path="/admin/public-course/lession" element={<PublicLession />} />
+          <Route path="/admin/public-course/lession/detail" element={<PublicLessionDetail />} />
+          <Route path="/admin/public-course/document" element={<PublicDocument />} />
+          <Route path="/admin/public-course/document/detail" element={<PublicDocumentDetail />} />
+          <Route path="/admin/public-course/summary" element={<Summary />} />
+          <Route path="/admin/public-course/reject" element={<NotificationRejectCourse />} />
+          <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
         </Routes>
       </UserProvider>
     </Router>
