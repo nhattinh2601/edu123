@@ -142,7 +142,7 @@ export default function EditLession() {
                             style={{ backgroundColor: "green" }}
                             onClick={() =>
                               handleNavigate(
-                                `/user/course/watch-video/${video.Id}`
+                                `/user/course/watch-video/${video.Id}/${id}`
                               ) 
                             }
                           />

@@ -109,7 +109,7 @@ const App = () => {
           />
           <Route path="/user/order/history" element={<HistoryOrder />} />
 
-          <Route path="/user/course/watch-video/:id" element={<WatchVideo />} />
+          <Route path="/user/course/watch-video/:courseId/:id" element={<WatchVideo />} />
           <Route
             path="/admin/upgrade-to-teacher"
             element={<UpgradeToTeacher />}
