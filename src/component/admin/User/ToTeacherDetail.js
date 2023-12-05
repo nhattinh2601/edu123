@@ -2,13 +2,9 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
 import { useNavigate, Link } from "react-router-dom";
-import Header from '../Header/Header';
+
 export default function ToTeacherDetail() {
   const navigate = useNavigate();
-
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
   const { id } = useParams();
   const [user, setUser] = useState(null);
 
@@ -25,6 +21,31 @@ export default function ToTeacherDetail() {
     fetchUser();
   }, [id]);
 
+  const handleSubmit = async event => {
+    event.preventDefault();
+    try {
+      const response = await axiosClient.patch(`/users/${user.Id}`, {
+        roleId: 2,
+      });
+      console.log(response);
+      
+      // After the PATCH request is successful, make a POST request
+      const messageResponse = await axiosClient.post(`/auth/send/message/${user.email}`, {
+        message: "Chúc mừng bạn đã trở thành giảng viên, hãy upload khóa học của mình và kiếm tiền ngay thôi!",
+      });
+      console.log(messageResponse);
+  
+      // After both requests are successful, navigate to another route
+      navigate('/admin/upgrade-to-teacher'); 
+    } catch (error) {
+      console.error("Error updating role or sending message:", error);
+    }
+  };
+
+  const handleReject = () => {
+    navigate(`/admin/upgrade-to-teacher/detail/reject/${user.email}`);
+  };
+
   if (!user) {
     return <div>Loading...</div>; // or some loading spinner
   }
@@ -32,7 +53,6 @@ export default function ToTeacherDetail() {
   return (
     <div>
       <div className="container">
-        <Header/>
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-9 mx-auto">
             <div className="card border-0 shadow rounded-3 my-5">
@@ -40,7 +60,7 @@ export default function ToTeacherDetail() {
                 <h2 className="card-title text-center mb-5  fw-bold ">
                   Thông tin người dùng{" "}
                 </h2>
-                <form action="/login" method="POST">
+                <form onSubmit={handleSubmit}>
                   {/* <div className="form-outline mb-4">
                     <input
                       type="text"
@@ -51,7 +71,7 @@ export default function ToTeacherDetail() {
                     />
                   </div> */}
 
-                  <div className="form-outline mb-4">
+<div className="form-outline mb-4">
                     <textarea
                       className="form-control"
                       placeholder="Chủ đề muốn giảng dạy trên edu123"
@@ -102,10 +122,9 @@ export default function ToTeacherDetail() {
                     Chấp nhận
                   </button>
                   <button
+                    type="button"
                     className="btn btn-primary btn-block mb-4 w-50 "
-                    onClick={() =>
-                      handleNavigate("/admin/upgrade-to-teacher/detail/reject")
-                    }
+                    onClick={handleReject}
                   >
                     Từ chối
                   </button>

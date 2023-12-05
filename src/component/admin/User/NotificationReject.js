@@ -1,11 +1,16 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axiosClient from '../../../api/axiosClient'; // assuming you have a client set up
-import Header from '../Header/Header';
+import { useNavigate, Link } from "react-router-dom";
 
 export default function NotificationReject() {
-  const [message, setMessage] = useState('');
-  const email = 'tinh26012002@gmail.com'; // fixed email address
+  const navigate = useNavigate();
 
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+  const [message, setMessage] = useState('');
+  const { email } = useParams();
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -20,6 +25,7 @@ export default function NotificationReject() {
     .then(response => {
       console.log(response);
       // You might want to navigate somewhere else here or set some state to indicate the email was sent
+      navigate('/admin/upgrade-to-teacher'); 
     })
     .catch(error => {
       console.error(error);
@@ -29,7 +35,6 @@ export default function NotificationReject() {
   return (
     <div>
       <div className="container">
-        <Header/>
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-9 mx-auto">
             <div className="card border-0 shadow rounded-3 my-5">

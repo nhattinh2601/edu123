@@ -35,11 +35,11 @@ export default function PaymentConfirm() {
   
   const handleSendToEmail = async (register_course_id) => {    
     try {
-      console.log(register_course_id);
+      // console.log(register_course_id);
       
       // After the PATCH request is successful, make a POST request
-      const messageResponse = await axiosClient.put(`/courseRegisters/confirm-payment/${register_course_id}`);
-      console.log(messageResponse);
+      // const messageResponse = await axiosClient.put(`/courseRegisters/confirm-payment/${register_course_id}`);
+      // console.log(messageResponse);
   
       // After both requests are successful, navigate to another route
       window.location.href = '/admin/payment-confirm';
