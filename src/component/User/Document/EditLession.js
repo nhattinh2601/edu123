@@ -86,7 +86,7 @@ export default function EditLession() {
   };
 
   if (!videoData) {
-    return <LoadingSpinner />; ;
+    return <LoadingSpinner />;
   }
   return (
     <div>
@@ -142,8 +142,8 @@ export default function EditLession() {
                             style={{ backgroundColor: "green" }}
                             onClick={() =>
                               handleNavigate(
-                                `/user/course/watch-video/${video.Id}`
-                              ) 
+                                `/user/course/watch-video/${video.Id}/${id}`
+                              )
                             }
                           />
                         </button>
@@ -153,7 +153,7 @@ export default function EditLession() {
                             onClick={() =>
                               handleNavigate(
                                 `/teacher/course/edit-video/${video.Id}`
-                              ) 
+                              )
                             }
                           />
                         </button>
