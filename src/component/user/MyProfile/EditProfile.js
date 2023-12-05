@@ -51,7 +51,7 @@ function EditProfile() {
     const userId = atob(encodedId);
 
     const fieldsToUpdate = {
-      name: name,
+      fullname: name,
       phone: phone,
     };
 

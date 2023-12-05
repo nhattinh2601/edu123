@@ -63,16 +63,14 @@ export default function PaymentConfirm() {
     }
   };
 
-  const lockAccount = async (userId) => {    
+  const lockAccount = async (userId,register_course_id) => {    
     try {
       console.log(userId);
-      const response = await axiosClient.patch(`/users/lock-account/${userId}`, {
-        roleId: 2,
-      });
+      const response = await axiosClient.patch(`/users/lock-account/${userId}`);
       console.log(response);
   
-      // const messageResponse = await axiosClient.put(`/courseRegisters/reject-confirm-payment/${register_course_id}`);
-      // console.log(messageResponse);
+      const messageResponse = await axiosClient.put(`/courseRegisters/reject-confirm-payment/${register_course_id}`);
+      console.log(messageResponse);
         
       window.location.href = '/admin/payment-confirm';
     } catch (error) {  
@@ -118,9 +116,7 @@ export default function PaymentConfirm() {
                               <button
                                 className="btn btn-primary btn-sm margin-button-header"
                                 onClick={() =>
-                                  handleNavigate(
-                                    "/admin/upgrade-to-teacher/detail"
-                                  )
+                                  lockAccount(user.userId, user.register_course_id)
                                 }
                               >
                                 <FontAwesomeIcon icon={faLock} /> Khóa tài khoản
@@ -128,7 +124,7 @@ export default function PaymentConfirm() {
                               <button
                                 className="btn btn-primary btn-sm margin-button-header"
                                 onClick={() =>
-                                  lockAccount(user.userId)
+                                  reject(user.register_course_id)
                                 }
                               >
                                 <FontAwesomeIcon icon={faTimes} /> Từ chối
