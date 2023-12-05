@@ -7,18 +7,29 @@ import {
   faClock,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import LoadingSpinner from "../../Others/LoadingSpinner";
+import Pagination from "../../Others/Pagination";
 
 const CourseList = ({ courseDatas }) => {
-
   const navigate = useNavigate();
 
   const handleCourseClick = (courseId) => {
     navigate(`/user/course/${courseId}`);
   };
   const { id } = useParams();
+  console.log("A:", id);
 
   const [teacherData, setTeacherData] = useState(null);
   const [courseData, setCourseData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const itemsPerPage = 5;
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
   const splitDescription = (description) =>
     description.split("**").map((part, index) => (
@@ -46,7 +57,7 @@ const CourseList = ({ courseDatas }) => {
   }, [id]);
 
   if (!teacherData || !courseData) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   const { fullname, description: teacherDescription } = teacherData;
@@ -69,7 +80,7 @@ const CourseList = ({ courseDatas }) => {
       <br />
       <br />
       <div className="bg-light bg-gradient" id="noidung">
-        {courseData.map((course) => (
+        {courseData.slice(startIndex, endIndex).map((course) => (
           <div
             key={course.Id}
             className="p-2 mb-4 border border-primary rounded"
@@ -123,8 +134,11 @@ const CourseList = ({ courseDatas }) => {
                 </p>
                 <p className="">SALE {course.sold}%</p>
 
-                
-                <Link to={`/user/course/${course.Id}`}  className="btn btn-danger" onClick={() => handleCourseClick(course.Id)}>
+                <Link
+                  to={`/user/course/${course.Id}`}
+                  className="btn btn-danger"
+                  onClick={() => handleCourseClick(course.Id)}
+                >
                   CHI TIẾT
                 </Link>
               </div>
@@ -132,6 +146,10 @@ const CourseList = ({ courseDatas }) => {
           </div>
         ))}
       </div>
+      <Pagination
+        pageCount={Math.ceil(courseData.length / itemsPerPage)}
+        handlePageClick={handlePageClick}
+      />
     </div>
   );
 };

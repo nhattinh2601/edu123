@@ -7,6 +7,7 @@ import axiosClient from "../../../api/axiosClient";
 import { useState, useEffect } from "react";
 import TeacherDetailContent from "./TeacherDetailContent";
 import { useParams } from "react-router-dom";
+import LoadingSpinner from "../../Others/LoadingSpinner";
 
 function extractFirstPart(str) {
   return str.split("**")[0];
@@ -15,7 +16,7 @@ function extractFirstPart(str) {
 const TeacherDetail = ({ courseDatas }) => {
   const { id } = useParams();
   const [teacherData, setTeacherData] = useState(null);
-  
+  console.log("A:", id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,13 +29,13 @@ const TeacherDetail = ({ courseDatas }) => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   if (!teacherData) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
-  const { fullname, avatar, description, phone} = teacherData;
+  const { fullname, avatar, description, phone } = teacherData;
 
   return (
     <div>
@@ -76,7 +77,6 @@ const TeacherDetail = ({ courseDatas }) => {
                 >
                   Liên hệ mình
                 </a>
-               
               </div>
             </div>
             <div className="d-inline-block text-black">
@@ -104,6 +104,6 @@ const TeacherDetail = ({ courseDatas }) => {
       <Footer />
     </div>
   );
-}
+};
 
 export default TeacherDetail;

@@ -313,7 +313,12 @@ const App = () => {
 
           <Route
             path="/teacher/course/edit-lession/:id"
-            element={<EditLession />}
+            element={
+              <ProtectedRoute
+                element={<EditLession />}
+                requiredRoleId="2"
+              />
+            }
           />
 
           {/* Trang admin */}
@@ -321,8 +326,6 @@ const App = () => {
             path="/admin"
             element={<ProtectedRoute element={<Admin />} requiredRoleId="3" />}
           />
-
-          <Route path="*" element={<NotFound />} />
           <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
           <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ToTeacherDetail />} />
           <Route path="/admin/upgrade-to-teacher/detail/reject/:email" element={<NotificationReject />} />
@@ -335,6 +338,9 @@ const App = () => {
           <Route path="/admin/public-course/summary" element={<Summary />} />
           <Route path="/admin/public-course/reject" element={<NotificationRejectCourse />} />
           <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
+
+          <Route path="*" element={<NotFound />} />
+          
         </Routes>
       </UserProvider>
     </Router>

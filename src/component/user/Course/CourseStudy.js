@@ -19,7 +19,7 @@ import axiosClient from "../../../api/axiosClient";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../Others/LoadingSpinner";
 import Pagination from "../../Others/Pagination";
-import StarRating from "./StarRating"; 
+import StarRating from "./StarRating";
 
 import "./review.css";
 
@@ -97,7 +97,7 @@ const CourseDetail = ({ courseDatas }) => {
 
         const userId = courseResponse.data.userId;
         const teacherResponse = await axiosClient.get(`/users/${userId}`);
-        
+
         setTeacherData(teacherResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -226,7 +226,7 @@ const CourseDetail = ({ courseDatas }) => {
                     alt=" "
                   />
                   <Link
-                    to={`/user/infor-teacher/${Id}`}
+                    to={`/user/info-teacher/${Id}`}
                     onClick={handleCourseClick}
                   >
                     {" "}
@@ -245,8 +245,8 @@ const CourseDetail = ({ courseDatas }) => {
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div className="d-inline-block text-white">
                   <span>
-                    <i className="fa fa-users" aria-hidden="true"></i> {studentCount} Học
-                    viên{" "}
+                    <i className="fa fa-users" aria-hidden="true"></i>{" "}
+                    {studentCount} Học viên{" "}
                   </span>
                 </div>
               </div>
@@ -357,7 +357,6 @@ const CourseDetail = ({ courseDatas }) => {
                         loading="lazy"
                       />
                     </div>
-                    
                   </div>
 
                   <div className="col-sm-8">
@@ -379,7 +378,7 @@ const CourseDetail = ({ courseDatas }) => {
             <div className="bg-white" id="danhgia">
               <h3>Đánh giá của học viên</h3>
               <StarRating onRatingChange={handleRatingChange} courseId={id} />
-              <hr/>
+              <hr />
               <div className="u-rate-f1">
                 {Object.keys(ratingDistribution).map((rating) => (
                   <div key={rating} className="u-rate-f1">
@@ -477,7 +476,7 @@ const CourseDetail = ({ courseDatas }) => {
                                         handleEditComment(review.reviewId)
                                       }
                                       className="edit-icon"
-                                    /> {" "}
+                                    />{" "}
                                     <FontAwesomeIcon
                                       icon={faTrash}
                                       onClick={() =>

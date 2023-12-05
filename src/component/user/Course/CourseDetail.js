@@ -37,7 +37,7 @@ const CourseDetail = ({ courseDatas }) => {
   const [courseData, setCourseData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
   const [videoData, setVideoData] = useState([]);
-  const [commentInput, setCommentInput] = useState("");
+
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedComment, setEditedComment] = useState("");
   const [ratingDistribution, setRatingDistribution] = useState({});
@@ -200,7 +200,7 @@ const CourseDetail = ({ courseDatas }) => {
                     alt=" "
                   />
                   <Link
-                    to={`/user/infor-teacher/${Id}`}
+                    to={`/user/info-teacher/${Id}`}
                     onClick={handleCourseClick}
                   >
                     {" "}
@@ -407,26 +407,7 @@ const CourseDetail = ({ courseDatas }) => {
                             ) : (
                               <div>
                                 <p>{review.content}</p>
-                                {parseInt(
-                                  atob(localStorage.getItem("userId"))
-                                ) === review.userId && (
-                                  <div>
-                                    <FontAwesomeIcon
-                                      icon={faPencilAlt}
-                                      onClick={() =>
-                                        handleEditComment(review.reviewId)
-                                      }
-                                      className="edit-icon"
-                                    /> {" "}
-                                    <FontAwesomeIcon
-                                      icon={faTrash}
-                                      onClick={() =>
-                                        handleDeleteComment(review.reviewId)
-                                      }
-                                      className="delete-icon"
-                                    />
-                                  </div>
-                                )}
+                                
                               </div>
                             )}
                           </div>
