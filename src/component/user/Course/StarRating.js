@@ -23,7 +23,7 @@ const StarRating = ({ onRatingChange, courseId }) => {
       }
     };
 
-    // Call the async function inside useEffect
+    
     fetchExistingRating();
   }, [courseId]);
 
@@ -41,12 +41,16 @@ const StarRating = ({ onRatingChange, courseId }) => {
     };
 
     try {
+      const courseIdInt = parseInt(courseId, 10);
       const response = await axiosClient.get(
-        `/ratings/user=${userId}/course=${courseId}`
+        `/ratings/user=${userId}/course=${courseIdInt}`
       );
 
+      const ratingid = response.data[0]?.id || 0;
+   
+
       if (response.data.length > 0) {
-        await axiosClient.patch(`/ratings/${userId}`, {
+        await axiosClient.patch(`/ratings/${ratingid}`, {
           rating: selectedRating,
         });
         console.log("Rating updated successfully");

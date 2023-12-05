@@ -124,23 +124,7 @@ const CourseDetail = ({ courseDatas }) => {
     return date.toLocaleString();
   };
 
-  const handleAddComment = async () => {
-    try {
-      const encodedUserId = localStorage.getItem("userId");
-      const userId = parseInt(atob(encodedUserId), 10);
-      const response = await axiosClient.post("/reviews", {
-        courseId: id,
-        userId: userId,
-        content: commentInput,
-      });
-
-      const newComment = response.data;
-      setReviewData([...reviewData, newComment]);
-      setCommentInput("");
-    } catch (error) {
-      console.error("Error adding comment:", error);
-    }
-  };
+  
 
   const handleEditComment = async (commentId) => {
     setEditingCommentId(commentId);
@@ -380,14 +364,7 @@ const CourseDetail = ({ courseDatas }) => {
             <div className="bg-white">
               <h3>Nhận xét của học viên</h3>
               <div>
-                <div>
-                  <textarea
-                    value={commentInput}
-                    onChange={(e) => setCommentInput(e.target.value)}
-                    placeholder="Nhập bình luận của bạn..."
-                  />
-                  <button onClick={handleAddComment}>Thêm bình luận</button>
-                </div>
+                
                 <ul className="load_comment">
                   {reviewData.slice(startIndex, endIndex).map((review) => (
                     <li key={review.reviewId} className="u-block-cmhv">
