@@ -52,7 +52,7 @@ export default function FeedBack() {
         userId: userId,
       });
 
-      setSuccessMessage("Đã báo cáo sự cố thành công");
+      setSuccessMessage("Đã báo cáo thành công");
       setTimeout(() => {
         setSuccessMessage("");
       }, 5000);

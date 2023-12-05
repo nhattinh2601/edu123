@@ -71,8 +71,8 @@ export default function PaymentConfirm() {
       });
       console.log(response);
   
-      const messageResponse = await axiosClient.put(`/courseRegisters/reject-confirm-payment/${register_course_id}`);
-      console.log(messageResponse);
+      // const messageResponse = await axiosClient.put(`/courseRegisters/reject-confirm-payment/${register_course_id}`);
+      // console.log(messageResponse);
         
       window.location.href = '/admin/payment-confirm';
     } catch (error) {  
