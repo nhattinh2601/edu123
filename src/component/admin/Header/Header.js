@@ -130,28 +130,11 @@ export default function Header() {
                 Xác nhận thanh toán người dùng
               </Link>
               <Link
-                to 
-                onClick={() => ("new")}
+                to='/admin/manager-user'
                 style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
                 className="p-3"
               >
-                Mới nhất              </Link>
-              <Link
-                to 
-                onClick={() => ("price-low")}
-                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
-                className="p-3"
-              >
-                Giá thấp đến cao
-              </Link>
-              <Link
-                to
-                onClick={() => ("price-high")}
-                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
-                className="p-3"
-              >
-                Giá cao đến thấp
-              </Link>
+                Quản lý người dùng              </Link>              
             </div>
           </div>
         </div>

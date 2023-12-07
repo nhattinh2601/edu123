@@ -47,11 +47,29 @@ function EditProfile() {
       return;
     }
 
+    const trimmedName = name.trim();
+
+    // Validate name
+    const nameRegex = /^[^\s].*[^\s]$/;
+    if (!trimmedName || !nameRegex.test(trimmedName)) {
+      setNameError(true);
+      setErrorMessage("Không được nhập dấu cách đầu");
+      return;
+    }
+
+    // Validate phone
+    const phoneRegex = /^\d{9,11}$/;
+    if (!phone || !phoneRegex.test(phone)) {
+      setPhoneError(true);
+      setErrorMessage("Nhập đúng số điện thoại từ 9 đến 11 số.");
+      return;
+    }
+
     const encodedId = localStorage.getItem("userId");
     const userId = atob(encodedId);
 
     const fieldsToUpdate = {
-      fullname: name,
+      fullname: trimmedName,
       phone: phone,
     };
 
@@ -84,7 +102,7 @@ function EditProfile() {
                   Cập Nhật Thông Tin{" "}
                 </h5>
                 {successMessage && (
-                  <div className="alert alert-success" role="alert">
+<div className="alert alert-success" role="alert">
                     {successMessage}
                   </div>
                 )}
