@@ -13,6 +13,8 @@ export default function RegisterTeacher() {
   const [teachingExperience, setTeachingExperience] = useState("");
   const [error, setError] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     async function fetchUserData() {
@@ -26,16 +28,20 @@ export default function RegisterTeacher() {
         setName(userData.fullname);
         setPhone(userData.phone);
         setEmail(userData.email);
+        setRole(userData.roleId);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
+    
 
     fetchUserData();
   }, []);
 
+  
+
   const fieldsToUpdate = {
-    name: name,
+    fullname: name,
     phone: phone,
     description: `${title}**${teachingSubject}**${teachingExperience}`,
     roleId: 4,
@@ -43,6 +49,13 @@ export default function RegisterTeacher() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (role === 4) {
+      setError("Bạn đã gửi thông tin đăng ký giảng viên. Vui lòng không gửi lại.");
+      setShowAlert(true);
+      return;
+    }
+
+    
 
     if (
       !name ||
@@ -56,6 +69,28 @@ export default function RegisterTeacher() {
       setShowAlert(true);
       return;
     }
+    const namePattern = /^[^\s].*$/;
+
+    if (!name.match(namePattern)) {
+      setError("Tên không được bắt đầu bằng dấu cách.");
+      setShowAlert(true);
+      return;
+    }
+
+    // Kiểm tra số điện thoại từ 9 đến 11 số và không có kí tự nào ngoài số
+    const phonePattern = /^[0-9]{9,11}$/;
+
+    if (!phone.match(phonePattern)) {
+      setError("Số điện thoại phải từ 9 đến 11 số và chỉ chứa kí tự số.");
+      setShowAlert(true);
+      return;
+    }
+    const isConfirmed = window.confirm("Bạn có chắc muốn đăng ký giảng viên không? Kiểm tra lại các thông tin trước khi đăng kí và đảm bảo thông tin thật!");
+  
+    if (!isConfirmed) {
+      // If not confirmed, do nothing
+      return;
+    }
 
     try {
       const encodedId = localStorage.getItem("userId");
@@ -66,6 +101,10 @@ export default function RegisterTeacher() {
         fieldsToUpdate
       );
       console.log("User updated:", response.data);
+      setShowAlert(false);
+setSuccessMessage(
+        "Bạn đã gửi thông tin đăng ký giảng viên thành công. Vui lòng chờ Admin liên hệ phỏng vấn."
+      );
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -90,6 +129,15 @@ export default function RegisterTeacher() {
                       dismissible
                     >
                       {error}
+                    </Alert>
+                  )}
+                  {successMessage && (
+                    <Alert
+                      variant="success"
+                      onClose={() => setSuccessMessage("")}
+                      dismissible
+                    >
+                      {successMessage}
                     </Alert>
                   )}
 
@@ -133,7 +181,7 @@ export default function RegisterTeacher() {
                       type="text"
                       className="form-control"
                       placeholder="Số điện thoại"
-                      name="phone"
+name="phone"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                     />

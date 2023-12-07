@@ -55,7 +55,7 @@ import PaymentConfirm from "./component/Admin/PaymentConfirm/PaymentConfirm.js";
 import CourseStudy from "./component/User/Course/CourseStudy.js";
 import FeedBack from "./component/User/Feedback/Feedback.js";
 import ManagerlUser from "./component/Admin/User/ManagerUser.js";
-
+import UserInfo from "./component/Admin/User/UserInfo.js";
 import Admin from "./component/Admin/Admin.js";
 
 import NotFound from "./component/Others/NotFound";
@@ -148,6 +148,10 @@ const App = () => {
           <Route
             path="/admin/public-course/reject"
             element={<NotificationRejectCourse />}
+          />
+          <Route
+            path="/admin/user-info/:id"
+            element={<UserInfo />}
           />
           <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
           <Route path="/user/course/:id" element={<CourseDetail />} />

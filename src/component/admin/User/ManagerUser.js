@@ -22,11 +22,17 @@ export default function ManagerUser() {
   const handleSearch = async () => {
     try {
       const response = await axiosClient.get(`/users`);
-      setUsers(response.data);
+      const filteredUsers = response.data.filter(user => 
+        user.fullname.toLowerCase().includes(search.toLowerCase()) ||
+        user.email.toLowerCase().includes(search.toLowerCase())
+      );
+      setUsers(filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
+
+  
   function getRoleName(roleId) {
     switch(roleId) {
       case 1: return 'Người dùng';
@@ -36,10 +42,28 @@ export default function ManagerUser() {
       default: return 'Không xác định';
     }
   }
-
-  function handleToggleLock(roleId,isDeleted) {
-    
-  }
+  const handleToggleLock = async (userId,isDeleted) => {    
+    try {
+      console.log(isDeleted);
+      if(isDeleted){
+        console.log(userId);
+      const response = await axiosClient.patch(`/users/unlock-account/${userId}`);
+      console.log(response);
+      }else{
+        console.log(userId);
+        const response = await axiosClient.patch(`/users/lock-account/${userId}`);
+        console.log(response);
+      }
+      
+      
+      
+        
+      
+    } catch (error) {  
+      console.error("Error updating role or sending message:", error);
+    }
+  };
+  
   return (
     <div className="container">
       <Header/>
@@ -85,13 +109,17 @@ export default function ManagerUser() {
           <td>
             <button
               className="btn btn-primary btn-sm"
-              onClick={() => handleNavigate(`/admin/upgrade-to-teacher/detail/${user.id}`)}
+              onClick={() =>
+                handleNavigate(
+                  `/admin/user-info/${user.Id}`
+                )
+              }
             >
               <FontAwesomeIcon icon={faCircleInfo} /> Chi tiết
             </button>&nbsp;
             <button
               className={`btn btn-sm ${user.isDeleted === true ? 'btn-success' : 'btn-danger'}`}
-              onClick={() => handleToggleLock(user.id, user.isDeleted)}
+              onClick={() => handleToggleLock(user.Id, user.isDeleted)}
             >
               {user.isDeleted === true ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}
             </button>
