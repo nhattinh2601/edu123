@@ -58,6 +58,7 @@ import ManagerlUser from "./component/Admin/User/ManagerUser.js";
 import UserInfo from "./component/Admin/User/UserInfo.js";
 import ManagerCourse from "./component/Admin/Course/ManagerCourse.js";
 import Admin from "./component/Admin/Admin.js";
+import ADay from "./component/Admin/Analytics/ADay.js";
 
 import NotFound from "./component/Others/NotFound";
 
@@ -347,6 +348,7 @@ const App = () => {
           <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
           <Route path="/admin/manager-user" element={<ManagerlUser />} />  
           <Route path="/admin/manager-course" element={<ManagerCourse />} />  
+          <Route path="/admin/analytics-aday" element={<ADay />} />  
 
           <Route path="*" element={<NotFound />} />
           

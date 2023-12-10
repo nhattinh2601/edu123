@@ -140,7 +140,13 @@ export default function Header() {
                 style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
                 className="p-3"
               >
-                Quản lý khóa học              </Link>              
+                Quản lý khóa học              </Link>
+                <Link
+                to='/admin/analytics-aday'
+                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
+                className="p-3"
+              >
+                1 ngày              </Link>                 
             </div>
           </div>
         </div>
