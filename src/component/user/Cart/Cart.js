@@ -60,6 +60,32 @@ export default function Cart() {
       console.error("Error deleting item:", error);
     }
   };
+  function generateRandomNumber() {
+    let output = "";
+  
+    // Tạo một vòng lặp để thêm 6 số ngẫu nhiên
+    for (let i = 0; i < 6; i++) {
+      const randomNumber = Math.floor(Math.random() * 10); // Tạo số từ 0 đến 9
+      output += randomNumber.toString(); // Ghép vào chuỗi output
+    }
+  
+    return output;
+  }
+ const handleCheckout = () => {
+  if (cartData.length > 0) {
+    const firstCartItem = cartData[0];
+    if ('courseId' in firstCartItem) {
+      const firstCourseId = firstCartItem.courseId;
+      const cartId = firstCartItem.id;
+      const otp = generateRandomNumber();
+      navigate(`/user/order/${firstCourseId}/${cartId}/${otp}`);
+    } else {
+      console.error("First item in cart does not have a courseId.");
+    }
+  } else {
+    console.log("Cart is empty");
+  }
+};
 
   const totalAmount = cartData.reduce((acc, item) => acc + item.promotional_price, 0);
 
@@ -154,7 +180,7 @@ export default function Cart() {
                   <button
                     type="button"
                     className="btn btn-primary btn-lg btn-block"
-                    onClick={() => navigate("/user/order")}
+                    onClick={handleCheckout}
                   >
                     Thanh toán ngay
                   </button>

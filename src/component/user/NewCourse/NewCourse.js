@@ -10,7 +10,7 @@ export default function NewCourse() {
   const [discountCode, setDiscountCode] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [formError, setFormError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); 
   const [promotionalPrice, setPromotionalPrice] = useState(0);
   const encodedId = localStorage.getItem("userId");
   const userId = atob(encodedId);
@@ -115,7 +115,7 @@ export default function NewCourse() {
         userId: userId,
       });
 
-      setSuccessMessage("Khóa học đã được tạo thành công! Chờ Admin xét duyệt");
+      setSuccessMessage("Khóa học đã được tạo thành công"); 
 
       console.log(response.data);
     } catch (error) {

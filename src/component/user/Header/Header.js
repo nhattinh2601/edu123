@@ -105,7 +105,7 @@ export default function Header() {
                 <Link className="dropdown-item" to="/user/dashboard">
                   Khóa học của tôi
                 </Link>
-                {roleId === "1" || roleId === "4"? (
+                {roleId === "1" || roleId ==="4"? (
                   <Link className="dropdown-item" to="/user/register-teacher">
                     Đăng ký giảng viên
                   </Link>
@@ -183,7 +183,7 @@ export default function Header() {
           />
         </Link>
       </div>
-
+      
       <div className="d-inline-block">
         <form
           className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"

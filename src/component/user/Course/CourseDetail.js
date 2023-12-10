@@ -31,6 +31,34 @@ const CourseDetail = ({ courseDatas }) => {
     alert(`Bạn cần mua khóa học mới để xem video: ${title}`);
   };
 
+  const addToCard = async (course_id) => {
+    try {
+      const encodedUserId = localStorage.getItem("userId");
+      const decodedUserId = atob(encodedUserId);
+
+      const response = await axiosClient.post("/carts/create", {
+        userId: decodedUserId,
+        courseId: course_id,
+      });
+
+      console.log("Course added to cart:", response.data);
+      const confirmed = window.confirm(
+        "Đã thêm khóa học và giỏ hàng. Bạn có muốn chuyển đến giỏ hàng không?"
+      );
+
+      if (confirmed) {
+        setTimeout(() => {
+          navigate("/user/cart");
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Error adding course to cart:", error.message);
+      window.alert(
+        "Khóa học đã có trong giỏ hàng hoặc khóa học đã được đăng kí"
+      );
+    }
+  };
+
   const { id } = useParams();
 
   const [teacherData, setTeacherData] = useState(null);
@@ -206,6 +234,7 @@ const CourseDetail = ({ courseDatas }) => {
                     {" "}
                     <span className="text-white">{fullname}</span>
                   </Link>
+                  
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div className="d-inline-block text-white">
@@ -222,6 +251,14 @@ const CourseDetail = ({ courseDatas }) => {
                     <i className="fa fa-users" aria-hidden="true"></i>{" "}
                     {studentCount} Học viên{" "}
                   </span>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                <div className="d-inline-block">
+                <button
+          className="btn-success"
+          onClick={() => addToCard(Id)}
+        >
+          Thêm vào giỏ hàng
+        </button>
                 </div>
               </div>
             </div>

@@ -56,6 +56,7 @@ import CourseStudy from "./component/User/Course/CourseStudy.js";
 import FeedBack from "./component/User/Feedback/Feedback.js";
 import ManagerlUser from "./component/Admin/User/ManagerUser.js";
 import UserInfo from "./component/Admin/User/UserInfo.js";
+import ManagerCourse from "./component/Admin/Course/ManagerCourse.js";
 import Admin from "./component/Admin/Admin.js";
 
 import NotFound from "./component/Others/NotFound";
@@ -201,7 +202,7 @@ const App = () => {
           />
 
           <Route
-            path="/user/order"
+            path="/user/order/:courseId/:cartId/:otp"
             element={<ProtectedRoute element={<Order />} requiredRoleId="1" />}
           />
 
@@ -344,6 +345,8 @@ const App = () => {
           <Route path="/admin/public-course/reject" element={<NotificationRejectCourse />} />
           <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
           <Route path="/admin/manager-user" element={<ManagerlUser />} />  
+          <Route path="/admin/manager-course" element={<ManagerCourse />} />  
+
           <Route path="*" element={<NotFound />} />
           
         </Routes>

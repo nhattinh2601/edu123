@@ -9,6 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
+import Header from "../Header/Header";
 export default function PaymentConfirm() {
   const navigate = useNavigate();
 
@@ -18,13 +19,17 @@ export default function PaymentConfirm() {
 
   const [users, setUsers] = useState([]);
 
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await axiosClient.get(
           `/courseRegisters/getcoursenoactive`
         );
-        setUsers(response.data);
+        const filteredUsers = response.data.filter(
+          (user) => user.isActive === null || user.isActive === false
+        );
+        setUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -32,55 +37,40 @@ export default function PaymentConfirm() {
 
     fetchUsers();
   }, []);
-  
-  const handleSendToEmail = async (register_course_id) => {    
-    try {
-      // console.log(register_course_id);
-      
-      // After the PATCH request is successful, make a POST request
-      // const messageResponse = await axiosClient.put(`/courseRegisters/confirm-payment/${register_course_id}`);
-      // console.log(messageResponse);
-  
-      // After both requests are successful, navigate to another route
-      window.location.href = '/admin/payment-confirm';
-    } catch (error) {
-      console.error("Error updating role or sending message:", error);
-    }
-  };
 
-  const reject = async (register_course_id) => {    
+  const handleActiveCourse = async (register_course_id) => {
     try {
       console.log(register_course_id);
-      
-      // After the PATCH request is successful, make a POST request
-      const messageResponse = await axiosClient.put(`/courseRegisters/reject-confirm-payment/${register_course_id}`);
+
+      const messageResponse = await axiosClient.put(
+        `/courseRegisters/active-course/${register_course_id}`
+      );
       console.log(messageResponse);
-  
-      // After both requests are successful, navigate to another route
-      window.location.href = '/admin/payment-confirm';
+
+      window.location.href = "/admin/payment-confirm";
     } catch (error) {
       console.error("Error updating role or sending message:", error);
     }
   };
 
-  const lockAccount = async (userId,register_course_id) => {    
+  const reject = async (register_course_id) => {
     try {
-      console.log(userId);
-      const response = await axiosClient.patch(`/users/lock-account/${userId}`);
-      console.log(response);
-  
-      const messageResponse = await axiosClient.put(`/courseRegisters/reject-confirm-payment/${register_course_id}`);
+      console.log(register_course_id);
+
+      const messageResponse = await axiosClient.put(
+        `/courseRegisters/reject-confirm-payment/${register_course_id}`
+      );
       console.log(messageResponse);
-        
-      window.location.href = '/admin/payment-confirm';
-    } catch (error) {  
+
+      window.location.href = "/admin/payment-confirm";
+    } catch (error) {
       console.error("Error updating role or sending message:", error);
     }
   };
-
 
   return (
     <div>
+      <Header />
       <div className="container">
         <div className="row">
           <div className="col-sm-12 col-md-9 col-lg-10 mx-auto">
@@ -91,49 +81,41 @@ export default function PaymentConfirm() {
                   <div className="card mb-4">
                     <div className="card-header py-3 d-flex justify-content-between align-items-center">
                       <h5 className="mb-0 d-inline-block">
-                        Danh sách yêu cầu người dùng
+                        Danh sách xác nhận thanh toán
                       </h5>
                     </div>
-                    <div className="card-body">                      
-                      {users.map((user, index) => (
-                        <div key={index} className="row mb-3">
-                          <div>
-                            <p className="d-inline-block float-lg-start">
-                              <strong>
-                                {user.email}  + đăng kí khóa học: {user.courseId}
-                              </strong>
-                            </p>
-                            <div className="float-end">
-                              <button
-                                className="btn btn-primary btn-sm margin-button-header"
-                                onClick={() =>
-                                  handleSendToEmail(user.register_course_id)
-                                }
-                              >
-                                <FontAwesomeIcon icon={faPaperPlane} /> Gửi mã
-                                kích hoạt
-                              </button>
-                              <button
-                                className="btn btn-primary btn-sm margin-button-header"
-                                onClick={() =>
-                                  lockAccount(user.userId, user.register_course_id)
-                                }
-                              >
-                                <FontAwesomeIcon icon={faLock} /> Khóa tài khoản
-                              </button>
-                              <button
-                                className="btn btn-primary btn-sm margin-button-header"
-                                onClick={() =>
-                                  reject(user.register_course_id)
-                                }
-                              >
-                                <FontAwesomeIcon icon={faTimes} /> Từ chối
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <div className="card-body">
+  <table className="table">
+    <thead>
+      <tr>
+        <th scope="col" className="text-start">Mã OTP</th>
+        <th scope="col" className="text-end"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {users.map((user, index) => (
+        <tr key={index}>
+          <td className="text-start"><strong>{user.otp}</strong></td>
+          <td className="text-end">
+            <button
+              className="btn btn-primary btn-sm me-2"
+              onClick={() => handleActiveCourse(user.register_course_id)}
+            >
+              <FontAwesomeIcon icon={faPaperPlane} />
+              Kích hoạt khóa học
+            </button>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => reject(user.register_course_id)}
+            >
+              <FontAwesomeIcon icon={faTimes} /> Từ chối
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
                   </div>
                 </div>
               </div>

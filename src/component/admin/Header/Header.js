@@ -135,6 +135,12 @@ export default function Header() {
                 className="p-3"
               >
                 Quản lý người dùng              </Link>              
+            <Link
+                to='/admin/manager-course'
+                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
+                className="p-3"
+              >
+                Quản lý khóa học              </Link>              
             </div>
           </div>
         </div>

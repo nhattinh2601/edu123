@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faEdit, faTrash, faFile } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link } from "react-router-dom";
-
+import Header from '../Header/Header';
 import EditCoursePanel from "./PublicCoursePanel";
 
 export default function CourseÌn() {
@@ -13,6 +13,7 @@ export default function CourseÌn() {
   };
   return (
     <div>
+      <Header/>
     <div className="container">
       <div className="row">
         <div className="col-sm-12 col-md-9 col-lg-7 mx-auto">

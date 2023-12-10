@@ -2,7 +2,7 @@
 import PublicCoursePanel from "./PublicCoursePanel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, Link } from "react-router-dom";
-
+import Header from '../Header/Header';
 import { faPlay, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -36,7 +36,7 @@ export default function NotificationReject() {
 
   return (
     <div>
-      
+      <Header/>
       <div className="container">
         <div className="row">
           <div className="col-sm-12 col-md-9 col-lg-7 mx-auto">

@@ -103,7 +103,7 @@ export default function RegisterTeacher() {
       console.log("User updated:", response.data);
       setShowAlert(false);
 setSuccessMessage(
-        "Bạn đã gửi thông tin đăng ký giảng viên thành công. Vui lòng chờ Admin liên hệ phỏng vấn."
+        "Bạn đã gửi thông tin đăng ký giảng viên thành công. Vui lòng chờ Admin xác nhận."
       );
     } catch (error) {
       console.error("Error updating user:", error);

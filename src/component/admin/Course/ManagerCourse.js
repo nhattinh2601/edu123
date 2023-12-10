@@ -5,14 +5,14 @@ import React, { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
 import Header from '../Header/Header';
 
-export default function ManagerUser() {
+export default function ManagerCourse() {
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
-    navigate(path);
+    window.open(path, '_blank');
   };
 
-  const [users, setUsers] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState('');
 
   const handleSearchChange = (e) => {
@@ -21,46 +21,34 @@ export default function ManagerUser() {
 
   const handleSearch = async () => {
     try {
-      const response = await axiosClient.get(`/users`);
-      const filteredUsers = response.data.filter(user => 
-        user.fullname.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase())
+      const response = await axiosClient.get(`/courses/getCoursesAndRelateInfo`);
+      const filteredCourses = response.data.filter(user => 
+        user.title.toLowerCase().includes(search.toLowerCase())
       );
-      setUsers(filteredUsers);
+      setCourses(filteredCourses);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching courses:", error);
     }
   };
 
   
-  function getRoleName(roleId) {
-    switch(roleId) {
-      case 1: return 'Người dùng';
-      case 2: return 'Giảng viên';
-      case 3: return 'Admin';
-      case 4: return 'Người dùng';
-      default: return 'Không xác định';
-    }
-  }
-  const handleToggleLock = async (userId,isDeleted) => {    
+  const handleToggleLock = async (course_id,active) => {    
     try {
-      console.log(isDeleted);
-      if(isDeleted){
-        console.log(userId);
-      const response = await axiosClient.patch(`/users/unlock-account/${userId}`);
+      console.log(active);
+      if(active){
+        console.log(course_id);
+      const response = await axiosClient.patch(`/courses/lock-course/${course_id}`);
       console.log(response);
       }else{
-        console.log(userId);
-        const response = await axiosClient.patch(`/users/lock-account/${userId}`);
+        console.log(course_id);
+        const response = await axiosClient.patch(`/courses/unlock-course/${course_id}`);
         console.log(response);
       }
       
       handleSearch();
       
-        
-      
     } catch (error) {  
-      console.error("Error updating role or sending message:", error);
+      console.error("Error to lock or unlock course:", error);
     }
   };
   
@@ -84,44 +72,51 @@ export default function ManagerUser() {
         </div>
       <div className="card mb-4">
         <div className="card-header py-3 d-flex justify-content-between align-items-center">
-          <h5 className="mb-0 d-inline-block">Danh sách người dùng</h5>
+          <h5 className="mb-0 d-inline-block">Danh sách khóa học</h5>
         </div>
         <div className="card-body">
   <table className="table">
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Họ và tên</th>
-        <th scope="col">Email</th>
+        <th scope="col">Tên khóa học</th>
+        <th scope="col">Danh mục</th>
+        <th scope="col">Tên giảng viên</th>
+        <th scope="col">Giá</th>
+        <th scope="col">Giá khuyến mãi</th>
+        <th scope="col">Số lượng bán</th>
         <th scope="col">Trạng thái</th>
-        <th scope="col">Quyền</th>
-        <th scope="col">Hành động</th>
+
       </tr>
     </thead>
     <tbody>
-      {users.map((user, index) => (
-        <tr key={user.id}>
+      {courses.map((course, index) => (
+        <tr key={course.course_id}>
           <th scope="row">{index + 1}</th>
-          <td>{user.fullname}</td>
-          <td>{user.email}</td>
-          <td>{user.isDeleted === true ? 'Bị khóa' : 'Đang hoạt động'}</td>
-          <td>{getRoleName(user.roleId)}</td>
+          <td>{course.title}</td>
+          <td>{course.category_name}</td>
+          <td>{course.user_name}</td>
+          <td>{course.price}</td>
+          <td>{course.promotional_price}</td>
+          <td>{course.sold}</td>
+
+          <td>{course.active === true ? 'Đang hoạt động' : 'Bị khóa'}</td>
           <td>
             <button
               className="btn btn-primary btn-sm"
               onClick={() =>
                 handleNavigate(
-                  `/admin/user-info/${user.Id}`
+                  `/user/course/${course.course_id}`
                 )
               }
             >
               <FontAwesomeIcon icon={faCircleInfo} /> Chi tiết
             </button>&nbsp;
             <button
-              className={`btn btn-sm ${user.isDeleted === true ? 'btn-success' : 'btn-danger'}`}
-              onClick={() => handleToggleLock(user.Id, user.isDeleted)}
+              className={`btn btn-sm ${course.active === true ? 'btn-danger' : 'btn-success'}`}
+              onClick={() => handleToggleLock(course.course_id, course.active)}
             >
-              {user.isDeleted === true ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}
+              {course.active === true ? 'Khóa' : 'Mở khóa'}
             </button>
           </td>
         </tr>
