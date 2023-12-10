@@ -81,9 +81,17 @@ export default function Cart() {
       navigate(`/user/order/${firstCourseId}/${cartId}/${otp}`);
     } else {
       console.error("First item in cart does not have a courseId.");
+      
     }
   } else {
     console.log("Cart is empty");
+    const isConfirmed = window.confirm(
+      "Giỏ hàng không có khóa học! Vui lòng chọn khóa học trước khi thanh toán!"
+    );
+
+    if (!isConfirmed) {
+      return;
+    }
   }
 };
 
@@ -160,7 +168,7 @@ export default function Cart() {
                 <div className="card-body">
                   <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                      Course
+                      Tiền khóa học
                       <span>{formatPrice(totalAmount)} VNĐ</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center px-0"></li>
