@@ -27,14 +27,19 @@ export default function NewCourse() {
   }, []);
 
   useEffect(() => {
-    const parsedPrice = parseFloat(price.replace(/\./g, ""));
-    const parsedDiscountCode = parseFloat(discountCode);
-    const newPromotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
-    setPromotionalPrice(newPromotionalPrice);
+    if (price && discountCode) {
+      const parsedPrice = parseFloat(price.replace(/\./g, ""));
+      const parsedDiscountCode = parseFloat(discountCode);
+      const newPromotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
+      setPromotionalPrice(newPromotionalPrice);
+    } else {
+      setPromotionalPrice(0);
+    }
   }, [price, discountCode]);
 
   const formatCurrency = (value) => {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const roundedValue = Math.round(value);
+  return roundedValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
   const handlePriceInput = (e) => {
@@ -100,7 +105,9 @@ export default function NewCourse() {
       const parsedPrice = parseFloat(price.replace(/\./g, ""));
       const parsedDiscountCode = parseFloat(discountCode);
 
-      const promotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
+      const promotionalPrice = Math.round(
+        parsedPrice * (1 - parsedDiscountCode / 100)
+      );
 
       const response = await axiosClient.post("/courses", {
         title: document.getElementById("courseName").value,
