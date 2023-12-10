@@ -85,7 +85,8 @@ const ProtectedRoute = ({ element, path, requiredRoleId }) => {
   return hasAccess ? element : <Navigate to="/" />;
 };
 
-const { roleId } = localStorage.getItem("roleId");
+const storedRoleId = localStorage.getItem("roleId");
+const { roleId } = storedRoleId ? JSON.parse(atob(storedRoleId)) : {};
 
 const App = () => {
   return (
