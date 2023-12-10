@@ -80,7 +80,7 @@ const CourseCard = ({ course }) => {
     } catch (error) {
       console.error("Error adding course to cart:", error.message);
       window.alert(
-        "Khóa học đã có trong giỏ hàng hoặc khóa học đã được đăng kí"
+        "Khóa học đã có trong giỏ hàng hoặc khóa học đã được đăng kí hoặc giỏ hàng chỉ được chứa 1 khóa học"
       );
     }
   };
