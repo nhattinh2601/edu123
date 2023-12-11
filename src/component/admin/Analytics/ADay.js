@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from "../Header/Header";
+import axiosClient from "../../../api/axiosClient";
+
 
 const Aday = () => {
   const pieChartRef = useRef(null);
-
+  const [totalCouse, setTotalCouse] = useState([]);
   useEffect(() => {
-    const loadGoogleCharts = () => {
+    const loadGoogleCharts = async () => {
       // Check if google charts library is already loaded
       if (window.google && window.google.charts) {
         drawChart();
@@ -18,18 +20,21 @@ const Aday = () => {
         };
         document.body.appendChild(script);
       }
+      
+      
     };
 
-    const drawChart = () => {
+    const drawChart = async () => {
+      const response = await axiosClient.get(`/courseRegisters/total-sold-in-day/10-12-2023`);
+      console.log(response.data);
+      // setTotalCouse(response.data);
       // Ensure the google object is available in the window scope
       const google = window.google;
       const data = new google.visualization.DataTable();
       data.addColumn('string', 'Element');
       data.addColumn('number', 'Percentage');
       data.addRows([
-        ['Nitrogen', 0.78],
-        ['Oxygen', 0.21],
-        ['Other', 0.01]
+        ['Sold', response.data],
       ]);
 
       // Ensure the DOM element is available
