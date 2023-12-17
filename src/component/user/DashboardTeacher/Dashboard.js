@@ -144,7 +144,7 @@ const Dashboard = ({ course }) => {
   };
 
   const handleCourseClick = (courseId) => {
-    navigate(`/user/course/${courseId}`);
+    navigate(`/user/course/study/${courseId}`);
   };
 
   const handleEditCourseClick = (iid) => {
@@ -269,7 +269,7 @@ const Dashboard = ({ course }) => {
 
                     <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
                       <p className="text-start text-md-center text-decoration-line-through">
-                        <strong>{formatPrice(course.price)}</strong>
+                        <strong>{formatPrice(course.price)} VNĐ</strong>
                       </p>
                       <p className="text-start text-md-center">
                         <strong>{formatPrice(course.promotional_price)}</strong>

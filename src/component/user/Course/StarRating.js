@@ -53,10 +53,13 @@ const StarRating = ({ onRatingChange, courseId }) => {
         await axiosClient.patch(`/ratings/${ratingid}`, {
           rating: selectedRating,
         });
+        await axiosClient.post(`/courses/updateRating/${courseId}`);
         console.log("Rating updated successfully");
       } else {
         await axiosClient.post("/ratings", ratingData);
         console.log("Rating created successfully");
+        await axiosClient.post(`/courses/updateRating/${courseId}`);
+        
       }
     } catch (error) {
       console.error("Error handling existing rating:", error);

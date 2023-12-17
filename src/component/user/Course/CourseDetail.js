@@ -100,7 +100,9 @@ const CourseDetail = ({ courseDatas }) => {
         setReviewData(reviewResponse.data);
 
         const videoResponse = await axiosClient.get(`/videos/course=${id}`);
-        setVideoData(videoResponse.data);
+        const videoList = videoResponse.data;
+        const VideoData = videoList.filter(item => !item.isDeleted);
+        setVideoData(VideoData);
 
         const userId = courseResponse.data.userId;
         const teacherResponse = await axiosClient.get(`/users/${userId}`);

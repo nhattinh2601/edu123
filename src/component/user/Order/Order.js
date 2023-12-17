@@ -30,11 +30,24 @@ export default function Order() {
     const encodedUserId = localStorage.getItem("userId");
     const userId = parseInt(atob(encodedUserId), 10);
 
-    await axiosClient.post(
-      `/courseRegisters/register-course/${userId}/${courseId}/${otp}`
-    );
-    handleDelete(cartId);
-    window.location.href = "/user/order/thankyou";
+    // Display confirmation dialog
+    const confirmed = window.confirm("Bạn có chắc chắn đã chuyển khoản?");
+
+    if (confirmed) {
+      // User clicked OK, proceed with payment
+      try {
+        await axiosClient.post(
+          `/courseRegisters/register-course/${userId}/${courseId}/${otp}`
+        );
+        handleDelete(cartId);
+        window.location.href = "/user/order/thankyou";
+      } catch (error) {
+        console.error("Error processing payment:", error);
+      }
+    } else {
+      // Optional: Handle if the user cancels the payment
+      console.log("Payment cancelled by user");
+    }
   };
   return (
     <div>

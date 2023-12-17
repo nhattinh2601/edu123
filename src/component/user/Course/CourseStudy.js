@@ -32,6 +32,31 @@ const CourseDetail = ({ courseDatas }) => {
 
   const { id } = useParams();
 
+  useEffect(() => {
+    const checkCourseRegister = async () => {
+      try {
+        const userIdLocal = localStorage.getItem("userId");
+        if (userIdLocal) {
+          const userId = parseInt(atob(userIdLocal), 10);
+          const response = await axiosClient.get(
+            `/courseRegisters/check/${userId}/${id}`
+          );
+
+          if (response.data === "True") {
+          } else {
+            navigate("/user");
+          }
+        } else {
+          navigate("/user");
+        }
+      } catch (error) {
+        console.error("Error checking course register:", error);
+      }
+    };
+
+    checkCourseRegister();
+  }, [id, navigate]);
+
   const [teacherData, setTeacherData] = useState(null);
   const [courseData, setCourseData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
@@ -72,8 +97,7 @@ const CourseDetail = ({ courseDatas }) => {
       try {
         const courseResponse = await axiosClient.get(`/courses/${id}`);
         setCourseData(courseResponse.data);
-
-        const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
+const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
         setReviewData(reviewResponse.data);
 
         const videoResponse = await axiosClient.get(`/videos/course=${id}`);
@@ -170,7 +194,7 @@ const CourseDetail = ({ courseDatas }) => {
         const updatedReviewData = reviewData.map((comment) =>
           comment.reviewId === commentId
             ? { ...comment, content: editedComment }
-            : comment
+: comment
         );
         setReviewData(updatedReviewData);
 
@@ -259,7 +283,7 @@ const CourseDetail = ({ courseDatas }) => {
         <div className="row">
           <div className="col-sm-2"></div>
           <div className="col-sm-6 ">
-            <div className="bg-light bg-gradient card shadow mb-3">
+<div className="bg-light bg-gradient card shadow mb-3">
               <div className="container"></div>
             </div>
             <br />
@@ -334,7 +358,7 @@ const CourseDetail = ({ courseDatas }) => {
                       <Link to={document.file_path} className="file-path">
                         {document.file_path}
                       </Link>
-                    </div>
+</div>
 
                     <hr className="mt-2 mb-2" />
                   </div>
@@ -417,7 +441,7 @@ const CourseDetail = ({ courseDatas }) => {
               <h3>Nhận xét của học viên</h3>
               <div>
                 <div>
-                  <textarea
+<textarea
                     value={commentInput}
                     onChange={(e) => setCommentInput(e.target.value)}
                     placeholder="Nhập bình luận của bạn..."
@@ -479,7 +503,7 @@ const CourseDetail = ({ courseDatas }) => {
                                     />{" "}
                                     <FontAwesomeIcon
                                       icon={faTrash}
-                                      onClick={() =>
+onClick={() =>
                                         handleDeleteComment(review.reviewId)
                                       }
                                       className="delete-icon"

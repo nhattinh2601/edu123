@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -10,6 +10,58 @@ import Pagination from "../../Others/Pagination";
 
 export default function WatchVideo() {
   const { courseId, id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkCourseRegister = async () => {
+      try {
+        const userIdLocal = localStorage.getItem("userId");
+        if (userIdLocal) {
+          const userId = parseInt(atob(userIdLocal), 10);
+          console.log("Checking course registration for userId:", userId);
+          console.log("Current id and courseId values:", id, courseId);
+
+          const courseRegisterResponse = await axiosClient.get(
+            `/courseRegisters/check/${id}/${userId}`
+          );
+          const response1 = await axiosClient.get(
+            `/courses/check/${id}/${userId}`
+          );
+          const response1Data = String(response1.data).toLowerCase();
+
+          if (
+            courseRegisterResponse.data === "true" ||
+            response1Data === "true"
+          ) {
+            const videoResponse = await axiosClient.get(
+              `/videos/check/${courseId}/${id}`
+            );
+
+            const videoDataLowercase = String(videoResponse.data).toLowerCase();
+            if (videoDataLowercase === "true") {
+            } else {
+              console.log(
+                "Navigating to /user because videoResponse.data is not true"
+              );
+              navigate("/user");
+            }
+          } else {
+            console.log(
+              "Navigating to /user because courseRegisterResponse.data is not True"
+            );
+            navigate("/user");
+          }
+        } else {
+          console.log("Navigating to /user because userIdLocal does not exist");
+          navigate("/user");
+        }
+      } catch (error) {
+        console.error("Error checking course and video registration:", error);
+      }
+    };
+
+    checkCourseRegister();
+  }, [id, courseId, navigate]);
 
   // State variables
   const [title, setTitle] = useState("");
@@ -29,7 +81,7 @@ export default function WatchVideo() {
 
   const itemsPerPage = 5;
   const startIndex = currentPage * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+const endIndex = startIndex + itemsPerPage;
 
   useEffect(() => {
     // Fetch video data
@@ -56,8 +108,9 @@ export default function WatchVideo() {
         const response = await axiosClient.get(`/videos/course=${id}`);
         const lessonsData = response.data;
 
-        // Set lessons data to the state
-        setLessons(lessonsData);
+        const filteredLessons = lessonsData.filter((video) => !video.isDeleted);
+
+        setLessons(filteredLessons);
       } catch (error) {
         console.error("Error fetching lessons:", error);
       }
@@ -66,19 +119,18 @@ export default function WatchVideo() {
     // Fetch comments data
     const fetchComments = async () => {
       try {
-        const response = await axiosClient.get(`/comments/video=${id}`);
-        
+        const response = await axiosClient.get(`/comments/video=${courseId}`);
+
         const commentsData = response.data;
-        setComments(commentsData);
+        const filteredComment = commentsData.filter((comment) => !comment.isDeleted);
+        setComments(filteredComment);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
     };
 
-    // Call fetchComments() when the component mounts
     fetchComments();
 
-    // Call both functions when the component mounts
     fetchVideoData();
     fetchLessons();
   }, [id, courseId]);
@@ -99,8 +151,9 @@ export default function WatchVideo() {
     try {
       const encodedUserId = localStorage.getItem("userId");
       const userId = parseInt(atob(encodedUserId), 10);
+     
       const response = await axiosClient.post("/comments", {
-        videoId: id, 
+        videoId: courseId,
         userId: userId,
         content: newCommentText,
       });
@@ -129,7 +182,7 @@ export default function WatchVideo() {
 
       if (response.data) {
         const updatedComments = comments.map((comment) =>
-          comment.commentId === commentId
+comment.commentId === commentId
             ? { ...comment, content: editedComment }
             : comment
         );
@@ -202,7 +255,7 @@ export default function WatchVideo() {
                 />
                 <button onClick={addNewComment}>Thêm bình luận</button>
                 <ul className="load_comment">
-                {comments.slice(startIndex, endIndex).map((comment) => (
+                  {comments.slice(startIndex, endIndex).map((comment) => (
                     <li key={comment.commentId} className="u-block-cmhv">
                       <div className="block-hv">
                         <div className="cm-hv">
@@ -212,7 +265,7 @@ export default function WatchVideo() {
                               alt="Avatar"
                               className="avatar"
                             />
-                            <p>Người đăng: {comment.fullname}</p>
+<p>Người đăng: {comment.fullname}</p>
                             <p>
                               Ngày bình luận:{" "}
                               {comment.update !== comment.create
@@ -279,7 +332,7 @@ export default function WatchVideo() {
           </div>
 
           <div className="col-sm-12 col-md-4 col-lg-4">
-            <div className="card border-0 shadow rounded-3 my-5">
+<div className="card border-0 shadow rounded-3 my-5">
               <div
                 className="video-list"
                 style={{ maxHeight: "100%", overflowY: "auto" }}

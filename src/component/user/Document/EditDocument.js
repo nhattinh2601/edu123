@@ -21,6 +21,31 @@ export default function EditDocument() {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
+    const checkCourseRegister = async () => {
+      try {
+        const userIdLocal = localStorage.getItem("userId");
+        if (userIdLocal) {
+          const userId = parseInt(atob(userIdLocal), 10);
+          const response1 = await axiosClient.get(
+            `/courses/check/${id}/${userId}`
+          );
+
+          if (response1.data === true) {
+          } else {
+            navigate("/user");
+          }
+        } else {
+          navigate("/user");
+        }
+      } catch (error) {
+        console.error("Error checking course register:", error);
+      }
+    };
+
+    checkCourseRegister();
+  }, [id, navigate]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosClient.get(`/documents/course=${id}`, {});

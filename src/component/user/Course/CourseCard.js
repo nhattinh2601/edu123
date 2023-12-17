@@ -8,13 +8,20 @@ const formatPrice = (price) => {
   if (typeof price !== "string") {
     price = String(price);
   }
+  if (price == "0") {
+    return "0 đồng";
+  }
 
   if (price.startsWith("0")) {
     price = price.slice(1);
   }
 
+  
+
   return price.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
+
+
 
 const CourseCard = ({ course }) => {
   const navigate = useNavigate();

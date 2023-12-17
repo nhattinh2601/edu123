@@ -21,6 +21,30 @@ export default function EditCourse() {
   const navigate = useNavigate();
 
   const { id } = useParams();
+  useEffect(() => {
+    const checkCourseRegister = async () => {
+      try {
+        const userIdLocal = localStorage.getItem("userId");
+        if (userIdLocal) {
+          const userId = parseInt(atob(userIdLocal), 10);
+          const response1 = await axiosClient.get(
+            `/courses/check/${id}/${userId}`
+          );
+
+          if (response1.data === true) {
+          } else {
+            navigate("/user");
+          }
+        } else {
+          navigate("/user");
+        }
+      } catch (error) {
+        console.error("Error checking course register:", error);
+      }
+    };
+
+    checkCourseRegister();
+  }, [id, navigate]);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -33,15 +57,13 @@ export default function EditCourse() {
         setPrice(formatCurrency(courseData.price));
         setDiscountCode(formatCurrency(courseData.sold));
         setSelectedCategory(courseData.categoryId);
-        
+
         const encodedId = localStorage.getItem("userId");
         const user = parseInt(atob(encodedId), 10);
-        console.log("Decoded userId:", user);
-        console.log("courseData.userId:", courseData.userId);
-        if (user!== courseData.userId) {
+
+        if (user !== courseData.userId) {
           navigate("/user");
         }
-        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

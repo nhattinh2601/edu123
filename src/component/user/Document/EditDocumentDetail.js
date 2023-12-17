@@ -3,7 +3,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
 import axiosClient from "../../../api/axiosClient";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function EditDocumentDetail() {
   const [link, setLink] = useState("");
@@ -11,6 +11,8 @@ export default function EditDocumentDetail() {
   const [title, setTitle] = useState("");
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [videoData, setVideoData] = useState(null);
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function EditDocumentDetail() {
       try {
         const response = await axiosClient.get(`documents/${id}`);
         const videoData = response.data;
-
+        setVideoData(videoData);
         setTitle(videoData.title);
         setLink(videoData.file_path);
       } catch (error) {
@@ -28,6 +30,34 @@ export default function EditDocumentDetail() {
 
     fetchUserData();
   }, [id]);
+
+  useEffect(() => {
+    const checkCourseRegister = async () => {
+      try {
+        const userIdLocal = localStorage.getItem("userId");
+        if (userIdLocal) {
+          const userId = parseInt(atob(userIdLocal), 10);
+          const response1 = await axiosClient.get(
+            `/courses/check/${videoData.courseId}/${userId}`
+          );
+
+          if (response1.data === true) {
+            // Do something if registered
+          } else {
+            navigate("/user");
+          }
+        } else {
+          navigate("/user");
+        }
+      } catch (error) {
+        console.error("Error checking course register:", error);
+      }
+    };
+
+    if (videoData) {
+      checkCourseRegister();
+    }
+  }, [videoData, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

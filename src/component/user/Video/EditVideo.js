@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import axiosClient from "../../../api/axiosClient";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function NewVideo() {
   const [uploadMethod, setUploadMethod] = useState("file");
@@ -12,28 +12,56 @@ export default function NewVideo() {
   const [shortDescription, setShortDescription] = useState("");
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const {id} = useParams();
-  
+  const [videoData, setVideoData] = useState(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchUserData() {
       try {
         const response = await axiosClient.get(`videos/${id}`);
         const videoData = response.data;
-
+        setVideoData(videoData);
         setVideoTitle(videoData.title);
         setShortDescription(videoData.description);
-        if (uploadMethod === "youtube"){
+        if (uploadMethod === "youtube") {
           setYoutubeLink(videoData.video_filepath);
         }
-       
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
 
     fetchUserData();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    const checkCourseRegister = async () => {
+      try {
+        const userIdLocal = localStorage.getItem("userId");
+        if (userIdLocal) {
+          const userId = parseInt(atob(userIdLocal), 10);
+          const response1 = await axiosClient.get(
+            `/courses/check/${videoData.courseId}/${userId}`
+          );
+
+          if (response1.data === true) {
+            // Do something if registered
+          } else {
+            navigate("/user");
+          }
+        } else {
+          navigate("/user");
+        }
+      } catch (error) {
+        console.error("Error checking course register:", error);
+      }
+    };
+
+    if (videoData) {
+      checkCourseRegister();
+    }
+  }, [videoData, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
