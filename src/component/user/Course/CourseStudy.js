@@ -41,8 +41,12 @@ const CourseDetail = ({ courseDatas }) => {
           const response = await axiosClient.get(
             `/courseRegisters/check/${userId}/${id}`
           );
+          const response1 = await axiosClient.get(
+            `/courses/check/${id}/${userId}`
+          );
+          
 
-          if (response.data === "True") {
+          if (response.data === "true" || response1.data === true) {
           } else {
             navigate("/user");
           }
@@ -97,7 +101,8 @@ const CourseDetail = ({ courseDatas }) => {
       try {
         const courseResponse = await axiosClient.get(`/courses/${id}`);
         setCourseData(courseResponse.data);
-const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
+
+        const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
         setReviewData(reviewResponse.data);
 
         const videoResponse = await axiosClient.get(`/videos/course=${id}`);
@@ -194,7 +199,7 @@ const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
         const updatedReviewData = reviewData.map((comment) =>
           comment.reviewId === commentId
             ? { ...comment, content: editedComment }
-: comment
+            : comment
         );
         setReviewData(updatedReviewData);
 
@@ -283,7 +288,7 @@ const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
         <div className="row">
           <div className="col-sm-2"></div>
           <div className="col-sm-6 ">
-<div className="bg-light bg-gradient card shadow mb-3">
+            <div className="bg-light bg-gradient card shadow mb-3">
               <div className="container"></div>
             </div>
             <br />
@@ -358,7 +363,7 @@ const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
                       <Link to={document.file_path} className="file-path">
                         {document.file_path}
                       </Link>
-</div>
+                    </div>
 
                     <hr className="mt-2 mb-2" />
                   </div>
@@ -441,7 +446,7 @@ const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
               <h3>Nhận xét của học viên</h3>
               <div>
                 <div>
-<textarea
+                  <textarea
                     value={commentInput}
                     onChange={(e) => setCommentInput(e.target.value)}
                     placeholder="Nhập bình luận của bạn..."
@@ -503,7 +508,7 @@ const reviewResponse = await axiosClient.get(`/reviews/course=${id}`);
                                     />{" "}
                                     <FontAwesomeIcon
                                       icon={faTrash}
-onClick={() =>
+                                      onClick={() =>
                                         handleDeleteComment(review.reviewId)
                                       }
                                       className="delete-icon"

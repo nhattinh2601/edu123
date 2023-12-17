@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosClient from '../../../api/axiosClient'; // assuming you have a client set up
 import { useNavigate, Link } from "react-router-dom";
+import "./upgrade-to-teacher.css";
+import Header from "../Header/Header";
 
 export default function NotificationReject() {
   const navigate = useNavigate();
@@ -34,6 +36,11 @@ export default function NotificationReject() {
 
   return (
     <div>
+       <div className="manager-user-layout">
+      <aside className="sidebar">
+        <Header />
+      </aside>
+      <main className="manager-user-main-content col-md-8">
       <div className="container">
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-9 mx-auto">
@@ -60,6 +67,8 @@ export default function NotificationReject() {
             </div>
           </div>
         </div>
+      </div>
+      </main>
       </div>
     </div>
   );

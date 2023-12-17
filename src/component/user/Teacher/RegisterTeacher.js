@@ -4,6 +4,7 @@ import axiosClient from "../../../api/axiosClient";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
+
 export default function RegisterTeacher() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

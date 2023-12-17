@@ -3,6 +3,7 @@ import logo from "../../../assets/images/logo.png";
 import shoppingCart from "../../../assets/images/shopping-cart-icon.png";
 import { useNavigate, Link } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
+import "./Header.css"
 
 export default function Header() {
   const [userDetails, setUserDetails] = useState(null);
@@ -99,59 +100,32 @@ export default function Header() {
   };
 
   return (
-    <header className="d-flex justify-content-center bg-white" id="topbar">
-      <h5>Trang quản trị viên</h5>
-      <div className="d-inline-block">
-        <Link to="/" style={{ display: "inline-block" }}>
-          <img
-            className="img-fluid logo"
-            alt="logo"
-            src={logo}
-            style={{ display: "block" }}
-          />
-        </Link>
-      </div>
-      <div className="w-75 d-flex justify-content-between">
-        <div className="card card-sm" style={{ zIndex: "3" }}>
-          <div className="card-body p-0">
-            <div className="d-flex justify-content-between p-0">
-              <Link
-                to='/admin/upgrade-to-teacher'
-                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
-                className="p-3"
-              >
-                Phê duyệt cho người dùng thành giảng viên
-              </Link>
-              <Link
-                to='/admin/payment-confirm'
-                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
-                className="p-3"
-              >
-                Xác nhận thanh toán người dùng
-              </Link>
-              <Link
-                to='/admin/manager-user'
-                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
-                className="p-3"
-              >
-                Quản lý người dùng              </Link>              
-            <Link
-                to='/admin/manager-course'
-                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
-                className="p-3"
-              >
-                Quản lý khóa học              </Link>
-                <Link
-                to='/admin/analytics-aday'
-                style={{ color: "black", textDecoration: "none", marginRight: "10px", cursor: "default" }}
-                className="p-3"
-              >
-                1 ngày              </Link>                 
-            </div>
-          </div>
-        </div>
-      </div>
+    <aside className="sidebar">
+    <div className="sidebar-logo">
+      <a href="/">
+      <img className="img-fluid" alt="logo" src={logo} />
+      </a>
+    </div>
+    <div className="sidebar-links">
+      <a href="/admin/upgrade-to-teacher" className="link-item">
+        Phê duyệt giảng viên
+      </a>
+      <a href="/admin/payment-confirm" className="link-item">
+        Xác nhận thanh toán
+      </a>
+      <a href="/admin/manager-user" className="link-item">
+        Quản lý người dùng
+      </a>
+      <a href="/admin/manager-course" className="link-item">
+        Quản lý khóa học
+      </a>
+      <a href="/admin/analytics-aday" className="link-item">
+          1 ngày
+      </a>
+    </div>
+    <div className="sidebar-auth">
       {renderAuthButtons()}
-    </header>
+    </div>
+  </aside>
   );
 }
