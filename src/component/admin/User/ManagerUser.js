@@ -25,6 +25,13 @@ export default function ManagerUser() {
     setSearch(e.target.value);
   };
 
+  const [selectedRole, setSelectedRole] = useState('user'); // State mới để lưu trữ giá trị được chọn từ combobox
+
+  const handleRoleChange = async (e) => {
+    const newRole = e.target.value;
+    setSelectedRole(newRole);
+    await classify(newRole); // Gọi hàm classify với giá trị role mới
+  };
   const handleSearch = async () => {
     try {
       setIsLoading(true);
@@ -118,6 +125,34 @@ export default function ManagerUser() {
     }
   };
 
+  const classify = async (role) => {
+    try {
+      setIsLoading(true);
+      const response = await axiosClient.get(`/users`);
+      let users = response.data;
+  
+      // Lọc dữ liệu dựa trên giá trị của role
+      users = users.filter((user) => {
+        if (role === 'user') {
+          return user.roleId === 1;
+        } else if (role === 'lecturer') {
+          return user.roleId === 2;
+        }
+        return true;
+      });
+  
+      // Sắp xếp và lọc dữ liệu như bạn muốn
+      // ...
+  
+      setUsers(users);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+    }
+  };
+
+
   //paging
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -125,6 +160,7 @@ export default function ManagerUser() {
     setCurrentPage(selected);
   };
 
+  
   const itemsPerPage = 5;
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -135,14 +171,21 @@ export default function ManagerUser() {
         setIsLoading(true);
         const response = await axiosClient.get(`/users`);
         let sortedUsers = response.data.sort((a, b) => {
-          // So sánh thời gian tạo giữa hai người dùng và sắp xếp từ mới đến cũ
-          return new Date(b.createAt) - new Date(a.createAt);
+          return new Date(b.updateAt) - new Date(a.updateAt);
         });
-
-        // Nếu có yêu cầu tìm kiếm, lọc người dùng theo từ khóa tìm kiếm
+        sortedUsers = sortedUsers.filter((user) => {
+          if (selectedRole === 'user') {
+            return user.roleId === 1;
+          } else if (selectedRole === 'lecturer') {
+            return user.roleId === 2;
+          } else {
+            return user;
+          }
+          return true;
+        });
         if (search) {
           sortedUsers = sortedUsers.filter((user) =>
-            user.createAt.toLowerCase().includes(search.toLowerCase())
+            user.search.toLowerCase().includes(search.toLowerCase())
           );
         }
 
@@ -151,10 +194,11 @@ export default function ManagerUser() {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };
 
+    };
+    console.log('Selected role changed to:', selectedRole);
     fetchData();
-  }, []);
+  }, [selectedRole]);
 
   //paging
 
@@ -184,6 +228,12 @@ export default function ManagerUser() {
         <div className="card mb-4">
           <div className="card-header py-3 d-flex justify-content-between align-items-center">
             <h5 className="mb-0 d-inline-block">Danh sách người dùng</h5>
+            <div>
+            <select className="custom-select" value={selectedRole} onChange={handleRoleChange}>
+  <option value="user">Người dùng</option>
+  <option value="lecturer">Giảng viên</option>
+</select>
+    </div>
           </div>
           {notification && (
             <div className={`notification ${notification.type}`}>
@@ -198,7 +248,7 @@ export default function ManagerUser() {
                   <th scope="col">#</th>
                   <th scope="col">Họ và tên</th>
                   <th scope="col">Email</th>
-                  <th scope="col">Ngày tạo tài khoản</th>
+                  <th scope="col">Ngày cập nhật</th>
                   <th scope="col">Trạng thái</th>
                   <th scope="col">Quyền</th>
                   <th scope="col">Hành động</th>
@@ -217,7 +267,7 @@ export default function ManagerUser() {
                     <th scope="row">{index + 1}</th>
                     <td>{user.fullname}</td>
                     <td>{user.email}</td>
-                    <td>{new Date(user.createAt).toLocaleString("vi-VN")}</td>
+                    <td>{new Date(user.updateAt).toLocaleString("vi-VN")}</td>
                     <td>
                       {user.isDeleted === true ? "Bị khóa" : "Đang hoạt động"}
                     </td>

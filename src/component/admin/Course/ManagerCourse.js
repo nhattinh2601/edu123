@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faSort } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
@@ -13,11 +13,67 @@ export default function ManagerCourse() {
     window.open(path, "_blank");
   };
 
+
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState("");
   const [notification, setNotification] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
 
+  const [selectedRole, setSelectedRole] = useState("true");
+  const handleRoleChange = async (e) => {
+    const newRole = e.target.value;
+    console.log(newRole);
+    setSelectedRole(newRole);
+    await classify(newRole); // Gọi hàm classify với giá trị role mới
+  };
+
+  const classify = async (role) => {
+    try {
+      setIsLoading(true);
+      const response = await axiosClient.get(
+        `/courses/getCoursesAndRelateInfo`
+      );
+      // let users = response.data;
+      let users = courses;
+      // Sắp xếp và lọc dữ liệu như bạn muốn
+      users = response.data.sort((a, b) => {
+        // So sánh thời gian tạo giữa hai người dùng và sắp xếp từ mới đến cũ
+        return new Date(b.updateAt) - new Date(a.updateAt);
+      });
+      // Lọc dữ liệu dựa trên giá trị của role
+      users = users.filter((user) => {
+        if (role === "true") {
+          console.log("true nè");
+          return user.active === true;
+        } else if (role === "false") {
+          console.log("false nè");
+          return user.active === false;
+        }
+        return true;
+      });
+
+      setCourses(users);
+      setIsLoading(false);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+    }
+  };
+
+  const [sortOrder, setSortOrder] = useState('desc'); // Giữ trạng thái sắp xếp
+  const sortSold = async () => {
+    const sortedCourses = [...courses].sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.sold - b.sold; // Sắp xếp từ thấp đến cao
+      } else {
+        return b.sold - a.sold; // Sắp xếp từ cao xuống thấp
+      }
+    });
+    setCourses(sortedCourses);
+    // Đảo ngược trạng thái sắp xếp sau mỗi lần click
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
@@ -29,8 +85,10 @@ export default function ManagerCourse() {
       const response = await axiosClient.get(
         `/courses/getCoursesAndRelateInfo`
       );
-      const filteredCourses = response.data.filter((user) =>
-        user.title.toLowerCase().includes(search.toLowerCase()) || user.user_name.toLowerCase().includes(search.toLowerCase()) 
+      const filteredCourses = response.data.filter(
+        (user) =>
+          user.title.toLowerCase().includes(search.toLowerCase()) ||
+          user.user_name.toLowerCase().includes(search.toLowerCase())
       );
       setCourses(filteredCourses);
       if (filteredCourses.length > 0) {
@@ -66,7 +124,7 @@ export default function ManagerCourse() {
             type: "success",
             message: "Khóa khóa học thành công!",
           });
-        }, 1000); 
+        }, 1000);
         console.log(response);
       } else {
         console.log(course_id);
@@ -81,7 +139,7 @@ export default function ManagerCourse() {
             type: "success",
             message: "Mở khóa khóa học thành công!",
           });
-        }, 1000); 
+        }, 1000);
         console.log(response);
       }
       setTimeout(() => {
@@ -121,9 +179,20 @@ export default function ManagerCourse() {
         );
         let sortedUsers = response.data.sort((a, b) => {
           // So sánh thời gian tạo giữa hai người dùng và sắp xếp từ mới đến cũ
-          return new Date(b.createAt) - new Date(a.createAt);
+          return new Date(b.updateAt) - new Date(a.updateAt);
         });
 
+        // Lọc dữ liệu dựa trên giá trị của role
+        sortedUsers = sortedUsers.filter((user) => {
+          if (selectedRole === "true") {
+            console.log("true nè");
+            return user.active === true;
+          } else if (selectedRole === "false") {
+            console.log("false nè");
+            return user.active === false;
+          }
+          return true;
+        });
         // Nếu có yêu cầu tìm kiếm, lọc người dùng theo từ khóa tìm kiếm
         if (search) {
           sortedUsers = sortedUsers.filter((user) =>
@@ -170,11 +239,22 @@ export default function ManagerCourse() {
           <div className="card-header py-3 d-flex justify-content-between align-items-center">
             <h5 className="mb-0 d-inline-block">Danh sách khóa học</h5>
           </div>
+          <div className="d-d-inline-block">
+            <select
+              className="custom-select"
+              value={selectedRole}
+              onChange={handleRoleChange}
+            >
+              <option value="true">Đang hoạt động</option>
+              <option value="false">Bị khóa</option>
+            </select>
+          </div>
           {notification && (
             <div className={`notification ${notification.type}`}>
               {notification.message}
             </div>
           )}
+
           <div className="card-body">
             <table className="table">
               <thead>
@@ -183,10 +263,15 @@ export default function ManagerCourse() {
                   <th scope="col">Tên khóa học</th>
                   <th scope="col">Danh mục</th>
                   <th scope="col">Tên giảng viên</th>
-                  <th scope="col">Giá</th>
+                  <th scope="col">Giá 
+     </th>
                   <th scope="col">Giá khuyến mãi</th>
-                  <th scope="col">Số lượng bán</th>
-                  <th scope="col">Ngày tạo</th>
+                  <th scope="col">Số lượng bán  <button onClick={() =>
+                          sortSold()
+                        }>
+      <FontAwesomeIcon icon={faSort} />
+      </button></th>
+                  <th scope="col">Ngày cập nhật</th>
                   <th scope="col">Trạng thái</th>
                 </tr>
               </thead>
@@ -207,7 +292,7 @@ export default function ManagerCourse() {
                     <td>{course.price}</td>
                     <td>{course.promotional_price}</td>
                     <td>{course.sold}</td>
-                    <td>{new Date(course.createAt).toLocaleString("vi-VN")}</td>
+                    <td>{new Date(course.updateAt).toLocaleString("vi-VN")}</td>
                     <td>
                       {course.active === true ? "Đang hoạt động" : "Bị khóa"}
                     </td>
@@ -215,7 +300,9 @@ export default function ManagerCourse() {
                       <button
                         className="btn btn-primary btn-sm"
                         onClick={() =>
-                          handleNavigate(`/user/course/${course.course_id}`)
+                          handleNavigate(
+                            `/admin/public-course/course-info/${course.course_id}`
+                          )
                         }
                       >
                         <FontAwesomeIcon icon={faCircleInfo} /> Chi tiết

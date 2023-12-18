@@ -59,6 +59,7 @@ import UserInfo from "./component/Admin/User/UserInfo.js";
 import ManagerCourse from "./component/Admin/Course/ManagerCourse.js";
 import Admin from "./component/Admin/Admin.js";
 import ADay from "./component/Admin/Analytics/ADay.js";
+import WatchVideoAdmin from "./component/Admin/Course/WatchVideo.js";
 
 import NotFound from "./component/Others/NotFound";
 
@@ -336,9 +337,9 @@ const App = () => {
           />
           <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
           <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ToTeacherDetail />} />
-          <Route path="/admin/upgrade-to-teacher/detail/reject/:email" element={<NotificationReject />} />
+          <Route path="/admin/upgrade-to-teacher/detail/reject/:email/:id" element={<NotificationReject />} />
           <Route path="/admin/public-course" element={<PublicCourse />} />          
-          <Route path="/admin/public-course/course-info" element={<CourseInfo />} />
+          <Route path="/admin/public-course/course-info/:id" element={<CourseInfo />} />
           <Route path="/admin/public-course/lession" element={<PublicLession />} />
           <Route path="/admin/public-course/lession/detail" element={<PublicLessionDetail />} />
           <Route path="/admin/public-course/document" element={<PublicDocument />} />
@@ -349,7 +350,7 @@ const App = () => {
           <Route path="/admin/manager-user" element={<ManagerlUser />} />  
           <Route path="/admin/manager-course" element={<ManagerCourse />} />  
           <Route path="/admin/analytics-aday" element={<ADay />} />  
-
+          <Route path="/admin/course/watch-video/:courseId/:id" element={<WatchVideoAdmin />} />    
           <Route path="*" element={<NotFound />} />
           
         </Routes>

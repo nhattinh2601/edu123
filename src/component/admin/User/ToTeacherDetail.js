@@ -13,6 +13,8 @@ export default function ToTeacherDetail() {
   const [title, setTitle] = useState("");
   const [teachingSubject, setTeachingSubject] = useState("");
   const [teachingExperience, setTeachingExperience] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -46,6 +48,7 @@ export default function ToTeacherDetail() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setIsLoading(true);
       const response = await axiosClient.patch(`/users/${user.Id}`, {
         roleId: 2,
       });
@@ -58,22 +61,35 @@ export default function ToTeacherDetail() {
             "Chúc mừng bạn đã trở thành giảng viên, hãy upload khóa học của mình và kiếm tiền ngay thôi!",
         }
       );
+      setIsLoading(false);
       console.log(messageResponse);
 
-      navigate("/admin/upgrade-to-teacher");
+      setNotification({
+        type: "success",
+        message: "Đã cấp quyền cho người dùng thành giảng viên thành công",
+      });
+      setTimeout(() => {
+        navigate("/admin/upgrade-to-teacher");
+      }, 3000);
     } catch (error) {
       console.error("Error updating role or sending message:", error);
+      setNotification({
+        type: "error",
+        message: "Đã xảy ra lỗi vui lòng thử lại sau!",
+      });
     }
   };
 
   const handleReject = () => {
-    navigate(`/admin/upgrade-to-teacher/detail/reject/${user.email}`);
+    navigate(`/admin/upgrade-to-teacher/detail/reject/${user.email}/${user.Id}`);
   };
 
   if (!user) {
-    return <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>; 
+    return (
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    );
   }
 
   return (
@@ -90,107 +106,123 @@ export default function ToTeacherDetail() {
                   <h2 className="card-title text-center mb-5  fw-bold ">
                     Thông tin người dùng{" "}
                   </h2>
-                  <div
-                    style={{
-                      width: "250px"
-                    }}
-                  >
-                    <img
-                      src={userImage}
+                  <form onSubmit={handleSubmit}>
+                    <div
                       style={{
-                        width: "100%", // Scale image to fit the container
-                        height: "auto", // Keep the aspect ratio of the image
+                        width: "250px",
                       }}
-                      alt="User Avatar"
-                      className="card-img-top"
-                    />
-                  </div>
-                  <br />
-
-                  <div className="form-outline mb-4">
-                    <label className="form-label fw-bold" htmlFor="name">
-                      Chức danh
-                    </label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Chủ đề muốn giảng dạy trên edu123"
-                      value={title}
-                      readOnly
-                    />
-                  </div>
-
-                  <div className="form-outline mb-4">
-                    <label className="form-label fw-bold" htmlFor="name">
-                      Lĩnh vực giảng dạy
-                    </label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Chủ đề muốn giảng dạy trên edu123"
-                      value={teachingSubject}
-                      readOnly
-                    />
-                  </div>
-                  <div className="form-outline mb-4">
-                    <label className="form-label fw-bold" htmlFor="name">
-                      Kinh nghiệm giảng dạy
-                    </label>
-                    <textarea
-                      className="form-control"
-                      placeholder="Chủ đề muốn giảng dạy trên edu123"
-                      value={teachingExperience}
-                      readOnly
-                    />
-                  </div>
-                  <div className="form-outline mb-4">
-                    <label className="form-label fw-bold" htmlFor="name">
-                      Số điện thoại{" "}
-                    </label>
-                    <input
-                      style={{
-                        width: "250px"
-                      }}
-                      type="text"
-                      className="form-control"
-                      placeholder="Số điện thoại"
-                      value={user.phone}
-                      readOnly
-                    />
-                    <div className="uti-link d-inline-block text-decoration-underline">
-                      <a
-                        href={`https://zalo.me/${user.phone}`}
-                        className="btn btn-light"
-                        role="button"
-                        aria-disabled="true"
-                      >
-                        Liên hệ qua zalo 
-                      </a>
+                    >
+                      <img
+                        src={userImage}
+                        style={{
+                          width: "100%", // Scale image to fit the container
+                          height: "auto", // Keep the aspect ratio of the image
+                        }}
+                        alt="User Avatar"
+                        className="card-img-top"
+                      />
                     </div>
-                  </div>
-                  <div className="form-outline mb-4">
-                    <label className="form-label fw-bold" htmlFor="name">
-                      Họ và tên{" "}
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Họ và tên"
-                      value={user.fullname}
-                      readOnly
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-block mb-4 w-50 "
-                  >
-                    Chấp nhận
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block mb-4 w-50 "
-                    onClick={handleReject}
-                  >
-                    Từ chối
-                  </button>
+                    <br />
+
+                    <div className="form-outline mb-4">
+                      <label className="form-label fw-bold" htmlFor="name">
+                        Chức danh
+                      </label>
+                      <textarea
+                        className="form-control"
+                        placeholder="Chủ đề muốn giảng dạy trên edu123"
+                        value={title}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="form-outline mb-4">
+                      <label className="form-label fw-bold" htmlFor="name">
+                        Lĩnh vực giảng dạy
+                      </label>
+                      <textarea
+                        className="form-control"
+                        placeholder="Chủ đề muốn giảng dạy trên edu123"
+                        value={teachingSubject}
+                        readOnly
+                      />
+                    </div>
+                    <div className="form-outline mb-4">
+                      <label className="form-label fw-bold" htmlFor="name">
+                        Kinh nghiệm giảng dạy
+                      </label>
+                      <textarea
+                        className="form-control"
+                        placeholder="Chủ đề muốn giảng dạy trên edu123"
+                        value={teachingExperience}
+                        readOnly
+                      />
+                    </div>
+                    <div className="form-outline mb-4">
+                      <label className="form-label fw-bold" htmlFor="name">
+                        Số điện thoại{" "}
+                      </label>
+                      <input
+                        style={{
+                          width: "250px",
+                        }}
+                        type="text"
+                        className="form-control"
+                        placeholder="Số điện thoại"
+                        value={user.phone}
+                        readOnly
+                      />
+                      <div className="uti-link d-inline-block text-decoration-underline">
+                        <a
+                          href={`https://zalo.me/${user.phone}`}
+                          className="btn btn-light"
+                          role="button"
+                          aria-disabled="true"
+                        >
+                          Liên hệ qua zalo
+                        </a>
+                      </div>
+                    </div>
+                    <div className="form-outline mb-4">
+                      <label className="form-label fw-bold" htmlFor="name">
+                        Họ và tên{" "}
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Họ và tên"
+                        value={user.fullname}
+                        readOnly
+                      />
+                    </div>
+                    <div className="form-outline mb-4">
+                      {isLoading ? (
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : (
+                        <div></div>
+                      )}
+                      {notification && (
+                        <div className={`notification ${notification.type}`}>
+                          {notification.message}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-block mb-4 w-50 "
+                    >
+                      Chấp nhận
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block mb-4 w-50 "
+                      onClick={handleReject}
+                    >
+                      Từ chối
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>

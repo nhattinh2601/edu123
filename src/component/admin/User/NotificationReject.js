@@ -13,21 +13,33 @@ export default function NotificationReject() {
   };
   const [message, setMessage] = useState('');
   const { email } = useParams();
+  const { id } = useParams();
+  const [notification, setNotification] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    setIsLoading(true);
+    const response =  axiosClient.patch(`/users/${id}`, {
+      roleId: 2,
+    });
 
-    // Call your API to send the email
     axiosClient.post(`/auth/send/message/${email}`, {
       message: message,
     })
     .then(response => {
       console.log(response);
-      // You might want to navigate somewhere else here or set some state to indicate the email was sent
+      setIsLoading(false);
+      setNotification({
+        type: "success",
+        message: "Đã từ chối người dùng thành công!",
+      });
+      setTimeout(() => {
       navigate('/admin/upgrade-to-teacher'); 
+      }, 3000);
     })
     .catch(error => {
       console.error(error);
@@ -56,6 +68,20 @@ export default function NotificationReject() {
                       onChange={handleMessageChange}
                     />
                   </div>
+                  <div className="form-outline mb-4">
+                      {isLoading ? (
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      ) : (
+                        <div></div>
+                      )}
+                      {notification && (
+                        <div className={`notification ${notification.type}`}>
+                          {notification.message}
+                        </div>
+                      )}
+                    </div>
                   <button
                     type="submit"
                     className="btn btn-primary btn-block mb-4 w-100 "

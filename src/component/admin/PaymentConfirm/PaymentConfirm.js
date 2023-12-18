@@ -1,15 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faLock, // icon for "Lock Account"
   faTimes, // icon for "Reject"
   faPaperPlane, // icon for "Send Activation Code"
-  faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link } from "react-router-dom";
 
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../api/axiosClient";
 import Header from "../Header/Header";
+import "./manager-user.css";
+import Pagination from "../../Others/Pagination";
+
+
 export default function PaymentConfirm() {
   const navigate = useNavigate();
 
@@ -18,18 +20,39 @@ export default function PaymentConfirm() {
   };
 
   const [users, setUsers] = useState([]);
+  const [notification, setNotification] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
 
-  
+  //paging
+  //paging
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const itemsPerPage = 5;
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        setIsLoading(true);
+
         const response = await axiosClient.get(
           `/courseRegisters/getcoursenoactive`
         );
         const filteredUsers = response.data.filter(
           (user) => user.isActive === null || user.isActive === false
         );
-        setUsers(filteredUsers);
+        let sortedUsers = filteredUsers.sort((a, b) => {
+          return new Date(b.createAt) - new Date(a.createAt);
+        });
+
+        setUsers(sortedUsers);
+        setIsLoading(false);
+
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -41,36 +64,84 @@ export default function PaymentConfirm() {
   const handleActiveCourse = async (register_course_id) => {
     try {
       console.log(register_course_id);
-
+      setIsLoading(true);
       const messageResponse = await axiosClient.put(
         `/courseRegisters/active-course/${register_course_id}`
       );
       console.log(messageResponse);
-
+      setIsLoading(false);
+      setNotification({
+        type: "success",
+        message: "Kích hoạt khóa học thành công!",
+      });
+      setTimeout(() => {
       window.location.href = "/admin/payment-confirm";
+      }, 2000);
     } catch (error) {
       console.error("Error updating role or sending message:", error);
+      setNotification({
+        type: "error",
+        message: "Đã xảy ra lỗi vui lòng thử lại sau!",
+      });
     }
   };
 
   const reject = async (register_course_id) => {
     try {
       console.log(register_course_id);
-
+      setIsLoading(true);
       const messageResponse = await axiosClient.put(
         `/courseRegisters/reject-confirm-payment/${register_course_id}`
       );
       console.log(messageResponse);
-
+      setIsLoading(false);
+      setNotification({
+        type: "success",
+        message: "Từ chối khóa học thành công!",
+      });
+      setTimeout(() => {
       window.location.href = "/admin/payment-confirm";
+      }, 2000);
     } catch (error) {
       console.error("Error updating role or sending message:", error);
+      setNotification({
+        type: "error",
+        message: "Đã xảy ra lỗi vui lòng thử lại sau!",
+      });
+    }
+  };
+
+  const [selectedDate, setSelectedDate] = useState(""); 
+  const handleDateChange = (event) => {
+    const newDate = event.target.value;
+    setSelectedDate(newDate);
+    setIsLoading(true);
+    if (newDate) {
+       // Tạo một đối tượng Date từ ngày được chọn
+    const selectedDateObj = new Date(newDate);
+    // Đặt giờ cho đối tượng Date này là 00:00:00 để chỉ so sánh ngày
+    selectedDateObj.setHours(0, 0, 0, 0);
+    // Lấy timestamp của ngày được chọn
+    const selectedTimestamp = selectedDateObj.getTime();
+      console.log(selectedTimestamp);
+    const filteredUsers = users.filter(
+      (user) =>
+        user.createAt===selectedTimestamp
+    );
+      setUsers(filteredUsers);
+    setIsLoading(false);
+    } else {
+      // Nếu không có ngày được chọn, hiển thị lại toàn bộ danh sách
+      setUsers(users);
     }
   };
 
   return (
-    <div>
-      <Header />
+    <div className="manager-user-layout">
+      <aside className="sidebar">
+        <Header />
+      </aside>
+      <main className="manager-user-main-content col-md-10">  
       <div className="container">
         <div className="row">
           <div className="col-sm-12 col-md-9 col-lg-10 mx-auto">
@@ -83,39 +154,81 @@ export default function PaymentConfirm() {
                       <h5 className="mb-0 d-inline-block">
                         Danh sách xác nhận thanh toán
                       </h5>
+                      {notification && (
+            <div className={`notification ${notification.type}`}>
+              {notification.message}
+            </div>
+          )}
                     </div>
                     <div className="card-body">
-  <table className="table">
-    <thead>
-      <tr>
-        <th scope="col" className="text-start">Mã OTP</th>
-        <th scope="col" className="text-end"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {users.map((user, index) => (
-        <tr key={index}>
-          <td className="text-start"><strong>{user.otp}</strong></td>
-          <td className="text-end">
-            <button
-              className="btn btn-primary btn-sm me-2"
-              onClick={() => handleActiveCourse(user.register_course_id)}
-            >
-              <FontAwesomeIcon icon={faPaperPlane} />
-              Kích hoạt khóa học
-            </button>
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={() => reject(user.register_course_id)}
-            >
-              <FontAwesomeIcon icon={faTimes} /> Từ chối
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+                      <table className="table">
+                      <thead>
+                <tr>
+                  <th scope="col">Họ và tên</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Date <input type="date" value={selectedDate} onChange={handleDateChange} /></th>
+                  <th scope="col">OTP</th>
+                  <th scope="col">Khóa học</th>
+                  <th scope="col">Giá tiền</th>
+                  <th scope="col">Hành động</th>
+                </tr>
+              </thead>
+              {isLoading ? (
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <div></div>
+              )}
+                        <tbody>
+                          {users.slice(startIndex, endIndex).map((user, index) => (
+                            <tr key={index}>
+                              <td className="text-start">
+                                <strong>{user.fullname}</strong>
+                              </td>
+                              <td className="text-start">
+                                <strong>{user.phone}</strong>
+                              </td>
+                              <td className="text-start">
+                                <strong>{new Date(user.updateAt).toLocaleString("vi-VN")}</strong>
+                              </td>
+                              <td className="text-start">
+                                <strong>{user.otp}</strong>
+                              </td>
+                              <td className="text-start">
+                                <strong>{user.course_name}</strong>
+                              </td>
+                              <td className="text-start">
+                                <strong>{user.price}</strong>
+                              </td>
+                              <td className="text-end">
+                                <button
+                                  className="btn btn-primary btn-sm me-2"
+                                  onClick={() =>
+                                    handleActiveCourse(user.register_course_id)
+                                  }
+                                >
+                                  <FontAwesomeIcon icon={faPaperPlane} />
+                                  Kích hoạt
+                                </button>
+                                <button
+                                  className="btn btn-primary btn-sm"
+                                  onClick={() =>
+                                    reject(user.register_course_id)
+                                  }
+                                >
+                                  <FontAwesomeIcon icon={faTimes} /> Từ chối
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      <Pagination
+              pageCount={Math.ceil(users.length / itemsPerPage)}
+              handlePageClick={handlePageClick}
+            />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -126,6 +239,7 @@ export default function PaymentConfirm() {
           </div>
         </div>
       </div>
+      </main>
     </div>
   );
 }
