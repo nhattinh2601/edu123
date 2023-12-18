@@ -12,24 +12,27 @@ export default function NewVideo() {
   const [shortDescription, setShortDescription] = useState("");
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
+
       let videoUrl;
 
       if (uploadMethod === "file" && !selectedVideo) {
         setFormError("Vui lòng chọn video để tải lên.");
+        setLoading(false);
         return;
       }
 
       if (uploadMethod === "youtube") {
-        // Check if youtubeLink is not empty
         if (!youtubeLink.trim()) {
           setFormError("Vui lòng nhập đường link YouTube.");
+          setLoading(false);
           return;
         }
 
@@ -37,16 +40,17 @@ export default function NewVideo() {
           /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
         if (!youtubeRegex.test(youtubeLink)) {
           setFormError("Đường link YouTube không hợp lệ.");
+          setLoading(false);
           return;
         }
       }
 
       if (!videoTitle.trim() || !shortDescription.trim()) {
         setFormError("Vui lòng điền đầy đủ thông tin.");
+        setLoading(false);
         return;
       }
 
-      // Check if the title and short description exceed the character limit
       const maxCharLimit = 255;
       if (
         videoTitle.length > maxCharLimit ||
@@ -55,6 +59,7 @@ export default function NewVideo() {
         setFormError(
           `Tiêu đề và mô tả ngắn không được quá ${maxCharLimit} ký tự.`
         );
+        setLoading(false);
         return;
       }
 
@@ -77,24 +82,28 @@ export default function NewVideo() {
         videoUrl = youtubeLink;
       }
 
+      const trimmedVideoTitle = videoTitle.trim();
+      const trimmedShortDescription = shortDescription.trim();
       const response = await axiosClient.post("/videos", {
         video_filepath: videoUrl,
-        description: shortDescription,
-        title: videoTitle,
+        description: trimmedShortDescription,
+        title: trimmedVideoTitle,
         courseId: id,
       });
 
       setSuccessMessage("Video đã được tạo thành công");
       setTimeout(() => {
         setSuccessMessage("");
-      }, 5000);
+      }, 15000);
       console.log(response.data);
     } catch (error) {
-      console.error("Error creating course:", error);
+      console.error("Error creating video:", error);
       setFormError("Đã xảy ra lỗi khi tạo video");
       setTimeout(() => {
         setFormError("");
-      }, 5000);
+      }, 15000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,7 +137,13 @@ export default function NewVideo() {
                         {successMessage}
                       </div>
                     )}
-                    {/* Choose upload method */}
+
+                    {loading && (
+                      <div className="alert alert-info" role="alert">
+                        Đang tải video, vui lòng đợi...
+                      </div>
+                    )}
+
                     <div className="mb-3">
                       <label className="form-label fw-bold">
                         Chọn phương thức tải video:
@@ -170,7 +185,6 @@ export default function NewVideo() {
                       </div>
                     </div>
 
-                    {/* Input based on the chosen method */}
                     {uploadMethod === "file" ? (
                       <div className="mb-3">
                         <label
@@ -205,7 +219,6 @@ export default function NewVideo() {
                       </div>
                     )}
 
-                    {/* Tiêu đề video */}
                     <div className="mb-3">
                       <label
                         htmlFor="videoTitle"
@@ -222,7 +235,6 @@ export default function NewVideo() {
                       />
                     </div>
 
-                    {/* Mô tả ngắn */}
                     <div className="mb-3">
                       <label
                         htmlFor="shortDescription"
@@ -240,7 +252,7 @@ export default function NewVideo() {
                     </div>
 
                     <button type="submit" className="btn btn-primary">
-                      Đăng
+                      {loading ? "Đang tải..." : "Đăng"}
                     </button>
                   </form>
                 </div>

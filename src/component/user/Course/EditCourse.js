@@ -18,6 +18,8 @@ export default function EditCourse() {
   const [errorMessage, setErrorMessage] = useState("");
   const [nameError, setNameError] = useState(false);
   const [phoneError, setDescriptionError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -87,7 +89,6 @@ export default function EditCourse() {
     const parsedPrice = parseFloat(price.replace(/\./g, ""));
     const parsedDiscountCode = parseFloat(discountCode);
 
-    // Check if the parsed values are valid numbers
     if (!isNaN(parsedPrice) && !isNaN(parsedDiscountCode)) {
       const newPromotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
       setPromotionalPrice(newPromotionalPrice);
@@ -100,7 +101,13 @@ export default function EditCourse() {
 
   const handlePriceInput = (e) => {
     const inputPrice = e.target.value.replace(/\D/g, "");
-    setPrice(formatCurrency(inputPrice));
+    const numericValue = parseInt(inputPrice, 10);
+
+    if (!isNaN(numericValue) && numericValue <= 100000000) {
+      setPrice(formatCurrency(inputPrice));
+    } else {
+      setErrorMessage("Vui lòng số tiền dưới 100.000.000 VNĐ");
+    }
   };
 
   const handleDiscountCodeInput = (e) => {
@@ -128,6 +135,8 @@ export default function EditCourse() {
     setNameError(false);
     setDescriptionError(false);
 
+    const trimInput = (value) => value.trim();
+
     if (!title || !description) {
       setNameError(!title);
       setDescriptionError(!description);
@@ -136,6 +145,7 @@ export default function EditCourse() {
     }
 
     try {
+      setLoading(true);
       const formData = new FormData();
 
       if (selectedImage) {
@@ -156,16 +166,17 @@ export default function EditCourse() {
         const parsedPrice = parseFloat(price.replace(/\./g, ""));
         const parsedDiscountCode = parseFloat(discountCode);
 
-        // Check if the parsed values are valid numbers
         if (!isNaN(parsedPrice) && !isNaN(parsedDiscountCode)) {
           const promotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
 
           const fieldsToUpdate = {
-            title: document.getElementById("courseName").value,
+            title: trimInput(document.getElementById("courseName").value),
             price: parsedPrice,
             sold: parsedDiscountCode,
             promotional_price: promotionalPrice,
-            description: document.getElementById("introduction").value,
+            description: trimInput(
+              document.getElementById("introduction").value
+            ),
             active: true,
             image: imageUrl,
             categoryId: parseInt(selectedCategory, 10),
@@ -185,20 +196,20 @@ export default function EditCourse() {
           setErrorMessage("Giá tiền hoặc mã giảm giá không hợp lệ.");
         }
       } else {
-        // If no image is selected, update other fields directly
         const parsedPrice = parseFloat(price.replace(/\./g, ""));
         const parsedDiscountCode = parseFloat(discountCode);
 
-        // Check if the parsed values are valid numbers
         if (!isNaN(parsedPrice) && !isNaN(parsedDiscountCode)) {
           const promotionalPrice = parsedPrice * (1 - parsedDiscountCode / 100);
 
           const fieldsToUpdate = {
-            title: document.getElementById("courseName").value,
+            title: trimInput(document.getElementById("courseName").value),
             price: parsedPrice,
             sold: parsedDiscountCode,
             promotional_price: promotionalPrice,
-            description: document.getElementById("introduction").value,
+            description: trimInput(
+              document.getElementById("introduction").value
+            ),
             active: true,
             categoryId: parseInt(selectedCategory, 10),
           };
@@ -220,6 +231,8 @@ export default function EditCourse() {
     } catch (uploadError) {
       console.error("Lỗi tải ảnh:", uploadError);
       setErrorMessage("Vui lòng kiểm tra lại");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -243,9 +256,13 @@ export default function EditCourse() {
                       {errorMessage}
                     </div>
                   )}
+                  {loading && (
+                      <div className="alert alert-info" role="alert">
+                        Đang cập nhật, vui lòng đợi...
+                      </div>
+                    )}
                   <form onSubmit={handleFormSubmit}>
                     <div className="row">
-                      {/* Tên khóa học */}
                       <div className="col-6 mb-3">
                         <label
                           htmlFor="courseName"
@@ -264,7 +281,6 @@ export default function EditCourse() {
                         />
                       </div>
 
-                      {/* Chuyên mục */}
                       <div className="col-3 mb-3">
                         <label
                           htmlFor="category"
@@ -289,7 +305,6 @@ export default function EditCourse() {
                         </select>
                       </div>
 
-                      {/* Tải ảnh */}
                       <div className="col-3 mb-3">
                         <label htmlFor="upload" className="form-label fw-bold">
                           Tải ảnh *
@@ -304,7 +319,6 @@ export default function EditCourse() {
                       </div>
                     </div>
 
-                    {/* Mô tả ngắn */}
                     <div className="mb-3">
                       <label
                         htmlFor="introduction"
@@ -371,7 +385,7 @@ export default function EditCourse() {
                     </div>
 
                     <button type="submit" className="btn btn-primary">
-                      Cập nhật khóa học
+                      {loading ? "Đang tải..." : "Cập nhật khóa học"}
                     </button>
                   </form>
                 </div>

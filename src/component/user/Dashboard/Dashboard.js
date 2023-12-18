@@ -95,6 +95,7 @@ export default function Dashboard() {
                         src={course.image}
                         className="image-course"
                         alt={course.title}
+                        style={{ maxWidth: "100%", height: "auto", maxHeight: "220px" }}
                       />
                       <a href="#!">
                         <div className="mask background-color"></div>

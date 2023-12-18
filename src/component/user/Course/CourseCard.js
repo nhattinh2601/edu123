@@ -16,12 +16,8 @@ const formatPrice = (price) => {
     price = price.slice(1);
   }
 
-  
-
   return price.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
-
-
 
 const CourseCard = ({ course }) => {
   const navigate = useNavigate();

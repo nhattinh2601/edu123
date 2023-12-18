@@ -4,7 +4,6 @@ import axiosClient from "../../../api/axiosClient";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-
 export default function RegisterTeacher() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -34,12 +33,9 @@ export default function RegisterTeacher() {
         console.error("Error fetching user data:", error);
       }
     }
-    
 
     fetchUserData();
   }, []);
-
-  
 
   const fieldsToUpdate = {
     fullname: name,
@@ -51,12 +47,12 @@ export default function RegisterTeacher() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (role === 4) {
-      setError("Bạn đã gửi thông tin đăng ký giảng viên. Vui lòng không gửi lại.");
+      setError(
+        "Bạn đã gửi thông tin đăng ký giảng viên. Vui lòng không gửi lại."
+      );
       setShowAlert(true);
       return;
     }
-
-    
 
     if (
       !name ||
@@ -86,8 +82,10 @@ export default function RegisterTeacher() {
       setShowAlert(true);
       return;
     }
-    const isConfirmed = window.confirm("Bạn có chắc muốn đăng ký giảng viên không? Kiểm tra lại các thông tin trước khi đăng kí và đảm bảo thông tin thật!");
-  
+    const isConfirmed = window.confirm(
+      "Bạn có chắc muốn đăng ký giảng viên không? Kiểm tra lại các thông tin trước khi đăng kí và đảm bảo thông tin thật!"
+    );
+
     if (!isConfirmed) {
       // If not confirmed, do nothing
       return;
@@ -103,7 +101,7 @@ export default function RegisterTeacher() {
       );
       console.log("User updated:", response.data);
       setShowAlert(false);
-setSuccessMessage(
+      setSuccessMessage(
         "Bạn đã gửi thông tin đăng ký giảng viên thành công. Vui lòng chờ Admin xác nhận."
       );
     } catch (error) {
@@ -182,7 +180,7 @@ setSuccessMessage(
                       type="text"
                       className="form-control"
                       placeholder="Số điện thoại"
-name="phone"
+                      name="phone"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                     />

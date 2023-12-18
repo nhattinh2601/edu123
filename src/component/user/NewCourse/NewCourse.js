@@ -13,6 +13,7 @@ export default function NewCourse() {
   const [successMessage, setSuccessMessage] = useState(""); 
   const [promotionalPrice, setPromotionalPrice] = useState(0);
   const encodedId = localStorage.getItem("userId");
+  const [loading, setLoading] = useState(false);
   const userId = atob(encodedId);
 
   useEffect(() => {
@@ -43,10 +44,17 @@ export default function NewCourse() {
   };
 
   const handlePriceInput = (e) => {
-    const inputPrice = e.target.value.replace(/\D/g, "");
-    setPrice(formatCurrency(inputPrice));
+    const inputPrice = e.target.value.replace(/\D/g, ""); 
+    const numericValue = parseInt(inputPrice, 10);
+  
+    
+    if (!isNaN(numericValue) && numericValue <= 100000000) {
+      setPrice(formatCurrency(inputPrice));
+    } else {
+      setFormError("Vui lòng số tiền dưới 100.000.000 VNĐ");
+    }
+    
   };
-
   const handleDiscountCodeInput = (e) => {
     const inputDiscountCode = e.target.value.replace(/\D/g, "");
     if (inputDiscountCode !== "") {
@@ -86,8 +94,10 @@ export default function NewCourse() {
     if (!validateForm()) {
       return;
     }
+    const trimInput = (value) => value.trim();
 
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append("file", selectedImage);
 
@@ -110,11 +120,11 @@ export default function NewCourse() {
       );
 
       const response = await axiosClient.post("/courses", {
-        title: document.getElementById("courseName").value,
+        title: trimInput(document.getElementById("courseName").value),
         price: parsedPrice,
         sold: parsedDiscountCode,
         promotional_price: promotionalPrice,
-        description: document.getElementById("introduction").value,
+        description: trimInput(document.getElementById("introduction").value),
         active: false,
         rating: 0,
         image: imageUrl,
@@ -127,6 +137,8 @@ export default function NewCourse() {
       console.log(response.data);
     } catch (error) {
       console.error("Error creating course:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -151,9 +163,15 @@ export default function NewCourse() {
                       </div>
                     )}
 
-                    {successMessage && ( // Display success message
+                    {successMessage && (
                       <div className="alert alert-success" role="alert">
                         {successMessage}
+                      </div>
+                    )}
+
+                    {loading && (
+                      <div className="alert alert-info" role="alert">
+                        Đang tải khóa học, vui lòng đợi...
                       </div>
                     )}
 
@@ -272,7 +290,7 @@ export default function NewCourse() {
                     </div>
 
                     <button type="submit" className="btn btn-primary">
-                      Tạo khóa học
+                      {loading ? "Đang tải..." : "Tạo khóa học"}
                     </button>
                   </form>
                 </div>

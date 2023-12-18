@@ -14,6 +14,7 @@ export default function NewVideo() {
   const [successMessage, setSuccessMessage] = useState("");
   const [videoData, setVideoData] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -67,41 +68,10 @@ export default function NewVideo() {
     e.preventDefault();
   
     try {
+      setLoading(true);
       let videoUrl;
   
-      if (uploadMethod === "file" && !selectedVideo) {
-        setFormError("Vui lòng chọn video để tải lên.");
-        return;
-      }
-  
-      if (uploadMethod === "youtube") {
-        // Check if youtubeLink is not empty
-        if (!youtubeLink.trim()) {
-          setFormError("Vui lòng nhập đường link YouTube.");
-          return;
-        }
-  
-        // Validate YouTube link
-        const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
-        if (!youtubeRegex.test(youtubeLink)) {
-          setFormError("Đường link YouTube không hợp lệ.");
-          return;
-        }
-      }
-  
-      if (!videoTitle.trim() || !shortDescription.trim()) {
-        setFormError("Vui lòng điền đầy đủ thông tin.");
-        return;
-      }
-  
-      // Check if the title and short description exceed the character limit
-      const maxCharLimit = 255;
-      if (videoTitle.length > maxCharLimit || shortDescription.length > maxCharLimit) {
-        setFormError(`Tiêu đề và mô tả ngắn không được quá ${maxCharLimit} ký tự.`);
-        return;
-      }
-  
-      if (uploadMethod === "file") {
+      if (uploadMethod === "file" && selectedVideo) {
         const formData = new FormData();
         formData.append("file", selectedVideo);
   
@@ -112,30 +82,61 @@ export default function NewVideo() {
         });
   
         videoUrl = uploadResponse.data.data;
-      } else {
+      } else if (uploadMethod === "youtube" && youtubeLink.trim()) {
+        // Validate YouTube link
+        const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
+        if (!youtubeRegex.test(youtubeLink)) {
+          setFormError("Đường link YouTube không hợp lệ.");
+          return;
+        }
+  
         videoUrl = youtubeLink;
       }
   
-      // Make sure to replace the URL with the correct resource path
-      const response = await axiosClient.patch(`/videos/${id}`, {
-        video_filepath: videoUrl,
-        description: shortDescription,
-        title: videoTitle,
-      });
+      
+  
+      if (!videoTitle.trim() || !shortDescription.trim()) {
+        setFormError("Vui lòng điền đầy đủ thông tin.");
+        return;
+      }
+  
+      const maxCharLimit = 255;
+      if (videoTitle.length > maxCharLimit || shortDescription.length > maxCharLimit) {
+        setFormError(`Tiêu đề và mô tả ngắn không được quá ${maxCharLimit} ký tự.`);
+        return;
+      }
+  
+      const trimmedVideoTitle = videoTitle.trim();
+      const trimmedShortDescription = shortDescription.trim();
+  
+      const patchData = {
+        description: trimmedShortDescription,
+        title: trimmedVideoTitle,
+      };
+  
+      if (videoUrl !== null) {
+        patchData.video_filepath = videoUrl;
+      }
+  
+      const response = await axiosClient.patch(`/videos/${id}`, patchData);
   
       setSuccessMessage("Video đã được cập nhật thành công");
       setTimeout(() => {
         setSuccessMessage("");
-      }, 5000);
+      }, 15000);
       console.log(response.data);
     } catch (error) {
       console.error("Error creating course:", error);
       setFormError("Đã xảy ra lỗi khi tạo video");
       setTimeout(() => {
         setFormError("");
-      }, 5000);
+      }, 15000);
+    } finally {
+      setLoading(false);
     }
   };
+  
+  
   
 
   const handleUploadMethodChange = (method) => {
@@ -155,7 +156,7 @@ export default function NewVideo() {
             <div className="card border-0 shadow rounded-3 my-5">
               <div className="card-body p-4 p-sm-5">
                 <div className="container">
-                  <h2 className="my-4">Tạo video</h2>
+                  <h2 className="my-4">Chỉnh sửa video</h2>
                   <form onSubmit={handleSubmit}>
                     {formError && (
                       <div className="alert alert-danger" role="alert">
@@ -166,6 +167,12 @@ export default function NewVideo() {
                     {successMessage && (
                       <div className="alert alert-success" role="alert">
                         {successMessage}
+                      </div>
+                    )}
+
+                    {loading && (
+                      <div className="alert alert-info" role="alert">
+                        Đang tải video, vui lòng đợi...
                       </div>
                     )}
                     {/* Choose upload method */}
@@ -279,7 +286,7 @@ export default function NewVideo() {
                     </div>
 
                     <button type="submit" className="btn btn-primary">
-                      Đăng
+                      {loading ? "Đang tải..." : "Cập nhật"}
                     </button>
                   </form>
                 </div>

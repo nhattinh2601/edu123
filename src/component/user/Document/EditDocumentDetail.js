@@ -13,6 +13,7 @@ export default function EditDocumentDetail() {
   const [successMessage, setSuccessMessage] = useState("");
   const [videoData, setVideoData] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -42,7 +43,6 @@ export default function EditDocumentDetail() {
           );
 
           if (response1.data === true) {
-            // Do something if registered
           } else {
             navigate("/user");
           }
@@ -63,7 +63,8 @@ export default function EditDocumentDetail() {
     e.preventDefault();
 
     try {
-      let imageUrl;
+      setLoading(true);
+      const trimInput = (value) => value.trim();
 
       if (!title.trim() || !link.trim()) {
         setFormError("Vui lòng điền đầy đủ thông tin.");
@@ -79,37 +80,60 @@ export default function EditDocumentDetail() {
       }
 
       const formData = new FormData();
-      formData.append("file", selectedFile);
 
-      const uploadResponse = await axiosClient.post(
-        "cloud/images/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      // Kiểm tra xem selectedFile có tồn tại không
+      if (selectedFile) {
+        formData.append("file", selectedFile);
+
+        const uploadResponse = await axiosClient.post(
+          "cloud/images/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const imageUrl = uploadResponse.data.data;
+
+        const patchData = {
+          file_path: trimInput(link),
+          title: trimInput(title),
+        };
+
+        if (imageUrl !== null) {
+          patchData.image = imageUrl;
         }
-      );
 
-      imageUrl = uploadResponse.data.data;
+        const response = await axiosClient.patch(`/documents/${id}`, patchData);
 
-      const response = await axiosClient.patch(`/documents/${id}`, {
-        file_path: link,
-        title: title,
-        image: imageUrl,
-      });
+        setSuccessMessage("Tài liệu đã được cập nhật thành công");
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 5000);
+        console.log(response.data);
+      } else {
+        // Nếu không chọn ảnh, chỉ cập nhật các thông tin khác
+        const response = await axiosClient.patch(`/documents/${id}`, {
+          file_path: trimInput(link),
+          title: trimInput(title),
+        });
 
-      setSuccessMessage("Tài liệu đã được cập nhật thành công");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 5000);
-      console.log(response.data);
+        setSuccessMessage("Tài liệu đã được cập nhật thành công");
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 5000);
+        console.log(response.data);
+      }
     } catch (error) {
       console.error("Error updating document:", error);
       setFormError("Đã xảy ra lỗi khi cập nhật ảnh");
       setTimeout(() => {
         setFormError("");
       }, 5000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,6 +161,12 @@ export default function EditDocumentDetail() {
                     {successMessage && (
                       <div className="alert alert-success" role="alert">
                         {successMessage}
+                      </div>
+                    )}
+
+                    {loading && (
+                      <div className="alert alert-info" role="alert">
+                        Đang cập nhật, vui lòng đợi...
                       </div>
                     )}
                     {/* Nhập đường dẫn của tài liệu tham khảo */}
@@ -191,14 +221,13 @@ export default function EditDocumentDetail() {
                     </div>
 
                     <button type="submit" className="btn btn-primary">
-                      Tải lên
+                      {loading ? "Đang tải..." : "Cập nhật"}
                     </button>
                   </form>
                 </div>
               </div>
             </div>
           </div>
-          
         </div>
       </div>
       <Footer />

@@ -151,11 +151,12 @@ export default function EditDocument() {
                                 className="bg-image hover-overlay hover-zoom ripple rounded"
                                 data-mdb-ripple-color="light"
                               >
-                                {/* Replace with actual document thumbnail */}
+                                
                                 <img
                                   src={document.image}
                                   className="image-course"
                                   alt="Document Thumbnail"
+                                  style={{ maxWidth: "100%", height: "auto", maxHeight: "300px" }}
                                 />
                               </div>
                             </div>

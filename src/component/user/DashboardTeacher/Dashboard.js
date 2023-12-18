@@ -272,7 +272,7 @@ const Dashboard = ({ course }) => {
                         <strong>{formatPrice(course.price)} VNĐ</strong>
                       </p>
                       <p className="text-start text-md-center">
-                        <strong>{formatPrice(course.promotional_price)}</strong>
+                        <strong>{formatPrice(course.promotional_price)} VNĐ</strong>
                       </p>
                     </div>
                     {index < courses.length - 1 && (

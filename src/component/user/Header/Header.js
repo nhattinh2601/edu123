@@ -114,7 +114,7 @@ export default function Header() {
                     Quản lý các khóa học
                   </Link>
                 )}
-                {roleId === "2" && (
+                {(roleId === "2"|| roleId ==="3") && (
                   <Link className="dropdown-item" to="/teacher/edit-info">
                     Cập nhật thông tin giảng viên
                   </Link>
@@ -123,7 +123,7 @@ export default function Header() {
                 <Link className="dropdown-item" to="/user/edit-info">
                   Cập nhật thông tin cá nhân
                 </Link>
-                {roleId === "2" && (
+                {(roleId === "2"|| roleId ==="3") && (
                   <Link className="dropdown-item" to="/teacher/payment-info">
                     Thông tin thanh toán
                   </Link>

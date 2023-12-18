@@ -16,15 +16,21 @@ function extractFirstPart(str) {
 const TeacherDetail = ({ courseDatas }) => {
   const { id } = useParams();
   const [teacherData, setTeacherData] = useState(null);
-  console.log("A:", id);
+  const [courseCount, setCourseCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosClient.get(`/users/${id}`, {});
-        setTeacherData(response.data);
+        // Fetch teacher data
+        const [teacherResponse, courseCountResponse] = await Promise.all([
+          axiosClient.get(`/users/${id}`),
+          axiosClient.get(`courses/countByUsers/${id}`),
+        ]);
+
+        setTeacherData(teacherResponse.data);
+        setCourseCount(courseCountResponse.data);
       } catch (error) {
-        console.error("Error fetching teacher data:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -80,7 +86,7 @@ const TeacherDetail = ({ courseDatas }) => {
               </div>
             </div>
             <div className="d-inline-block text-black">
-              <span>6 </span> Khóa học
+              <span>{courseCount} </span> Khóa học
             </div>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <div className="d-inline-block text-black">

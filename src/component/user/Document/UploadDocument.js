@@ -10,12 +10,14 @@ export default function UploadDocument() {
   const [link, setLink] = useState("");
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const {id} = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       if (!title.trim() || !link.trim()) {
         setFormError("Vui lòng điền đầy đủ thông tin.");
         return;
@@ -44,10 +46,11 @@ export default function UploadDocument() {
 
         imageUrl = uploadResponse.data.data;
       }
-
+      const trimInput = (value) => value.trim();
+      
       const response = await axiosClient.post("/documents", {
-        file_path: link,
-        title: title,
+        file_path: trimInput(link),
+        title: trimInput(title),
         image: imageUrl,
         courseId: id,
       });
@@ -63,6 +66,8 @@ export default function UploadDocument() {
       setTimeout(() => {
         setFormError("");
       }, 5000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,6 +98,12 @@ export default function UploadDocument() {
                       </div>
                     )}
 
+                    {loading && (
+                      <div className="alert alert-info" role="alert">
+                        Đang tạo tài liệu, vui lòng đợi...
+                      </div>
+                    )}
+
                     {/* Nhập đường dẫn của tài liệu tham khảo */}
                     <div className="mb-3">
                       <label htmlFor="documentLink" className="form-label fw-bold">Đường dẫn của tài liệu tham khảo</label>
@@ -111,7 +122,9 @@ export default function UploadDocument() {
                       <input type="file" className="form-control" id="uploadImage" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} />
                     </div>
 
-                    <button type="submit" className="btn btn-primary">Tải lên</button>
+                    <button type="submit" className="btn btn-primary">
+                      {loading ? "Đang tải..." : "Tải lên"}
+                    </button>
                   </form>
                 </div>
               </div>
