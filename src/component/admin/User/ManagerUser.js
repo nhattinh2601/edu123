@@ -109,6 +109,9 @@ export default function ManagerUser() {
         type: "error",
         message: "Đã xảy ra lỗi, vui lòng thử lại",
       });
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     } finally {
       // Tắt trạng thái isLoading sau cùng để đảm bảo nó luôn được thực hiện
       handleSearch(); // Bạn cũng có thể muốn đợi kết quả của handleSearch nếu nó là async
