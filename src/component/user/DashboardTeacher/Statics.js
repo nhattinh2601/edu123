@@ -1,14 +1,14 @@
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import EditCoursePanel from "../Panel/EditCoursePanel";
+import { useState, useEffect } from "react";
+import axiosClient from "../../../api/axiosClient";
+import { useParams, useNavigate } from "react-router-dom";
 
-import Header from './Header/Header';
-import React, { useEffect, useRef, useState } from 'react';
-import axiosClient from "../../api/axiosClient";
-import { Link, useParams, useNavigate } from "react-router-dom";
-function Admin() {
-  
+export default function Statics() {
   const navigate = useNavigate();
   const [totalSold, setTotalSold] = useState(0);
   const [soldDay, setSoldDay] = useState(0);
-  const [soldDayNoActive, setSoldDayNoActive] = useState(0);
   const [soldMonth, setSoldMonth] = useState(0);
   
   const [totalPrice, setTotalPrice] = useState(0);
@@ -47,30 +47,33 @@ function Admin() {
   useEffect(() => {
     async function fetchUserData() {
       try {
+        const encodedUserId = localStorage.getItem("userId");
+        const userId = parseInt(atob(encodedUserId), 10);
+        console.log(userId);
+        
         const currentDate = new Date();
         // Định dạng ngày theo DD-MM-YYYY
         const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`.replace(/(?<=^|\/)(\d)(?=\/|$)/g, '0$1');
         const formattedMonthYear = `${String(currentDate.getMonth() + 1).padStart(2, '0')}-${currentDate.getFullYear()}`;
         // Sử dụng biến formattedDate trong URL
-        const response = await axiosClient.get(`/courseRegisters/total-sold-in-day/${formattedDate}`);
+        const response = await axiosClient.get(`/courseRegisters/total-course-in-day-per-teacher/${formattedDate}/${userId}`);
         setSoldDay(response.data);
 
-        const response_NoActive = await axiosClient.get(`/courseRegisters/total-sold-in-day-no-active/${formattedDate}`);
-        setSoldDayNoActive(response_NoActive.data);
+        
 
-        const response2 = await axiosClient.get(`/courseRegisters/total-sold-in-month/${formattedMonthYear}`);
+        const response2 = await axiosClient.get(`/courseRegisters/total-course-in-month-per-teacher/${formattedMonthYear}/${userId}`);
         setSoldMonth(response2.data);
 
-        const response_price_day = await axiosClient.get(`/courseRegisters/total-price-in-day/${formattedDate}`);
+        const response_price_day = await axiosClient.get(`/courseRegisters/total-price-in-day-per-teacher/${formattedDate}/${userId}`);
         setPriceDay(formatPrice(response_price_day.data));
 
-        const response_price_month = await axiosClient.get(`/courseRegisters/total-price-in-month/${formattedMonthYear}`);
+        const response_price_month = await axiosClient.get(`/courseRegisters/total-price-in-month-per-teacher/${formattedMonthYear}/${userId}`);
         setPriceMonth(formatPrice(response_price_month.data));
 
-        const response_total_sold = await axiosClient.get(`/courseRegisters/total-sold`);
+        const response_total_sold = await axiosClient.get(`/courseRegisters/total-course-per-teacher/${userId}`);
         setTotalSold(response_total_sold.data);
 
-        const response_total_price = await axiosClient.get(`/courseRegisters/total-price`);
+        const response_total_price = await axiosClient.get(`/courseRegisters/total-price-per-teacher/${userId}`);
         setTotalPrice(formatPrice(response_total_price.data));
 
       } catch (error) {
@@ -81,22 +84,20 @@ function Admin() {
     fetchUserData();
   }, []);
 
+
   return (
-    <div className="manager-user-layout">
-      <aside className="sidebar">
-        <Header />
-      </aside>
-      <main className="manager-user-main-content col-md-10">  
-      <h5>Chào mừng bạn đã đến với trang quản trị viên</h5>
+    <div>
+      <Header />
+      <div className="container">
+        <div className="row">
+        <main className="manager-user-main-content col-md-10">  
+      <h5>Thống kê</h5>
       
-      <div className="mb-3" style={cardStyle}>
+      <div className="mb-3 d-inline-block" style={cardStyle}>
         <h6>Thông tin bán hàng</h6>
         <p>
           Số lượng khóa học đã bán ngày hôm nay: {soldDay} &nbsp; <br />
-          <span className='text-nowrap bd-highlight'>Đang chờ xử lý</span>: {soldDayNoActive} -&gt;
-          <Link to={`/admin/payment-confirm`} className="d-inline-block">
-            <span>Xử lý ngay!</span>
-          </Link>
+          
         </p>
         <p>
           Số lượng khóa học đã bán tháng này: {soldMonth}
@@ -105,8 +106,8 @@ function Admin() {
           Tổng số lượng khóa học đã bán : {totalSold}
         </p>
       </div>
-      <br/>
-      <div style={cardStyle}>
+      &nbsp;
+      <div  style={cardStyle}>
         <h6>Thông tin doanh thu</h6>
         <p>
           Doanh thu hôm nay: {priceDay} vnđ
@@ -119,9 +120,9 @@ function Admin() {
         </p>
       </div>
       </main>
+        </div>
+      </div>
+      <Footer />
     </div>
-
   );
 }
-
-export default Admin;

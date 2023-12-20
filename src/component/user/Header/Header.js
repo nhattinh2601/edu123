@@ -115,6 +115,11 @@ export default function Header() {
                   </Link>
                 )}
                 {(roleId === "2"|| roleId ==="3") && (
+                  <Link className="dropdown-item" to="/teacher/statics">
+                    Thống kê
+                  </Link>
+                )}
+                {(roleId === "2"|| roleId ==="3") && (
                   <Link className="dropdown-item" to="/teacher/edit-info">
                     Cập nhật thông tin giảng viên
                   </Link>

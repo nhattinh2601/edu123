@@ -107,6 +107,9 @@ export default function Header() {
       </a>
     </div>
     <div className="sidebar-links">
+    <a href="/admin" className="link-item">
+        Dashboard
+      </a>
       <a href="/admin/upgrade-to-teacher" className="link-item">
         Phê duyệt giảng viên
       </a>

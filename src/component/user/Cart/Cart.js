@@ -5,7 +5,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-
+import { Link } from "react-router-dom";
 const formatPrice = (price) => {
   if (typeof price !== "string") {
     price = String(price);
@@ -21,12 +21,14 @@ const formatPrice = (price) => {
 export default function Cart() {
   const navigate = useNavigate();
   const [cartData, setCartData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const encodedUserId = localStorage.getItem("userId");
         const userId = parseInt(atob(encodedUserId), 10);
+        setIsLoading(true);
 
         const response = await axiosClient.get(`/carts/user/${userId}`);
         const allCartItems = response.data;
@@ -35,6 +37,8 @@ export default function Cart() {
         const filteredCartItems = allCartItems.filter(item => !item.isDeleted);
 
         setCartData(filteredCartItems);
+        setIsLoading(false);
+
       } catch (error) {
         console.error("Error fetching cart data:", error);
       }
@@ -109,6 +113,15 @@ export default function Cart() {
                 <div className="card-header py-3">
                   <h5 className="mb-0">Giỏ hàng</h5>
                 </div>
+                <div>
+                {isLoading ? (
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <div></div>
+              )}
+                </div>
                 {cartData.map((item) => (
                   <div key={item.courseId} className="card-body">
                     <div className="row">
@@ -117,14 +130,15 @@ export default function Cart() {
                           className="bg-image hover-overlay hover-zoom ripple rounded"
                           data-mdb-ripple-color="light"
                         >
+                          <Link to={`/user/course/${item.courseId}`}>
                           <img
                             src={item.image}
                             className="img-fluid rounded"
                             alt={item.teacher}
                           />
-                          <a href="#!">
+                          
                             <div className="mask background-color"></div>
-                          </a>
+                            </Link>
                         </div>
                       </div>
 

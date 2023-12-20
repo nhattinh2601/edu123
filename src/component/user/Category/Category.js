@@ -13,6 +13,7 @@ export default function Category() {
   const { categoryId } = useParams();
   console.log(categoryId);
   const [currentCourse, setCurrentCourse] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
 
   useEffect(() => {
     const fetchCurrentCourse = async () => {
@@ -45,6 +46,7 @@ export default function Category() {
     const fetchSearchCourses = async () => {
       try {
         if (categoryId) {
+          setIsLoading(true);
           const response = await axiosClient.get(
             `/courses/sortCourseInCategory/${categoryId}/sort_by=`
           );
@@ -52,6 +54,7 @@ export default function Category() {
             (course) => course.isDeleted !== true && course.active === true
           );
           setSearchCourses(filteredCourses);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error fetching search courses:", error);
@@ -68,14 +71,15 @@ export default function Category() {
   const fetchSearchCourses = async (sortName) => {
     try {
       let url = `/courses/sortCourseInCategory/${categoryId}/sort_by=${sortName}`;
-
+    setIsLoading(true);
       const response = await axiosClient.get(url);
-
       const filteredCourses = response.data.filter(
         (course) => course.isDeleted !== true && course.active === true
       );
 
       setSearchCourses(filteredCourses);
+      setIsLoading(false);
+
     } catch (error) {
       console.error("Error fetching search courses:", error);
     }
@@ -332,7 +336,17 @@ export default function Category() {
         <div className="container-fluid  ">
           <div className="row">
             <div className="center_body margin-left">
+              <div className="row">
+              {isLoading ? (
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <div></div>
+              )}
+              </div>
               <div className="row ">
+              
                 {currentCourses.map((course) => (
                   <CourseCard key={course.Id} course={course} />
                 ))}

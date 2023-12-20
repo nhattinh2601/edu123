@@ -25,7 +25,13 @@ const Aday = () => {
     };
 
     const drawChart = async () => {
-      const response = await axiosClient.get(`/courseRegisters/total-sold-in-day/10-12-2023`);
+       // Lấy ngày hiện tại
+       const currentDate = new Date();
+       // Định dạng ngày theo DD-MM-YYYY
+       const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`.replace(/(?<=^|\/)(\d)(?=\/|$)/g, '0$1');
+     
+       // Sử dụng biến formattedDate trong URL
+       const response = await axiosClient.get(`/courseRegisters/total-sold-in-day/${formattedDate}`);
       console.log(response.data);
       // setTotalCouse(response.data);
       // Ensure the google object is available in the window scope

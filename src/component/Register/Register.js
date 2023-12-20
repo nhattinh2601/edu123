@@ -10,6 +10,7 @@ function Register() {
 
   const [registerError, setRegisterError] = useState(null);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
 
   const [error, setError] = useState({
     passwordWeak: true,
@@ -17,6 +18,7 @@ function Register() {
     invalidEmailFormat: false,
     invalidPhoneFormat: false,
   });
+  const [notification, setNotification] = useState(null);
 
   const [formValues, setFormValues] = useState({
     fullname: "",
@@ -84,6 +86,7 @@ function Register() {
     }
 
     try {
+      setIsLoading(true);
       const params = {
         fullname: formValues.fullname,
         email: formValues.email,
@@ -91,7 +94,15 @@ function Register() {
         phone: formValues.phone,
       };
       const response = await UserAPI.register(params);
-      alert("Đăng ký thành công!");
+      setIsLoading(false);
+      setNotification({
+        type: "success",
+        message:
+          "Đăng kí tài khoản thành công!",
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", formValues.email);
         const encodedPassword = btoa(formValues.password);
@@ -100,9 +111,12 @@ function Register() {
         localStorage.removeItem("rememberedEmail");
         localStorage.removeItem("rememberedPassword");
       }
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 5000);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
       setRegisterError("Email đã tồn tại");
     }
   };
@@ -116,6 +130,15 @@ function Register() {
               <h5 className="card-title text-center mb-5 fw-light fs-10 fw-bold text-decoration-underline">
                 Đăng ký
               </h5>
+              <div>
+              {isLoading ? (
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <div></div>
+              )}
+              </div>
               <div>
                 <label className="form-label" htmlFor="fullName">
                   <span style={{ color: "red" }}>* Bắt buộc điền</span>
@@ -282,9 +305,11 @@ function Register() {
                     </div>
                   </div>
                 </div>
-                {registerError && (
-                  <Alert variant="danger">{registerError}</Alert>
-                )}
+                {notification && (
+            <div className={`notification ${notification.type}`}>
+              {notification.message}
+            </div>
+          )}
 
                 <button
                   type="button"

@@ -37,6 +37,7 @@ import UploadDocument from "./component/User/Document/UploadDocument.js";
 import EditCourse from "./component/User/Course/EditCourse.js";
 import EditDocument from "./component/User/Document/EditDocument.js";
 import EditDocumentDetail from "./component/User/Document/EditDocumentDetail.js";
+import Statics from "./component/User/DashboardTeacher/Statics.js";
 
 import EditLession from "./component/User/Document/EditLession.js";
 import WatchVideo from "./component/User/Video/WatchVideo.js";
@@ -239,6 +240,15 @@ const App = () => {
             element={
               <ProtectedRoute
                 element={<EditInfoTeacher />}
+                requiredRoleId="2"
+              />
+            }
+          />
+           <Route
+            path="/teacher/statics"
+            element={
+              <ProtectedRoute
+                element={<Statics />}
                 requiredRoleId="2"
               />
             }

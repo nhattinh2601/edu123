@@ -8,7 +8,6 @@ import "./manager-user.css";
 import "../Notification/Notification.css";
 import Pagination from "../../Others/Pagination";
 
-
 export default function ManagerUser() {
   const navigate = useNavigate();
 
@@ -25,7 +24,7 @@ export default function ManagerUser() {
     setSearch(e.target.value);
   };
 
-  const [selectedRole, setSelectedRole] = useState('user'); // State mới để lưu trữ giá trị được chọn từ combobox
+  const [selectedRole, setSelectedRole] = useState("user"); // State mới để lưu trữ giá trị được chọn từ combobox
 
   const handleRoleChange = async (e) => {
     const newRole = e.target.value;
@@ -75,7 +74,6 @@ export default function ManagerUser() {
     }
   }
 
-
   const handleToggleLock = async (userId, isDeleted) => {
     try {
       console.log(isDeleted);
@@ -92,7 +90,7 @@ export default function ManagerUser() {
             type: "success",
             message: "Mở khóa tài khoản người dùng thành công!",
           });
-        }, 3000); 
+        }, 3000);
       } else {
         console.log(userId);
         setIsLoading(true);
@@ -104,7 +102,7 @@ export default function ManagerUser() {
             type: "success",
             message: "Đã khóa tài khoản người dùng thành công!",
           });
-        }, 3000); 
+        }, 3000);
       }
 
       setTimeout(() => {
@@ -130,20 +128,20 @@ export default function ManagerUser() {
       setIsLoading(true);
       const response = await axiosClient.get(`/users`);
       let users = response.data;
-  
+
       // Lọc dữ liệu dựa trên giá trị của role
       users = users.filter((user) => {
-        if (role === 'user') {
+        if (role === "user") {
           return user.roleId === 1;
-        } else if (role === 'lecturer') {
+        } else if (role === "lecturer") {
           return user.roleId === 2;
         }
         return true;
       });
-  
+
       // Sắp xếp và lọc dữ liệu như bạn muốn
       // ...
-  
+
       setUsers(users);
       setIsLoading(false);
     } catch (error) {
@@ -152,7 +150,6 @@ export default function ManagerUser() {
     }
   };
 
-
   //paging
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -160,7 +157,6 @@ export default function ManagerUser() {
     setCurrentPage(selected);
   };
 
-  
   const itemsPerPage = 5;
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -174,9 +170,9 @@ export default function ManagerUser() {
           return new Date(b.updateAt) - new Date(a.updateAt);
         });
         sortedUsers = sortedUsers.filter((user) => {
-          if (selectedRole === 'user') {
+          if (selectedRole === "user") {
             return user.roleId === 1;
-          } else if (selectedRole === 'lecturer') {
+          } else if (selectedRole === "lecturer") {
             return user.roleId === 2;
           } else {
             return user;
@@ -194,9 +190,8 @@ export default function ManagerUser() {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
     };
-    console.log('Selected role changed to:', selectedRole);
+    console.log("Selected role changed to:", selectedRole);
     fetchData();
   }, [selectedRole]);
 
@@ -229,11 +224,15 @@ export default function ManagerUser() {
           <div className="card-header py-3 d-flex justify-content-between align-items-center">
             <h5 className="mb-0 d-inline-block">Danh sách người dùng</h5>
             <div>
-            <select className="custom-select" value={selectedRole} onChange={handleRoleChange}>
-  <option value="user">Người dùng</option>
-  <option value="lecturer">Giảng viên</option>
-</select>
-    </div>
+              <select
+                className="custom-select"
+                value={selectedRole}
+                onChange={handleRoleChange}
+              >
+                <option value="user">Người dùng</option>
+                <option value="lecturer">Giảng viên</option>
+              </select>
+            </div>
           </div>
           {notification && (
             <div className={`notification ${notification.type}`}>

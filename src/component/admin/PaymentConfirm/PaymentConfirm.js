@@ -117,17 +117,22 @@ export default function PaymentConfirm() {
     setSelectedDate(newDate);
     setIsLoading(true);
     if (newDate) {
-       // Tạo một đối tượng Date từ ngày được chọn
-    const selectedDateObj = new Date(newDate);
-    // Đặt giờ cho đối tượng Date này là 00:00:00 để chỉ so sánh ngày
-    selectedDateObj.setHours(0, 0, 0, 0);
-    // Lấy timestamp của ngày được chọn
-    const selectedTimestamp = selectedDateObj.getTime();
-      console.log(selectedTimestamp);
-    const filteredUsers = users.filter(
-      (user) =>
-        user.createAt===selectedTimestamp
-    );
+      const inputDate = new Date(newDate);
+      inputDate.setHours(0, 0, 0, 0); // Set time to start of day for comparison
+      const inputTimestamp = inputDate.getTime();
+      console.log(inputTimestamp);
+      // Lọc mảng users dựa trên ngày createAt
+      const filteredUsers = users.filter((user) => {
+        // Chuyển thuộc tính createAt từng user thành Date object
+        const userCreateDate = new Date(user.createAt);
+        // Đặt thời gian của Date object này về đầu ngày
+        userCreateDate.setHours(0, 0, 0, 0);
+        // Lấy timestamp từ Date object
+        const userTimestamp = userCreateDate.getTime();
+        console.log(userTimestamp);
+        // So sánh timestamp của user với timestamp từ input
+        return userTimestamp === inputTimestamp;
+      });
       setUsers(filteredUsers);
     setIsLoading(false);
     } else {
@@ -166,20 +171,14 @@ export default function PaymentConfirm() {
                 <tr>
                   <th scope="col">Họ và tên</th>
                   <th scope="col">Phone</th>
-                  <th scope="col">Date <input type="date" value={selectedDate} onChange={handleDateChange} /></th>
+                  <th scope="col">Date </th>
                   <th scope="col">OTP</th>
                   <th scope="col">Khóa học</th>
                   <th scope="col">Giá tiền</th>
                   <th scope="col">Hành động</th>
                 </tr>
               </thead>
-              {isLoading ? (
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              ) : (
-                <div></div>
-              )}
+              
                         <tbody>
                           {users.slice(startIndex, endIndex).map((user, index) => (
                             <tr key={index}>

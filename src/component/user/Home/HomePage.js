@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import axiosClient from "../../../api/axiosClient";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLanguage, faDesktop } from "@fortawesome/free-solid-svg-icons";
 import Header from "../Header/Header.js";
 import Footer from "../Footer/Footer.js";
 import HomePageContent from "./HomePageContent";

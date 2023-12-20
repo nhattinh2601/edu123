@@ -20,6 +20,8 @@ const formatPrice = (price) => {
 const CourseCard = ({ course }) => {
   const navigate = useNavigate();
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     const checkRegistration = async () => {
@@ -53,6 +55,19 @@ const CourseCard = ({ course }) => {
       handleAddToCart();
     }
   };
+  //modal
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleShowConfirmModal = () => setShowConfirmModal(true);
+  const handleCloseConfirmModal = () => setShowConfirmModal(false);
+
+  const handleShowAlertModal = (message) => {
+    setAlertMessage(message);
+    setShowAlertModal(true);
+  };
+  const handleCloseAlertModal = () => setShowAlertModal(false);
 
   const handleClick = () => {
     navigate(`/user/course/${course.course_id}`);
@@ -62,30 +77,38 @@ const CourseCard = ({ course }) => {
     try {
       const encodedUserId = localStorage.getItem("userId");
       const decodedUserId = atob(encodedUserId);
-
+      try {
+        const decodedUserId = atob(encodedUserId);
+        setIsLoading(true);
       const response = await axiosClient.post("/carts/create", {
         userId: decodedUserId,
         courseId: course.course_id,
       });
-
-      console.log("Course added to cart:", response.data);
-      const confirmed = window.confirm(
-        "Đã thêm khóa học và giỏ hàng. Bạn có muốn chuyển đến giỏ hàng không?"
-      );
-
-      if (confirmed) {
-        setTimeout(() => {
-          navigate("/user/cart");
-        }, 2000);
+      setIsLoading(false);
+      setNotification({
+        type: "success",
+        message:
+          "Thêm khóa học vào giỏ hàng thành công!",
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
+      } catch (e) {
+        if (typeof decodedUserId !== 'undefined') {
+          handleShowAlertModal("Hàng đã được thêm vào giỏ hàng!");
+          console.log('decodedUserId tồn tại và có giá trị:', decodedUserId);
+        } else {
+        handleShowAlertModal("Đăng nhập để thêm vào giỏ hàng!");
+        console.log('decodedUserId không tồn tại hoặc giải mã không thành công');
+        }
       }
+      
+      
     } catch (error) {
       console.error("Error adding course to cart:", error.message);
-      window.alert(
-        "Khóa học đã có trong giỏ hàng hoặc khóa học đã được đăng kí"
-      );
+      handleShowAlertModal("Khóa học đã có trong giỏ hàng hoặc đã được đăng ký.");
     }
   };
-
 
   const formattedPrice = formatPrice(course.price);
   const formattedPromotionalPrice = formatPrice(course.promotional_price);
@@ -145,24 +168,109 @@ const CourseCard = ({ course }) => {
             </p>
           </div>
         </div>
-
+       
         {isHovered && (
           <div className="hovered-div">
             <h5>{course.title}</h5>
             <p>{course.description}</p>
+            {isLoading ? (
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        ) : (
+          <div></div>
+        )}
             <button
-          className={`btn ${
-            isRegistered ? "btn-success" : "btn-primary"
-          } w-100`}
-          onClick={handleButtonClick}
-        >
-          {isRegistered ? "Vào học" : "Thêm vào giỏ hàng"}
-        </button>
+              className={`btn ${
+                isRegistered ? "btn-success" : "btn-primary"
+              } w-100`}
+              onClick={handleButtonClick}
+            >
+              {isRegistered ? "Vào học" : "Thêm vào giỏ hàng"}
+            </button>
             <div class="triangle-border"></div>
             <div class="triangle"></div>
           </div>
         )}
       </div>
+      <div
+        className="modal"
+        tabIndex="-1"
+        style={{ display: showConfirmModal ? "block" : "none" }}
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Xác nhận</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={handleCloseConfirmModal}
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>
+                Đã thêm khóa học và giỏ hàng. Bạn có muốn chuyển đến giỏ hàng
+                không?
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleCloseConfirmModal}
+              >
+                Không
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  handleCloseConfirmModal();
+                  navigate("/user/cart");
+                }}
+              >
+                Có
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="modal"
+        tabIndex="-1"
+        style={{ display: showAlertModal ? "block" : "none" }}
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Thông báo</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={handleCloseAlertModal}
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>{alertMessage}</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleCloseAlertModal}
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {notification && (
+            <div className={`notification ${notification.type}`}>
+              {notification.message}
+            </div>
+          )}
     </div>
   );
 };

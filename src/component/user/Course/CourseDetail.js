@@ -5,12 +5,7 @@ import Header from "../Header/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
-import {
-  faPlay,
-  faPencilAlt,
-  faTrash,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faStar } from "@fortawesome/free-solid-svg-icons";
 
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../../api/axiosClient";
@@ -28,9 +23,16 @@ const CourseDetail = ({ courseDatas }) => {
     navigate(`/user/infor-teacher/${Id}`);
   };
   const handleVideoClick = (title) => {
-    alert(`Bạn cần mua khóa học mới để xem video: ${title}`);
+    handleShowAlertModal(`Bạn cần mua khóa học mới để xem video: ${title}`);
   };
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
+  const handleShowAlertModal = (message) => {
+    setAlertMessage(message);
+    setShowAlertModal(true);
+  };
+  const handleCloseAlertModal = () => setShowAlertModal(false);
   const addToCard = async (course_id) => {
     try {
       const encodedUserId = localStorage.getItem("userId");
@@ -53,9 +55,7 @@ const CourseDetail = ({ courseDatas }) => {
       }
     } catch (error) {
       console.error("Error adding course to cart:", error.message);
-      window.alert(
-        "Khóa học đã có trong giỏ hàng hoặc khóa học đã được đăng kí"
-      );
+      handleShowAlertModal("Hàng đã được thêm vào giỏ hàng!");
     }
   };
 
@@ -76,7 +76,7 @@ const CourseDetail = ({ courseDatas }) => {
     description.split("**").map((part, index) => (
       <span key={index}>
         {part}
-        {index < 2 && " - "}{" "}
+        {index < 2 && <br />}{" "}
       </span>
     ));
 
@@ -101,7 +101,7 @@ const CourseDetail = ({ courseDatas }) => {
 
         const videoResponse = await axiosClient.get(`/videos/course=${id}`);
         const videoList = videoResponse.data;
-        const VideoData = videoList.filter(item => !item.isDeleted);
+        const VideoData = videoList.filter((item) => !item.isDeleted);
         setVideoData(VideoData);
 
         const userId = courseResponse.data.userId;
@@ -153,8 +153,6 @@ const CourseDetail = ({ courseDatas }) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
   };
-
-  
 
   const handleEditComment = async (commentId) => {
     setEditingCommentId(commentId);
@@ -236,7 +234,6 @@ const CourseDetail = ({ courseDatas }) => {
                     {" "}
                     <span className="text-white">{fullname}</span>
                   </Link>
-                  
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <div className="d-inline-block text-white">
@@ -253,14 +250,12 @@ const CourseDetail = ({ courseDatas }) => {
                     <i className="fa fa-users" aria-hidden="true"></i>{" "}
                     {studentCount} Học viên{" "}
                   </span>
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <div className="d-inline-block">
-                <button
-          className="btn-success"
-          onClick={() => addToCard(Id)}
-        >
-          Thêm vào giỏ hàng
-        </button>
+                  <button className="btn-success" onClick={() => addToCard(Id)}>
+                    Thêm vào giỏ hàng
+                  </button>
                 </div>
               </div>
             </div>
@@ -315,15 +310,20 @@ const CourseDetail = ({ courseDatas }) => {
 
             <div className="bg-white" id="noidung">
               <h3 className="mb-4">Nội dung khóa học</h3>
-              {videoData.map((video) => (
+              {videoData.map((video, index) => (
                 <div key={video.Id} className="video-item mb-3">
                   <FontAwesomeIcon icon={faPlay} className="play-icon" />
                   <Link
                     to="#"
                     className="video-link"
                     onClick={() => handleVideoClick(video.title)}
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                      fontSize: "18px",
+                    }} // Inline styles
                   >
-                    {video.title}
+                    &nbsp; Bài {index + 1}. {video.title}
                   </Link>
                   <div className="duration float-right">{video.duration}</div>
                   <hr className="mt-2 mb-2" />
@@ -340,6 +340,8 @@ const CourseDetail = ({ courseDatas }) => {
                     <div>
                       <img
                         className="lazy"
+                        width="150"
+                        height="150"
                         src={avatar}
                         alt="Không có ảnh"
                         align=""
@@ -367,43 +369,39 @@ const CourseDetail = ({ courseDatas }) => {
             <div className="bg-white" id="danhgia">
               <h3>Đánh giá của học viên</h3>
               <div className="u-rate-f1">
-                {Object.keys(ratingDistribution).map((rating) => (
-                  <div key={rating} className="u-rate-f1">
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <p className="star-rating-num">
-                          {rating}{" "}
-                          {Array.from({ length: 1 }, (_, i) => (
-                            <FontAwesomeIcon key={i} icon={faStar} />
-                          ))}
-                        </p>
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow={ratingDistribution[rating]}
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: `${ratingDistribution[rating]}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>{ratingDistribution[rating]}%</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+  {Object.keys(ratingDistribution).map((rating) => (
+    <div key={rating} className="u-rate-f1" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}> {/* Sử dụng Flexbox */}
+      <div className="u-rate-f1-star" style={{ flex: 'none', fontSize: '15px' }}> {/* Cố định kích thước icon và text */}
+        <span className="star-rate">
+          <p className="star-rating-num">
+            {rating}{" "}
+            {Array.from({ length: 1 }, (_, i) => (
+              <FontAwesomeIcon key={i} icon={faStar} style={{ fontSize: '15px' }} />
+            ))}
+          </p>
+        </span>
+      </div>
+      <div className="u-rate-f1-progress" style={{ flex: 1, marginLeft: '10px', height: '15px' }}> {/* Linh động kích thước progress bar */}
+        <div className="progress" style={{ height: '100%',width: '75%' }}>
+          <div
+            className="progress-bar progress-bar-success"
+            role="progressbar"
+            aria-valuenow={ratingDistribution[rating]}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            style={{ width: `${ratingDistribution[rating]}%`, height: '100%' }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
             </div>
 
             <br />
             <div className="bg-white">
               <h3>Nhận xét của học viên</h3>
               <div>
-                
                 <ul className="load_comment">
                   {reviewData.slice(startIndex, endIndex).map((review) => (
                     <li key={review.reviewId} className="u-block-cmhv">
@@ -446,7 +444,6 @@ const CourseDetail = ({ courseDatas }) => {
                             ) : (
                               <div>
                                 <p>{review.content}</p>
-                                
                               </div>
                             )}
                           </div>
@@ -461,6 +458,36 @@ const CourseDetail = ({ courseDatas }) => {
                 pageCount={Math.ceil(reviewData.length / itemsPerPage)}
                 handlePageClick={handlePageClick}
               />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="modal"
+        tabIndex="-1"
+        style={{ display: showAlertModal ? "block" : "none" }}
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Thông báo</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={handleCloseAlertModal}
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>{alertMessage}</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleCloseAlertModal}
+              >
+                Đóng
+              </button>
             </div>
           </div>
         </div>

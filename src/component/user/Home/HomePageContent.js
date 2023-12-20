@@ -22,13 +22,19 @@ const HomePageCotent = () => {
   const [topNewCourses, setTopNewCourses] = useState([]);
   const [topSoldCourses, settopSoldCourses] = useState([]);
   const [topRatingCourses, settopRatingCourses] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading1, setIsLoading1] = useState(false); 
+  const [isLoading2, setIsLoading2] = useState(false); 
 
   useEffect(() => {
     const fetchTopNewCourses = async () => {
       try {
-        const response = await axiosClient.get("/courses/get4CourseNewRelateInfo");
+        setIsLoading(true);
+        const response = await axiosClient.get(
+          "/courses/get4CourseNewRelateInfo"
+        );
         setTopNewCourses(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching top new courses:", error);
       }
@@ -36,8 +42,12 @@ const HomePageCotent = () => {
 
     const fetchTopSoldCourses = async () => {
       try {
-        const response = await axiosClient.get("/courses/get4CourseSoldRelateInfo");
+        setIsLoading1(true);
+        const response = await axiosClient.get(
+          "/courses/get4CourseSoldRelateInfo"
+        );
         settopSoldCourses(response.data);
+        setIsLoading1(false);
       } catch (error) {
         console.error("Error fetching top most courses:", error);
       }
@@ -45,8 +55,12 @@ const HomePageCotent = () => {
 
     const fetchTopRatingCourses = async () => {
       try {
-        const response = await axiosClient.get("/courses/get4CourseRatingRelateInfo");
+        setIsLoading2(true);
+        const response = await axiosClient.get(
+          "/courses/get4CourseRatingRelateInfo"
+        );
         settopRatingCourses(response.data);
+        setIsLoading2(false);
       } catch (error) {
         console.error("Error fetching top most courses:", error);
       }
@@ -65,24 +79,78 @@ const HomePageCotent = () => {
           <h3 className="fw-bold">Top khóa học bán chạy</h3>
           <br />
           <div className="row">
+            {isLoading ? (
+              <div>
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-secondary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-danger" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+              </div>
+            ) : (
+              <div></div>
+            )}
             {topSoldCourses.map((course) => (
               <CourseCard key={course.Id} course={course} />
             ))}
           </div>
 
           <br />
-          <h3 className="fw-bold">Top khóa học được đánh giá cao</h3>    
+          <h3 className="fw-bold">Top khóa học được đánh giá cao</h3>
           <br />
           <div className="row">
+          {isLoading1 ? (
+              <div>
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-secondary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-danger" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+              </div>
+            ) : (
+              <div></div>
+            )}
             {topRatingCourses.map((course) => (
               <CourseCard key={course.Id} course={course} />
             ))}
-          </div>      
+          </div>
 
           <br />
           <h3 className="fw-bold">Khóa học mới ra mắt</h3>
           <br />
           <div className="row">
+          {isLoading2 ? (
+              <div>
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-secondary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+                <div class="spinner-border text-danger" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> &nbsp;
+              </div>
+            ) : (
+              <div></div>
+            )}
             {topNewCourses.map((course) => (
               <CourseCard key={course.Id} course={course} />
             ))}
@@ -254,29 +322,29 @@ const HomePageCotent = () => {
           </div>
           <br />
           <div className="row align-items-center justify-content-center">
-  <div
-    className="card d-flex flex-row align-items-center justify-content-center mx-3 p-0"
-    style={{
-      width: "50rem",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-    }}
-  >
-    <img
-      src={imageteacher}
-      alt="Mô tả hình ảnh"
-      style={{ width: "75%", height: "auto" }}
-    />
-    <div className="p-3 d-flex flex-column">
-      <p>
-        Bạn muốn chia sẻ kiến thức mà mình có? Hãy đăng kí hợp tác với
-        chúng tôi ngay!
-      </p>
-      <button type="button" className="btn btn-primary mb-2">
-        Bắt đầu dạy học ngay hôm nay!
-      </button>
-    </div>
-  </div>
-</div>
+            <div
+              className="card d-flex flex-row align-items-center justify-content-center mx-3 p-0"
+              style={{
+                width: "50rem",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <img
+                src={imageteacher}
+                alt="Mô tả hình ảnh"
+                style={{ width: "75%", height: "auto" }}
+              />
+              <div className="p-3 d-flex flex-column">
+                <p>
+                  Bạn muốn chia sẻ kiến thức mà mình có? Hãy đăng kí hợp tác với
+                  chúng tôi ngay!
+                </p>
+                <button type="button" className="btn btn-primary mb-2">
+                  Bắt đầu dạy học ngay hôm nay!
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

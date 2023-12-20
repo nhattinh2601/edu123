@@ -22,23 +22,18 @@ export default function WatchVideo() {
           console.log("Current id and courseId values:", id, courseId);
 
           const courseRegisterResponse = await axiosClient.get(
-            `/courseRegisters/check/${id}/${userId}`
+            `/courseRegisters/check/${userId}/${id}`
           );
           const response1 = await axiosClient.get(
             `/courses/check/${id}/${userId}`
           );
-          const response1Data = String(response1.data).toLowerCase();
 
-          if (
-            courseRegisterResponse.data === "true" ||
-            response1Data === "true"
-          ) {
+          if (courseRegisterResponse.data === true || response1.data === true) {
             const videoResponse = await axiosClient.get(
               `/videos/check/${courseId}/${id}`
             );
-
-            const videoDataLowercase = String(videoResponse.data).toLowerCase();
-            if (videoDataLowercase === "true") {
+  
+            if (videoResponse.data === true) {
             } else {
               console.log(
                 "Navigating to /user because videoResponse.data is not true"
@@ -52,7 +47,7 @@ export default function WatchVideo() {
             navigate("/user");
           }
         } else {
-          console.log("Navigating to /user because userIdLocal does not exist");
+    
           navigate("/user");
         }
       } catch (error) {
@@ -62,6 +57,7 @@ export default function WatchVideo() {
 
     checkCourseRegister();
   }, [id, courseId, navigate]);
+
 
   // State variables
   const [title, setTitle] = useState("");

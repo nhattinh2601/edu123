@@ -22,6 +22,8 @@ function Login() {
     passwordWeak: false,
     emailPasswordNotFound: false,
   });
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
+  
 
   const [formValues, setFormValues] = useState({
     password: "",
@@ -97,6 +99,7 @@ function Login() {
     e.preventDefault();
     try {
       const params = { email: formValues.email, password: formValues.password };
+      setIsLoading(true);
       const response = await toast.promise(UserAPI.login(params), {
         pending: "Đang đăng nhập...",
         success: "Đăng nhập thành công!",
@@ -110,6 +113,8 @@ function Login() {
         progress: undefined,
         theme: "light",
       });
+      setIsLoading(false);
+
 
       const user = response.data.UserProfileDto;
 
@@ -121,6 +126,7 @@ function Login() {
         setLoginError(
           "Tài khoản của bạn đã bị xóa. Liên hệ quản trị viên để biết thêm thông tin."
         );
+      setIsLoading(false);
         return;
       }
 
@@ -160,6 +166,7 @@ function Login() {
       }
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
       setLoginError("Đăng nhập thất bại kiểm tra lại thông tin!!!");
     }
   };
@@ -173,6 +180,15 @@ function Login() {
               <h5 className="card-title text-center mb-5 fw-light fs-10 fw-bold text-decoration-underline">
                 Sign In
               </h5>
+              <div>
+              {isLoading ? (
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <div></div>
+              )}
+              </div>
               <div>
                 <label className="form-label" htmlFor="fullName">
                   <span style={{ color: "red" }}>* Bắt buộc điền</span>

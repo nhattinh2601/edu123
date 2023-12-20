@@ -15,7 +15,7 @@ export default function NotificationReject() {
   const { email } = useParams();
   const { id } = useParams();
   const [notification, setNotification] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
+  const [isLoading, setIsLoading] = useState(false); 
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -24,7 +24,7 @@ export default function NotificationReject() {
     event.preventDefault();
     setIsLoading(true);
     const response =  axiosClient.patch(`/users/${id}`, {
-      roleId: 2,
+      roleId: 1,
     });
 
     axiosClient.post(`/auth/send/message/${email}`, {

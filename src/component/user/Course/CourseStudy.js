@@ -44,9 +44,8 @@ const CourseDetail = ({ courseDatas }) => {
           const response1 = await axiosClient.get(
             `/courses/check/${id}/${userId}`
           );
-          
-
-          if (response.data === "true" || response1.data === true) {
+        
+          if (response.data === true || response1.data === true) {
           } else {
             navigate("/user");
           }
@@ -82,7 +81,7 @@ const CourseDetail = ({ courseDatas }) => {
     description.split("**").map((part, index) => (
       <span key={index}>
         {part}
-        {index < 2 && " - "}{" "}
+        {index < 2 && <br />}{" "}
       </span>
     ));
 
@@ -331,14 +330,19 @@ const CourseDetail = ({ courseDatas }) => {
 
             <div className="bg-white" id="noidung">
               <h3 className="mb-4">Nội dung khóa học</h3>
-              {videoData.map((video) => (
+              {videoData.map((video, index) => (
                 <div key={video.Id} className="video-item mb-3">
                   <FontAwesomeIcon icon={faPlay} className="play-icon" />
                   <Link
                     to={`/user/course/watch-video/${video.Id}/${id}`}
                     className="video-link"
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                      fontSize: "18px",
+                    }} // Inline styles
                   >
-                    {video.title}
+                    &nbsp; Bài {index + 1}. {video.title}
                   </Link>
                   <div className="duration float-right">{video.duration}</div>
                   <hr className="mt-2 mb-2" />
@@ -360,7 +364,13 @@ const CourseDetail = ({ courseDatas }) => {
                         {document.title}
                         {": "}
                       </span>
-                      <Link to={document.file_path} className="file-path">
+                      <Link to={document.file_path} className="file-path" 
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                          fontSize: "18px",
+                        }} 
+                      >
                         {document.file_path}
                       </Link>
                     </div>
@@ -378,8 +388,10 @@ const CourseDetail = ({ courseDatas }) => {
                 <div className="row">
                   <div className="col-sm-3">
                     <div>
-                      <img
+                    <img
                         className="lazy"
+                        width="150"
+                        height="150"
                         src={avatar}
                         alt="Không có ảnh"
                         align=""
@@ -409,36 +421,33 @@ const CourseDetail = ({ courseDatas }) => {
               <StarRating onRatingChange={handleRatingChange} courseId={id} />
               <hr />
               <div className="u-rate-f1">
-                {Object.keys(ratingDistribution).map((rating) => (
-                  <div key={rating} className="u-rate-f1">
-                    <div className="u-rate-f1-star">
-                      <span className="star-rate">
-                        <p className="star-rating-num">
-                          {rating}{" "}
-                          {Array.from({ length: 1 }, (_, i) => (
-                            <FontAwesomeIcon key={i} icon={faStar} />
-                          ))}
-                        </p>
-                      </span>
-                    </div>
-                    <div className="u-rate-f1-progress">
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-success"
-                          role="progressbar"
-                          aria-valuenow={ratingDistribution[rating]}
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: `${ratingDistribution[rating]}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="u-rate-f1-num">
-                      <p>{ratingDistribution[rating]}%</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+  {Object.keys(ratingDistribution).map((rating) => (
+    <div key={rating} className="u-rate-f1" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}> {/* Sử dụng Flexbox */}
+      <div className="u-rate-f1-star" style={{ flex: 'none', fontSize: '15px' }}> {/* Cố định kích thước icon và text */}
+        <span className="star-rate">
+          <p className="star-rating-num">
+            {rating}{" "}
+            {Array.from({ length: 1 }, (_, i) => (
+              <FontAwesomeIcon key={i} icon={faStar} style={{ fontSize: '15px' }} />
+            ))}
+          </p>
+        </span>
+      </div>
+      <div className="u-rate-f1-progress" style={{ flex: 1, marginLeft: '10px', height: '15px' }}> {/* Linh động kích thước progress bar */}
+        <div className="progress" style={{ height: '100%',width: '75%' }}>
+          <div
+            className="progress-bar progress-bar-success"
+            role="progressbar"
+            aria-valuenow={ratingDistribution[rating]}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            style={{ width: `${ratingDistribution[rating]}%`, height: '100%' }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
             </div>
 
             <br />
