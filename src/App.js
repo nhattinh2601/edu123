@@ -345,22 +345,22 @@ const App = () => {
             path="/admin"
             element={<ProtectedRoute element={<Admin />} requiredRoleId="3" />}
           />
-          <Route path="/admin/upgrade-to-teacher" element={<UpgradeToTeacher />} />
-          <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ToTeacherDetail />} />
-          <Route path="/admin/upgrade-to-teacher/detail/reject/:email/:id" element={<NotificationReject />} />
-          <Route path="/admin/public-course" element={<PublicCourse />} />          
-          <Route path="/admin/public-course/course-info/:id" element={<CourseInfo />} />
-          <Route path="/admin/public-course/lession" element={<PublicLession />} />
-          <Route path="/admin/public-course/lession/detail" element={<PublicLessionDetail />} />
-          <Route path="/admin/public-course/document" element={<PublicDocument />} />
-          <Route path="/admin/public-course/document/detail" element={<PublicDocumentDetail />} />
-          <Route path="/admin/public-course/summary" element={<Summary />} />
-          <Route path="/admin/public-course/reject" element={<NotificationRejectCourse />} />
-          <Route path="/admin/payment-confirm" element={<PaymentConfirm />} />
-          <Route path="/admin/manager-user" element={<ManagerlUser />} />  
-          <Route path="/admin/manager-course" element={<ManagerCourse />} />  
+          <Route path="/admin/upgrade-to-teacher" element={<ProtectedRoute element={<UpgradeToTeacher />} requiredRoleId="3" />} />
+          <Route path="/admin/upgrade-to-teacher/detail/:id" element={<ProtectedRoute element={<ToTeacherDetail />} requiredRoleId="3" />} />
+          <Route path="/admin/upgrade-to-teacher/detail/reject/:email/:id" element={<ProtectedRoute element={<NotificationReject />} requiredRoleId="3" />} />
+          <Route path="/admin/public-course" element={<ProtectedRoute element={<PublicCourse />} requiredRoleId="3" />} />          
+          <Route path="/admin/public-course/course-info/:id" element={<ProtectedRoute element={<CourseInfo />} requiredRoleId="3" />} />
+          <Route path="/admin/public-course/lession" element={<ProtectedRoute element={<PublicLession />} requiredRoleId="3" />} />
+          <Route path="/admin/public-course/lession/detail" element={<ProtectedRoute element={<PublicLessionDetail />} requiredRoleId="3" />}/>
+          <Route path="/admin/public-course/document" element={<ProtectedRoute element={<PublicDocument />} requiredRoleId="3" />} />
+          <Route path="/admin/public-course/document/detail" element={<ProtectedRoute element={<PublicDocumentDetail />} requiredRoleId="3" />} />
+          <Route path="/admin/public-course/summary" element={<ProtectedRoute element={<Summary />} requiredRoleId="3" />}/>
+          <Route path="/admin/public-course/reject" element={<ProtectedRoute element={<NotificationRejectCourse />} requiredRoleId="3" />} />
+          <Route path="/admin/payment-confirm" element={<ProtectedRoute element={<PaymentConfirm />} requiredRoleId="3" />} />
+          <Route path="/admin/manager-user" element={<ProtectedRoute element={<ManagerlUser />} requiredRoleId="3" />} />  
+          <Route path="/admin/manager-course" element={<ProtectedRoute element={<ManagerCourse />} requiredRoleId="3" />} />  
           <Route path="/admin/analytics-aday" element={<ADay />} />  
-          <Route path="/admin/course/watch-video/:courseId/:id" element={<WatchVideoAdmin />} />    
+          <Route path="/admin/course/watch-video/:courseId/:id" element={<ProtectedRoute element={<WatchVideoAdmin />} requiredRoleId="3" />} />    
           <Route path="*" element={<NotFound />} />
           
         </Routes>

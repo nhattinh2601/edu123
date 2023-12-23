@@ -121,10 +121,7 @@ export default function Header() {
       </a>
       <a href="/admin/manager-course" className="link-item">
         Quản lý khóa học
-      </a>
-      <a href="/admin/analytics-aday" className="link-item">
-          1 ngày
-      </a>
+      </a>      
     </div>
     <div className="sidebar-auth">
       {renderAuthButtons()}

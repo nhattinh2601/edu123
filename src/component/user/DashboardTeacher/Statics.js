@@ -20,7 +20,7 @@ export default function Statics() {
       price = String(price);
     }
     if (price == "0") {
-      return "0 đồng";
+      return "0";
     }
   
     if (price.startsWith("0")) {
@@ -32,6 +32,17 @@ export default function Statics() {
   const handleNavigate = (path) => {
     navigate(path);
   };
+
+  const getCurrentFormattedDate = () => {
+    const today = new Date();
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  };
+  const [dateStart, setDateStart] = useState(getCurrentFormattedDate());
+  const [dateEnd, setDateEnd] = useState(getCurrentFormattedDate());
+  const [totalPriceInTime, setTotalPriceInTime] = useState(0);
+  const [totalSoldInTime, setTotalSoldInTime] = useState(0);
+  const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
+
   const cardStyle = {
     borderRadius: '0.25rem',
     backgroundColor: '#e6e6fa',
@@ -84,6 +95,31 @@ export default function Statics() {
     fetchUserData();
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+  };
+
+  // Function to handle the filtering action
+  const handleFilter = async () => {
+    try {
+      const encodedUserId = localStorage.getItem("userId");
+      const userId = parseInt(atob(encodedUserId), 10);
+      const formattedStart = formatDate(dateStart);
+      const formattedEnd = formatDate(dateEnd);
+      // Create the URL with the formatted dates
+      setIsLoading(true);
+      const price = await axiosClient.get(`/courseRegisters/total-price-in-time-per-teacher/${formattedStart}/${formattedEnd}/${userId}`);
+      setTotalPriceInTime(formatPrice(price.data));
+
+      const sold = await axiosClient.get(`/courseRegisters/total-sold-in-time-per-teacher/${formattedStart}/${formattedEnd}/${userId}`);
+      setTotalSoldInTime(formatPrice(sold.data));
+      setIsLoading(false);
+      // Navigate to the new URL
+    } catch (error) {
+      console.error("Error formatting dates or navigating:", error);
+    }
+  };
 
   return (
     <div>
@@ -106,7 +142,29 @@ export default function Statics() {
           Tổng số lượng khóa học đã bán : {totalSold}
         </p>
       </div>
-      &nbsp;
+      &nbsp;&nbsp;&nbsp;
+      {/* filter lọc ngày tháng năm */}
+      <div className="mb-3 d-inline-block">
+        <h6>Lọc theo thời gian</h6>
+        <label htmlFor="dateStart">Ngày bắt đầu:</label>
+          <input type="date" id="dateStart" name="dateStart" value={dateStart} onChange={(e) => setDateStart(e.target.value)} />
+          <label htmlFor="dateEnd">Ngày kết thúc:</label>
+          <input type="date" id="dateEnd" name="dateEnd" value={dateEnd} onChange={(e) => setDateEnd(e.target.value)} />&nbsp;
+          <button className='badge bg-primary text-wrap'  onClick={handleFilter}>Lọc</button>
+        <p>
+          Doanh thu : {totalPriceInTime} vnđ
+        </p>
+        <p>
+          Số lượng khóa học: {totalSoldInTime} 
+        </p>
+        {isLoading ? (
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <div></div>
+              )}
+      </div>
       <div  style={cardStyle}>
         <h6>Thông tin doanh thu</h6>
         <p>
@@ -115,9 +173,14 @@ export default function Statics() {
         <p>
           Doanh thu tháng nay: {priceMonth} vnđ
         </p>
-        <p>
-          Tổng doanh thu: {totalPrice} vnđ
-        </p>
+        Tổng doanh thu: {totalPrice ==0 ? (
+                <div class="d-flex align-items-center">
+                <strong>Loading...</strong>
+                <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+              </div>
+              ) : (
+                <p>{totalPrice} vnđ</p>
+              )} 
       </div>
       </main>
         </div>
